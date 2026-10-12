@@ -1,0 +1,85 @@
+\subsection{Filling Out the Design Space: Cartesian Base}
+\label{sec:cartesian-base}
+
+A central idea in this work has been to consider the `base' notion of usage in
+graded systems: linear-base systems have linear propositions, with a linear
+axiom rule, and linear function type; graded-base systems have graded propositions,
+with a graded axiom rule, and a graded function type. This framing suggest
+an unexplored point in the design space: what about a graded system with
+a cartesian base, i.e., with a cartesian axiom rule and standard cartesian
+function (type), with contexts comprising both cartesian and graded
+assumptions?
+
+Crucially we must then consider how the cartesian part interacts with
+the graded part. On the left, we have the rules for dereliction and
+application in Linear Base, on the right have the potential rules
+for a Cartesian Base. Since cartesian propositions can be used arbitrarily
+we now require an element $\omega \in \mathcal{R}$ of the semiring which
+behaves in an absorbing fashion for both addition $+$ and multiplication $\cdot$.
+Dereliction in Cartesian Base can then mark a cartesian assumption
+with $\omega$. Application must also scale the argument context $\Gamma_2$
+by $\omega$ since the function arrow is cartesian and so may use
+its argument arbitrarily:
+
+\begin{minipage}{0.5\linewidth}
+\begin{align*}
+\begin{array}{c}
+\text{(Linear Base)} \\[0.5em]
+\dfrac{\Gamma, x : A \vdash_{\textsc{l}} t : B}
+      {\Gamma, x : [A]_1 \vdash_{\textsc{l}} t : B} (der)
+\\[1.5em]
+\dfrac{\Gamma_1 \vdash_{\textsc{l}} t_1 : A \multimap B \quad \Gamma_2 \vdash_{\textsc{l}} t_2 : A}
+      {\Gamma_1 + \Gamma_2 \vdash_{\textsc{l}} t_1\ t_2 : B}(app)
+\end{array}
+\\
+\end{align*}
+\end{minipage}
+\begin{minipage}{0.5\linewidth}
+\begin{align*}
+\begin{array}{c}
+\text{(Cartesian Base)} \\[0.5em]
+\dfrac{\Gamma, x : A \vdash t : B}
+      {\Gamma, x : [A]_\omega \vdash t : B}(der)
+\\[1.5em]
+\dfrac{\Gamma_1 \vdash t_1 : A \rightarrow B \quad \Gamma_2 \vdash t_2 : A}
+      {\Gamma_1 + \omega \ast \Gamma_2 \vdash t_1\ t_2 : B}(app)
+\end{array}
+\\
+\end{align*}
+\end{minipage}
+
+\noindent
+The above seems a reasonable approach to building a
+Cartesian Base system. However, this system
+provides little benefit as the grading quickly degenerates to
+being always $\omega$ in derivations. Consider below the derivation of
+the `copy' operation on an axiom to produce a pair:
+
+\begin{align*}
+\begin{array}{cc}
+\dfrac{
+\dfrac{x : A \vdash_{\textsc{l}} x : A}
+      {x : [A]_1 \vdash_{\textsc{l}} x : A}
+\quad
+\dfrac{x : A \vdash_{\textsc{l}} x : A}
+      {x : [A]_1 \vdash_{\textsc{l}} x : A}
+}
+{x : [A]_{1 + 1} \vdash_{\textsc{l}} (x, x) : A \otimes A}
+&
+\dfrac{
+\dfrac{x : A \vdash x : A}
+      {x : [A]_\omega \vdash x : A}
+\quad
+\dfrac{x : A \vdash x : A}
+      {x : [A]_\omega \vdash x : A}
+}
+{x : [A]_\omega \vdash (x, x) : A \otimes A}
+\end{array}
+\end{align*}
+%
+In Linear Base, there is a precise account of the non-linearity
+incurred: the term uses $x$ with graded $1+1$. However, in
+Cartesian Base we can only say $\omega$ due to the dereliction rule.
+In the end, the Cartesian Base system
+is ultimately no more informative as a graded system than
+standard intuitionistic, cartesian systems.

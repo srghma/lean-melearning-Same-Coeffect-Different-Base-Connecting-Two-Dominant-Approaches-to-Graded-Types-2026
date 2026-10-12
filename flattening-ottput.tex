@@ -1,0 +1,52 @@
+Elimination of graded modalities in both linear- and graded-base systems looks almost identical,
+eliminating a graded modality at grade $r$ by a kind of
+`cut' (substitution) against a variable with matching grade $r$:
+%
+\begin{gather*}
+\SYSTEMdruleLinlet{} \quad \SYSTEMdruleGradBoxlet{}
+\end{gather*}
+%
+Some graded-base systems in the literature however
+have a more general elimination rule~\cite{DBLP:journals/pacmpl/AbelB20,grtt},
+of the form:
+\begin{align*}
+\SYSTEMdruleGradBoxletGen{}
+\end{align*}
+%
+The generalised rule allows an additional scaling of the resources
+for $\SYSTEMnt{t_{{\mathrm{1}}}}$ due to additional use of $x$ in $\SYSTEMnt{t_{{\mathrm{2}}}}$. Such
+a rule has not appeared in any Linear Base system, but could
+easily be added to both systems to provide equivalent power
+across both flavours of coeffect types.
+
+This generalised typing enables the
+derivation of a function $  \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   (   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{s} } }  \SYSTEMnt{A}   )    \multimap   \textcolor{coeffectColor}{\square_{ \SYSTEMsym{(}   \SYSTEMnt{r}  \cdot  \SYSTEMnt{s}   \SYSTEMsym{)} } }  \SYSTEMnt{A}  $,
+akin to the multiplication (join) of a graded monad (the dual to comultiplication
+of a graded comonad structure):
+%
+\begin{gather*}
+  \vspace{-1em}
+  \inferrule*[right=\SYSTEMRenameRuleGradBoxletGen{}]
+             {\inferrule*[right=\SYSTEMRenameRuleGradvar{}]
+                {\;}{   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }    \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   (   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{s} } }  \SYSTEMnt{A}   )       \vdash_{\textsc{g}_\square }  \SYSTEMmv{x}  :   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   (   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{s} } }  \SYSTEMnt{A}   )   }
+               \inferrule*[right=\SYSTEMRenameRuleGradBoxletGen{}]
+                          {\inferrule*[right=\SYSTEMRenameRuleGradvar{}]{\;}
+                            {   \SYSTEMmv{y}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }    \textcolor{coeffectColor}{\square_{ \SYSTEMnt{s} } }  \SYSTEMnt{A}      \vdash_{\textsc{g}_\square }  \SYSTEMmv{y}  :   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{s} } }  \SYSTEMnt{A}  }
+                            \inferrule*[right=\SYSTEMRenameRuleGradBoxpr{}]
+                                       {\inferrule*[right=\SYSTEMRenameRuleGradvar{}]{\;}
+                                         {   \SYSTEMmv{z}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }  \SYSTEMnt{A}    \vdash_{\textsc{g}_\square }  \SYSTEMmv{z}  :  \SYSTEMnt{A} }}
+                                       {   \SYSTEMmv{z}  :_{\textcolor{coeffectColor}{   \SYSTEMnt{r}  \cdot  \SYSTEMnt{s}   } }  \SYSTEMnt{A}    \vdash_{\textsc{g}_\square }   \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]}   :   \textcolor{coeffectColor}{\square_{   \SYSTEMnt{r}  \cdot  \SYSTEMnt{s}   } }  \SYSTEMnt{A}  }
+                          \hspace{-2.4em}}
+                          {   \SYSTEMmv{y}  :_{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }    \textcolor{coeffectColor}{\square_{ \SYSTEMnt{s} } }  \SYSTEMnt{A}      \vdash_{\textsc{g}_\square }   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{y}  \, \mathsf{in} \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]}    :   \textcolor{coeffectColor}{\square_{   \SYSTEMnt{r}  \cdot  \SYSTEMnt{s}   } }  \SYSTEMnt{A}  \hspace{-3em}}
+             \hspace{-3em}}
+             {    \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }    \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   (   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{s} } }  \SYSTEMnt{A}   )       \vdash_{\textsc{g}_\square }   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{x}  \, \mathsf{in} \,   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{y}  \, \mathsf{in} \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]}     :   \textcolor{coeffectColor}{\square_{   \SYSTEMnt{r}  \cdot  \SYSTEMnt{s}   } }  \SYSTEMnt{A}   }
+\end{gather*}
+%
+Indeed, the generalised $\Box$-elimination can be modelled in a
+categorical semantics by a graded comonad along with an additional
+graded multiplication operation $\mu_{r,s,A} :   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   (   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{s} } }  \SYSTEMnt{A}   )    \multimap   \textcolor{coeffectColor}{\square_{ \SYSTEMsym{(}   \SYSTEMnt{r}  \cdot  \SYSTEMnt{s}   \SYSTEMsym{)} } }  \SYSTEMnt{A}  $ (as one might find in a graded monad structure).
+However, not all graded comonads modelling $ \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A} $
+admit such an operation and so having the generalised
+$\Box$-elimination may not be desirable in general graded comonadic calculi.
+We thus omitted this generalised rule from the main part of our results, considering
+the simpler $\SYSTEMRenameRuleLinlet{}$ and $\SYSTEMRenameRuleGradBoxlet{}$ rules.

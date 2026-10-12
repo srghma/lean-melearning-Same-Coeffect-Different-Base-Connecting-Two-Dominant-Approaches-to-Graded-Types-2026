@@ -1,0 +1,155 @@
+In the course of the paper, we define translations between several calculi of the Linear and Graded
+strands, according to the overview in Figure~\ref{fig:relationship}. As for the term and type syntax
+of the different calculi, we use the same interpretation brackets across different variations of
+linear- and graded-base calculi respectively, making clear from the context which interpretation we are referring to.
+
+The interpretation
+$ \textcolor{GLcolor}{\llbracket}   -   \textcolor{GLcolor}{\rrbracket} $ takes graded-base terms to linear-base terms and $ \textcolor{LGcolor}{\llparenthesis} \smidge   -   \smidge \textcolor{LGcolor}{\rrparenthesis} $ takes linear-base
+terms to graded-base terms. The following mnemonics have proven useful to the authors:
+\begin{itemize}
+  \item Given a graded term $t$, $ \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket} $ is its translation, into a \underline{L}inear term,
+    with the square \underline{L}ilac brackets mirroring the shape of the letter L.
+  \item Given a linear term $t$, $ \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis} $ is its translation into a \underline{G}raded term,
+    with the rounded \underline{G}reen parentheses mirroring the shape of the letter G.
+\end{itemize}
+%
+The same notation is used for type and context translations.
+
+\subsubsection{Graded Base to Linear Base translation}
+\label{subsec:transl-graded-base-to-linear-base}
+
+\NewCommandCopy{\oldSYSTEMdrule}{\SYSTEMdrule}
+\NewCommandCopy{\oldEquiv}{\equiv}
+\NewCommandCopy{\oldTriangleq}{\triangleq}
+\renewcommand{\triangleq}{& \oldTriangleq &}
+\renewcommand{\equiv}{ \oldEquiv}
+\renewcommand{\SYSTEMdrule}[4][]{#3 \qquad #2} % \quad\SYSTEMdrulename{#4}}}
+
+% Our first defintion of Graded Base to Linear Base follows:
+%
+\begin{gather*}
+{\setlength{\arraycolsep}{0.1em}
+\begin{array}{lcl@{\hspace{2em}}r}
+\SYSTEMdruleTranslGtoLTmvar{} \\
+\SYSTEMdruleTranslGtoLTmabs{}
+\SYSTEMdruleTranslGtoLTmapp{} & \text{(Term translation)} \\[0.75em]
+\SYSTEMdruleTranslGtoLTybaseTy{} \\
+\SYSTEMdruleTranslGtoLTyfunTy{} & \text{(Type translation)} \\[0.75em]
+\SYSTEMdruleTranslGtoLGtxtempty{} \\
+\SYSTEMdruleTranslGtoLGtxtgrad{} & \text{(Context translation)}
+\end{array}}
+\end{gather*}
+\let\SYSTEMdrule\oldSYSTEMdrule
+\let\equiv\oldEquiv
+\let\triangleq\oldTriangleq
+%
+The key idea is to use the graded modality to capture the grading of assumptions and functions.
+The graded function type translates to the Linear Base function type $     \multimap     $, with its left-hand side
+under $ \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }     $.
+This translation leads to the insight that Graded Base effectively
+wraps a graded modality around function inputs, capturing the usage of the parameter in the body.
+Since every term in Graded Base has an associated grading in the context,
+every abstraction in the translation from Graded to Linear needs to do an unboxing (let) and every application needs to do a boxing (promotion).
+
+Contexts are translated straightforwardly. The translation can never produce a linear assumption.
+
+\begin{example} The judgment $    \SYSTEMmv{f}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{(}  \SYSTEMsym{1}  \SYSTEMsym{+}  \SYSTEMsym{1}  \SYSTEMsym{)} } }   (   \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{A}   )    ,   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{(}   \SYSTEMnt{r}  \cdot  \SYSTEMnt{r}   \SYSTEMsym{)} } }  \SYSTEMnt{A}    \vdash_{\textsc{g} }   \SYSTEMmv{f} \,  \SYSTEMsym{(}   \SYSTEMmv{f} \,  \SYSTEMmv{x}   \SYSTEMsym{)}   :  \SYSTEMnt{A} $
+in Graded Base translates to $    \SYSTEMmv{f}  : \textcolor{coeffectColor}{[}    \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}    \multimap   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}   {\textcolor{coeffectColor}{]_{ \SYSTEMsym{(}  \SYSTEMsym{1}  \SYSTEMsym{+}  \SYSTEMsym{1}  \SYSTEMsym{)} } } }   ,   \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}  {\textcolor{coeffectColor}{]_{ \SYSTEMsym{(}   \SYSTEMnt{r}  \cdot  \SYSTEMnt{r}   \SYSTEMsym{)} } } }    \vdash_{\textsc{l} }   \SYSTEMmv{f} \,   \textcolor{coeffectColor}{[}   \SYSTEMmv{f} \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]}    \textcolor{coeffectColor}{]}    :   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}  $
+in Linear Base. Note the right-hand sides of an application find themselves under a promotion.
+\end{example}
+%
+\begin{remark}
+We do not translate $ \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }  \SYSTEMnt{B} $ to a linear function $  \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}   \multimap   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{B}  \textcolor{GLcolor}{\rrbracket}  $;
+  this is because $ \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }  \SYSTEMnt{B} $ does not necessarily mean that the function uses its argument linearly.
+  Some choices of semiring mean that $1$ does not mean `used exactly once', the simplest example
+  being the single-point (trivial) semiring in which $0 = 1$ and so $1$ would mean any usage.
+\end{remark}
+%
+We now establish key soundness results. Firstly, that the translation is type
+preserving, i.e., translation of terms,
+contexts, and types is such that a well-typed derivation in Graded
+Base is well-typed under its translation to Linear Base. This
+requires various small lemmas that the translation is a
+homomorphism between graded-base contexts and linear-base contexts
+which we elide here. Secondly, the translation
+preserves the operational semantics, and lastly it preserves the
+equational theory. Appendix~\refappendix{app:proofs-grad-to-lin} provides the full proofs and supporting lemmas.
+%
+\begin{restatable}{thrm}{gradToLinTranslation}[Soundness of the Graded Base to Linear Base translation]
+  \begin{itemize}[itemsep=0.3em]
+  \item Type preservation: $ \Delta  \vdash_{\textsc{g} }  \SYSTEMnt{t}  :  \SYSTEMnt{A}  \implies   \textcolor{GLcolor}{\llbracket}  \Delta  \textcolor{GLcolor}{\rrbracket}   \vdash_{\textsc{l} }   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   :   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}  $
+  \item Operational correspondence: $ \SYSTEMnt{t}  \rightsquigarrow_{\textsc{g} }  \SYSTEMnt{t'}  \implies   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   \rightsquigarrow_{\textsc{l} }^\ast   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t'}  \textcolor{GLcolor}{\rrbracket}  $
+  \item Equation preservation: $ \SYSTEMnt{t}  \equiv_{\textsc{g} }  \SYSTEMnt{t'}  \implies   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   \,\equiv_{\textsc{l} }\,   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t'}  \textcolor{GLcolor}{\rrbracket}  $
+  \end{itemize}
+  \label{thrm:gradToLinTranslation}
+\end{restatable}
+%
+
+\subsubsection{Linear Base to Graded Base translation}
+\label{subsec:lin-to-grad-cps}
+
+A type-preserving translation from Linear Base to Graded Base is however more difficult
+since we need to find some encoding of the graded modal type $ \textcolor{LGcolor}{\llparenthesis} \smidge   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A}   \smidge \textcolor{LGcolor}{\rrparenthesis} $.
+From the introduction rule of the graded modality (promotion), such a translation on
+terms should incur a multiplication of the context by $r$ which in Graded Base is only
+provided through application of a $ \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{B} $ function. Thus a translation must have such
+a function in a negative position, suggesting a continuation-passing style (CPS)
+or Church-encoding-like form.
+
+Taking inspiration from~\citet{lindley2025encoding} on encoding products,
+we extend Plotkin's CPS translation of the call-by-name $\lambda$-calculus~\cite{plotkin1975call}
+with a CPS encoding of the graded modalities of Linear Base into Graded Base:
+%
+\renewcommand{\triangleq}{& \oldTriangleq &}
+\renewcommand{\equiv}{& \oldEquiv &}
+\renewcommand{\SYSTEMdrule}[4][]{#3 \qquad #2}
+%
+\begin{gather*}
+{\setlength{\arraycolsep}{0.1em}
+\begin{array}{lcl@{\hspace{2em}}r}
+\SYSTEMdruleTranslLtoGCpsTyfunTy{} \\
+\SYSTEMdruleTranslLtoGCpsTyboxTy{} \\
+\SYSTEMdruleTranslLtoGCpsTybaseTy{} & \text{(Type translation)} \\[0.75em]
+\SYSTEMdruleTranslLtoGCpsTmvar{} \\
+\SYSTEMdruleTranslLtoGCpsTmabs{} \\
+\SYSTEMdruleTranslLtoGCpsTmapp{} \\
+\SYSTEMdruleTranslLtoGCpsTmpr{} \\
+\SYSTEMdruleTranslLtoGCpsTmlet{} & \text{(Term translation)} \\[0.75em]
+\SYSTEMdruleTranslLtoGGtxtempty{} \\
+\SYSTEMdruleTranslLtoGGtxtlin{} \\
+\SYSTEMdruleTranslLtoGGtxtgrad{} & \text{(Context translation)}
+\end{array}}
+\end{gather*}
+%
+\let\SYSTEMdrule\oldSYSTEMdrule
+\let\equiv\oldEquiv
+\let\triangleq\oldTriangleq
+%
+\noindent
+The key point is to (recursively) encode $ \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A} $ as
+ $  (   \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }   \mathrm{K}    )   \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }   \mathrm{K}  $ so that in the case
+of promotion $ \textcolor{coeffectColor}{[}  \SYSTEMnt{t}  \textcolor{coeffectColor}{]} $ we can use application to scale
+the grades of $\SYSTEMnt{t}$. Note that linear assumptions get mapped
+to graded assumptions with grade $1$, though this may not mean
+`linear use' (see Section~\ref{subsec:linearity-preserving} for
+a solution).
+
+\begin{restatable}{thrm}{linToGradCPSTranslation}[Soundness of the Linear Base to Graded Base translation (proofs in Appendix~\refappendix{app:proofs-lin-to-grad-cps}).]
+  \begin{itemize}[itemsep=0.2em]
+  \item Type preservation: $ \Gamma  \vdash_{\textsc{l} }  \SYSTEMnt{t}  :  \SYSTEMnt{A}  \implies   \textcolor{LGcolor}{\llparenthesis}  \Gamma  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}  $
+  \item Operational correspondence: $ \SYSTEMnt{t}  \rightsquigarrow_{\textsc{l} }  \SYSTEMnt{t'}  \implies   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \rightsquigarrow_{\beta\textsc{g} }^\ast   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t'}  \smidge \textcolor{LGcolor}{\rrparenthesis}  $
+  \item \vspace{-0.5em} Equation preservation: $\SYSTEMnt{t}  \equiv^{\beta_\to\beta\eta_\Box}_{\textsc{l} }  \SYSTEMnt{t'} \implies   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \equiv_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t'}  \smidge \textcolor{LGcolor}{\rrparenthesis}  $
+  \end{itemize}
+  \label{thrm:linToGradCPSTranslation}
+\end{restatable}
+%
+\noindent
+As we use Plotkin's CBN CPS translation, there are two notable implications:
+Firstly, regarding operational correspondence, our source uses CBN but we need full
+$\beta$-reduction (via the \SYSTEMRenameRuleSemGrdcongAbs{} rule) in the target to prove simulation.
+Computational adequacy then follows from the $\lambda$-calculus standardisation theorem.
+Secondly, regarding equation preservation: we
+preserve only $\beta$-equality for functions and not $\eta$-equality---a well-known limitation of Plotkin's translation.
+However, we preserve both $\beta$- and $\eta$-equality for the graded modality,
+hence we label the equational theory here as $ \equiv^{\beta_\to\beta\eta_\Box}_{\textsc{l} } $.
+Section~\ref{sec:poly} considers an alternate encoding in a polymorphic Graded Base setting.

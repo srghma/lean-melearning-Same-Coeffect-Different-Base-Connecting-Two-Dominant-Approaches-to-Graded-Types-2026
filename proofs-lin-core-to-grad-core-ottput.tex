@@ -1,0 +1,799 @@
+\subsection{Proof of Soundness for Linear Core to Graded Modal Core}
+\label{app:proofs-lin-core-to-grad-core}
+
+\ifextended\linToGradTranslationExt*\fi
+
+\subsubsection{Type preservation}
+\label{app:proofs-lin-core-to-grad-core-typ}
+
+\begin{proof}
+  The proof subsumes the earlier proofs; we add the additional cases here due to the
+  extension of the language from Linear Base to Linear Core.
+  \begin{itemize}
+\item (prod$_i$)
+$$
+\SYSTEMdruleLinprodi{}
+$$
+% $$
+% \SYSTEMdruleGradprodi{}
+% $$
+By induction on both premises we have
+$  \textcolor{LGcolor}{\llparenthesis}  \Gamma_{{\mathrm{1}}}  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}  $
+and
+$  \textcolor{LGcolor}{\llparenthesis}  \Gamma_{{\mathrm{2}}}  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}  $.
+
+Therefore we can construct:
+%
+$$
+\inferrule*[Right=\SYSTEMRenameRuleGradprodi{}]
+{  \textcolor{LGcolor}{\llparenthesis}  \Gamma_{{\mathrm{1}}}  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+   \textcolor{LGcolor}{\llparenthesis}  \Gamma_{{\mathrm{2}}}  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}  }
+{  \textcolor{LGcolor}{\llparenthesis}  \Gamma_{{\mathrm{1}}}  \textcolor{LGcolor}{\rrparenthesis}   \SYSTEMsym{+}   \textcolor{LGcolor}{\llparenthesis}  \Gamma_{{\mathrm{2}}}  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \langle   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}  ,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \rangle   :    \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \times   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}    }
+$$
+%
+
+\item (prod$_e$)
+$$
+\SYSTEMdruleLinprode{}
+$$
+% $$
+% \SYSTEMdruleGradprode{}
+% $$
+By induction on both premises we have
+$  \textcolor{LGcolor}{\llparenthesis}  \Gamma_{{\mathrm{1}}}  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :    \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \times   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}   $
+and
+$    \textcolor{LGcolor}{\llparenthesis}  \Gamma_{{\mathrm{2}}}  \textcolor{LGcolor}{\rrparenthesis}  ,   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}    ,   \SYSTEMmv{y}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}     \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{C}  \smidge \textcolor{LGcolor}{\rrparenthesis}  $.
+
+Therefore we can construct:
+%
+$$
+\inferrule*[Right=\SYSTEMRenameRuleGradprode{}]
+{  \textcolor{LGcolor}{\llparenthesis}  \Gamma_{{\mathrm{1}}}  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :    \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \times   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \\
+     \textcolor{LGcolor}{\llparenthesis}  \Gamma_{{\mathrm{2}}}  \textcolor{LGcolor}{\rrparenthesis}  ,   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}    ,   \SYSTEMmv{y}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}     \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{C}  \smidge \textcolor{LGcolor}{\rrparenthesis}  }
+{  \textcolor{coeffectColor}{ \SYSTEMsym{1}  \cdot}   \textcolor{LGcolor}{\llparenthesis}  \Gamma_{{\mathrm{1}}}  \textcolor{LGcolor}{\rrparenthesis}    \SYSTEMsym{+}   \textcolor{LGcolor}{\llparenthesis}  \Gamma_{{\mathrm{2}}}  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \mathsf{let} \, \langle  \SYSTEMmv{x} ,  \SYSTEMmv{y}  \rangle =   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{in} \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}    :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{C}  \smidge \textcolor{LGcolor}{\rrparenthesis}   }
+$$
+%
+
+\item (unit$_i$)
+$$
+\SYSTEMdruleLinuniti{}
+$$
+
+Therefore we construct the goal typing:
+$$
+\SYSTEMdruleGraduniti{}
+$$
+%
+
+\item (unit$_e$)
+$$
+\SYSTEMdruleLinunite{}
+$$
+% $$
+% \SYSTEMdruleGradunite{}
+% $$
+By induction on both premises we have
+$  \textcolor{LGcolor}{\llparenthesis}  \Gamma_{{\mathrm{1}}}  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{LGcolor}{\llparenthesis} \smidge   \mathrm{unit}   \smidge \textcolor{LGcolor}{\rrparenthesis}  $
+and
+$  \textcolor{LGcolor}{\llparenthesis}  \Gamma_{{\mathrm{2}}}  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}  $.
+
+Therefore we can construct:
+%
+$$
+\inferrule*[Right=\SYSTEMRenameRuleGradprode{}]
+{  \textcolor{LGcolor}{\llparenthesis}  \Gamma_{{\mathrm{1}}}  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{LGcolor}{\llparenthesis} \smidge   \mathrm{unit}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+   \textcolor{LGcolor}{\llparenthesis}  \Gamma_{{\mathrm{2}}}  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}  }
+{  \textcolor{LGcolor}{\llparenthesis}  \Gamma_{{\mathrm{1}}}  \textcolor{LGcolor}{\rrparenthesis}   \SYSTEMsym{+}   \textcolor{LGcolor}{\llparenthesis}  \Gamma_{{\mathrm{2}}}  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \mathsf{let} \, \langle \rangle =   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{in} \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}    :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}   }
+$$
+%
+
+\item (sum$_{i1}$)
+$$
+\SYSTEMdruleLinsumiOne{}
+$$
+% $$
+% \SYSTEMdruleGradsumiOne{}
+% $$
+By induction on the premise we have
+$  \textcolor{LGcolor}{\llparenthesis}  \Gamma  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}  $.
+
+Therefore we can construct:
+%
+$$
+\inferrule*[Right=\SYSTEMRenameRuleGradsumiOne{}]
+{  \textcolor{LGcolor}{\llparenthesis}  \Gamma  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}  }
+{  \textcolor{LGcolor}{\llparenthesis}  \Gamma  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \mathsf{inj}_1 \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}    :    \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}   +   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}    }
+$$
+%
+
+\item (sum$_{i2}$)
+$$
+\SYSTEMdruleLinsumiTwo{}
+$$
+% $$
+% \SYSTEMdruleGradsumiTwo{}
+% $$
+By induction on the premise we have
+$  \textcolor{LGcolor}{\llparenthesis}  \Gamma  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}  $.
+
+Therefore we can construct:
+%
+$$
+\inferrule*[Right=\SYSTEMRenameRuleGradsumiTwo{}]
+{  \textcolor{LGcolor}{\llparenthesis}  \Gamma  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}  }
+{  \textcolor{LGcolor}{\llparenthesis}  \Gamma  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \mathsf{inj}_2 \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}    :    \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}   +   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}    }
+$$
+%
+
+\item (sum$_e$)
+$$
+\SYSTEMdruleLinsume{}
+$$
+% $$
+% \SYSTEMdruleGradsume{}
+% $$
+By induction on the premises we have
+$  \textcolor{LGcolor}{\llparenthesis}  \Gamma_{{\mathrm{1}}}  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :    \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}   +   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}   $,
+$   \textcolor{LGcolor}{\llparenthesis}  \Gamma_{{\mathrm{2}}}  \textcolor{LGcolor}{\rrparenthesis}  ,   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}     \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{C}  \smidge \textcolor{LGcolor}{\rrparenthesis}  $
+and
+$   \textcolor{LGcolor}{\llparenthesis}  \Gamma_{{\mathrm{2}}}  \textcolor{LGcolor}{\rrparenthesis}  ,   \SYSTEMmv{y}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}     \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{C}  \smidge \textcolor{LGcolor}{\rrparenthesis}  $.
+
+Using the unit property on graded contexts we can construct:
+%
+$$
+\inferrule*[Right=\SYSTEMRenameRuleGradsume{}]
+{ \SYSTEMsym{1}  \, \textcolor{coeffectColor}{\sqsubseteq} \,  \SYSTEMsym{1}  \qquad   \textcolor{LGcolor}{\llparenthesis}  \Gamma_{{\mathrm{1}}}  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :    \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}   +   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+    \textcolor{LGcolor}{\llparenthesis}  \Gamma_{{\mathrm{2}}}  \textcolor{LGcolor}{\rrparenthesis}  ,   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}     \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{C}  \smidge \textcolor{LGcolor}{\rrparenthesis}  \\
+    \textcolor{LGcolor}{\llparenthesis}  \Gamma_{{\mathrm{2}}}  \textcolor{LGcolor}{\rrparenthesis}  ,   \SYSTEMmv{y}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}     \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{C}  \smidge \textcolor{LGcolor}{\rrparenthesis}  }
+{  \textcolor{coeffectColor}{ \SYSTEMsym{1}  \cdot}   \textcolor{LGcolor}{\llparenthesis}  \Gamma_{{\mathrm{1}}}  \textcolor{LGcolor}{\rrparenthesis}    \SYSTEMsym{+}   \textcolor{LGcolor}{\llparenthesis}  \Gamma_{{\mathrm{2}}}  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \mathsf{case} \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{x}  \rightarrow   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   ; \, \mathsf{inj2} \,  \SYSTEMmv{y}  \rightarrow   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \}   :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{C}  \smidge \textcolor{LGcolor}{\rrparenthesis}   }
+$$
+%
+
+\item (push$_\otimes$)
+  $$
+  \SYSTEMdruleLinpushprod{}
+  $$
+
+  By induction on the premise we have (ih):
+  $$  \textcolor{LGcolor}{\llparenthesis}  \Gamma  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   (    \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \times   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}    )   $$
+
+  Then we can construct:
+  %%
+  \begin{gather*}
+  \inferrule*[Right=\SYSTEMRenameRuleGradBoxlet{}]
+  {
+    (ih) \quad \inferrule*[Right=\SYSTEMRenameRuleGradprode{}]
+    %
+    {
+    \inferrule*[Right=\SYSTEMRenameRuleGradvar{}]
+         {\quad}
+         {   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }    \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \times   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}      \vdash_{\textsc{g} }  \SYSTEMmv{x}  :    \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \times   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}   }
+       \qquad
+       \inferrule*[Right=\SYSTEMRenameRuleGradprodi{}]
+        {\inferrule*[Right=\SYSTEMRenameRuleGradBoxpr{}]
+         {\inferrule*[Right=\SYSTEMRenameRuleGradvar{}]
+          {\quad}
+          {   \SYSTEMmv{y}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}     \vdash_{\textsc{g} }  \SYSTEMmv{y}  :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}  }
+         }
+         {   \SYSTEMmv{y}  :_{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}     \vdash_{\textsc{g} }   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}   :   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}   }
+         \qquad
+         \inferrule*[Right=\SYSTEMRenameRuleGradBoxpr{}]
+         {\inferrule*[Right=\SYSTEMRenameRuleGradvar{}]
+          {\quad}
+          {   \SYSTEMmv{z}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}     \vdash_{\textsc{g} }  \SYSTEMmv{z}  :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}  }
+         }
+         {   \SYSTEMmv{z}  :_{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}     \vdash_{\textsc{g} }   \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]}   :   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}   }
+       }
+       {    \SYSTEMmv{y}  :_{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}    ,   \SYSTEMmv{z}  :_{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}     \vdash_{\textsc{g} }   \langle   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}  ,   \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]}   \rangle   :    \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \times   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}    }
+    }
+    {   \textcolor{LGcolor}{\llparenthesis}  \Gamma  \textcolor{LGcolor}{\rrparenthesis}  ,   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}     \vdash_{\textsc{g} }   \mathsf{let} \, \langle  \SYSTEMmv{y} ,  \SYSTEMmv{z}  \rangle =  \SYSTEMmv{x}  \, \mathsf{in} \,   \langle   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}  ,   \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]}   \rangle    :    \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \times   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}    }
+  }
+  {  \textcolor{LGcolor}{\llparenthesis}  \Gamma  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{in} \,   \mathsf{let} \, \langle  \SYSTEMmv{y} ,  \SYSTEMmv{z}  \rangle =  \SYSTEMmv{x}  \, \mathsf{in} \,   \langle   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}  ,   \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]}   \rangle     :    \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \times   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}    }
+  \end{gather*}
+  %
+  satisfying the goal.
+
+\item (push$_\oplus$)
+  $$
+  \SYSTEMdruleLinpushsum{}
+  $$
+  By induction on the premise we have (ih):
+  $$  \textcolor{LGcolor}{\llparenthesis}  \Gamma  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   (    \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}   +   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}    )   $$
+
+  We then construct:
+  \begin{gather*}
+    \inferrule*[Right=\SYSTEMRenameRuleGradBoxlet{}]
+    {
+      (ih) \quad \inferrule*[Right=\SYSTEMRenameRuleGradsume{}]
+            {
+         \inferrule*[Right=\SYSTEMRenameRuleGradvar{}]
+           {\quad}
+           {   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }    \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}   +   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}      \vdash_{\textsc{g} }  \SYSTEMmv{x}  :    \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}   +   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}   }
+         \qquad
+          {\inferrule*[Right=\SYSTEMRenameRuleGradsumiOne{}]
+           {\inferrule*[Right=\SYSTEMRenameRuleGradBoxpr{}]
+           {\inferrule*[Right=\SYSTEMRenameRuleGradvar{}]
+            {\quad}
+            {   \SYSTEMmv{y}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}     \vdash_{\textsc{g} }  \SYSTEMmv{y}  :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}  }
+           }
+           {   \SYSTEMmv{y}  :_{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}     \vdash_{\textsc{g} }   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}   :   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}   }
+           }
+           {   \SYSTEMmv{y}  :_{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}     \vdash_{\textsc{g} }   \mathsf{inj}_1 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}    :    \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}    +   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}    }
+          }
+          \qquad
+           \inferrule*[Right=\SYSTEMRenameRuleGradsumiTwo{}]
+           {\inferrule*[Right=\SYSTEMRenameRuleGradBoxpr{}]
+           {\inferrule*[Right=\SYSTEMRenameRuleGradvar{}]
+            {\quad}
+            {   \SYSTEMmv{z}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}     \vdash_{\textsc{g} }  \SYSTEMmv{z}  :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}  }
+           }
+           {   \SYSTEMmv{z}  :_{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}     \vdash_{\textsc{g} }   \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]}   :   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}   }
+           }
+           {   \SYSTEMmv{z}  :_{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}     \vdash_{\textsc{g} }   \mathsf{inj}_2 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]}    :    \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}    +   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}    }
+         }
+      {   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }   (    \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}   +   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}    )     \vdash_{\textsc{g} }   \mathsf{case} \,  \SYSTEMmv{x}  \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{y}  \rightarrow   \mathsf{inj}_1 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}    ; \, \mathsf{inj2} \,  \SYSTEMmv{z}  \rightarrow   \mathsf{inj}_2 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]}    \}   :    \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}    +   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}    }
+    }
+    {  \textcolor{LGcolor}{\llparenthesis}  \Gamma  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{in} \,   \mathsf{case} \,  \SYSTEMmv{x}  \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{y}  \rightarrow   \mathsf{inj}_1 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}    ; \, \mathsf{inj2} \,  \SYSTEMmv{z}  \rightarrow   \mathsf{inj}_2 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]}    \}    :    \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}    +   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}    }
+    \end{gather*}
+
+\item ($ \textsf{push}_{\mathrm{unit} }     $)
+  $$
+  \SYSTEMdruleLinpushunit{}
+  $$
+  By induction on the premise we have (ih):
+  $$  \textcolor{LGcolor}{\llparenthesis}  \Gamma  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \mathrm{unit}   $$
+
+  Then we construct the typing:
+\begin{gather*}
+\inferrule*[Right=\SYSTEMRenameRuleGradBoxlet{}]
+{
+  (ih) :   \textcolor{LGcolor}{\llparenthesis}  \Gamma  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \mathrm{unit}   
+  \quad
+  \inferrule*[Right=\SYSTEMRenameRuleGradunite{}]
+    {
+      \inferrule*[Right=\SYSTEMRenameRuleGradvar{}]
+        {\quad}
+        {   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }   \mathrm{unit}     \vdash_{\textsc{g} }  \SYSTEMmv{x}  :   \mathrm{unit}  }
+      \quad\quad
+      \inferrule*[Right=\SYSTEMRenameRuleGraduniti{}]
+        {\quad}
+        { \emptyset  \vdash_{\textsc{g}}  \langle \rangle  :  \mathrm{unit} }
+    }
+    {   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }   \mathrm{unit}     \vdash_{\textsc{g} }   \mathsf{let} \, \langle \rangle =  \SYSTEMmv{x}  \, \mathsf{in} \,   \langle \rangle    :   \mathrm{unit}  }
+  }
+{  \textcolor{LGcolor}{\llparenthesis}  \Gamma  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{in} \,   \mathsf{let} \, \langle \rangle =  \SYSTEMmv{x}  \, \mathsf{in} \,   \langle \rangle     :   \mathrm{unit}  }
+\end{gather*}
+%
+
+  \end{itemize}
+\end{proof}
+
+
+\subsubsection{Operational correspondence}
+\label{app:proofs-lin-core-to-grad-core-ops}
+
+\begin{lemma}[Interpretation preserves substitution]
+\label{lemma:interp-lin-to-grd-core-preserves-subst}
+For all Linear Base terms $\SYSTEMnt{t}, \SYSTEMnt{t'}$ then
+$ \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t'}   \smidge \textcolor{LGcolor}{\rrparenthesis}  \equiv  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t'}  \smidge \textcolor{LGcolor}{\rrparenthesis}  $.
+\end{lemma}
+
+\begin{proof}
+  We extend the proof of Lemma~\ref{lemma:interp-lin-to-grd-mod-preserves-subst} with the new cases:
+  %
+  \begin{itemize}
+    \item ($\otimes_i$) $\SYSTEMnt{t'} \equiv  \langle  \SYSTEMnt{t_{{\mathrm{1}}}} ,  \SYSTEMnt{t_{{\mathrm{2}}}}  \rangle $;
+%
+\begin{gather*}
+\begin{align*}
+\begin{array}{rcrlll}
+\textit{(goal)} & &  \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]   \langle  \SYSTEMnt{t_{{\mathrm{1}}}} ,  \SYSTEMnt{t_{{\mathrm{2}}}}  \rangle    \smidge \textcolor{LGcolor}{\rrparenthesis}  & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \langle  \SYSTEMnt{t_{{\mathrm{1}}}} ,  \SYSTEMnt{t_{{\mathrm{2}}}}  \rangle   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+\textit{(defn. subst [lhs])} & \Rightarrow &  \textcolor{LGcolor}{\llparenthesis} \smidge   \langle   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}  ,   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}   \rangle   \smidge \textcolor{LGcolor}{\rrparenthesis}  & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \langle  \SYSTEMnt{t_{{\mathrm{1}}}} ,  \SYSTEMnt{t_{{\mathrm{2}}}}  \rangle   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+\textit{(defn. interp [lhs])} & \Rightarrow &  \langle   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}  ,   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \rangle  & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \langle  \SYSTEMnt{t_{{\mathrm{1}}}} ,  \SYSTEMnt{t_{{\mathrm{2}}}}  \rangle   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+\textit{(defn. interp [rhs])} & \Rightarrow &  \langle   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}  ,   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \rangle  & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \langle   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}  ,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \rangle   \\
+\textit{(defn. subst [rhs])} & \Rightarrow &  \langle   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}  ,   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \rangle  & \eqStep &  \langle   [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   ,   [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \rangle  \\
+\textit{(induction on $\SYSTEMnt{t_{{\mathrm{1}}}}$ and $\SYSTEMnt{t_{{\mathrm{2}}}}$)} & \Rightarrow & \top
+\end{array}
+\end{align*}
+\end{gather*}
+%
+\item ($\otimes_e$) $\SYSTEMnt{t'} \equiv  \mathsf{let} \, \langle  \SYSTEMmv{y} ,  \SYSTEMmv{z}  \rangle =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}} $ (with $ \SYSTEMmv{y} ,   \SYSTEMmv{z}  \,\#\,  \SYSTEMnt{t}  $);
+%
+\begin{gather*}
+\begin{align*}
+\begin{array}{rcrlll}
+\textit{(goal)} & &  \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]   \mathsf{let} \, \langle  \SYSTEMmv{y} ,  \SYSTEMmv{z}  \rangle =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}}    \smidge \textcolor{LGcolor}{\rrparenthesis}  & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{let} \, \langle  \SYSTEMmv{y} ,  \SYSTEMmv{z}  \rangle =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+\textit{(defn. subst [lhs])} & \Rightarrow &  \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{let} \, \langle  \SYSTEMmv{y} ,  \SYSTEMmv{z}  \rangle =   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \, \mathsf{in} \,   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}    \smidge \textcolor{LGcolor}{\rrparenthesis}  & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{let} \, \langle  \SYSTEMmv{y} ,  \SYSTEMmv{z}  \rangle =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+\textit{(defn. interp [lhs])} & \Rightarrow &  \mathsf{let} \, \langle  \SYSTEMmv{y} ,  \SYSTEMmv{z}  \rangle =   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{in} \,   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{let} \, \langle  \SYSTEMmv{y} ,  \SYSTEMmv{z}  \rangle =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+\textit{(defn. interp [rhs])} & \Rightarrow &  \mathsf{let} \, \langle  \SYSTEMmv{y} ,  \SYSTEMmv{z}  \rangle =   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{in} \,   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]    \mathsf{let} \, \langle  \SYSTEMmv{y} ,  \SYSTEMmv{z}  \rangle =   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{in} \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}     \\
+\textit{(defn. subst [rhs])} & \Rightarrow &  \mathsf{let} \, \langle  \SYSTEMmv{y} ,  \SYSTEMmv{z}  \rangle =   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{in} \,   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   & \eqStep &   \mathsf{let} \, \langle  \SYSTEMmv{y} ,  \SYSTEMmv{z}  \rangle =   [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \, \mathsf{in} \,   [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}     \\
+\textit{(ind. on $\SYSTEMnt{t_{{\mathrm{1}}}}$ and $\SYSTEMnt{t_{{\mathrm{2}}}}$)} & \Rightarrow & \top
+\end{array}
+\end{align*}
+\end{gather*}
+%
+\item ($ \mathrm{unit} _i$) $\SYSTEMnt{t'} \equiv  \langle \rangle $;
+%
+\begin{align*}
+\begin{array}{rcrlll}
+\textit{(goal)} & &  \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]   \langle \rangle    \smidge \textcolor{LGcolor}{\rrparenthesis}  & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \langle \rangle   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+\textit{(defn. subst [lhs])} & \Rightarrow &  \textcolor{LGcolor}{\llparenthesis} \smidge   \langle \rangle   \smidge \textcolor{LGcolor}{\rrparenthesis}  & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \langle \rangle   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+\textit{(defn. subst [rhs])} & \Rightarrow &  \textcolor{LGcolor}{\llparenthesis} \smidge   \langle \rangle   \smidge \textcolor{LGcolor}{\rrparenthesis}  & \eqStep &  \textcolor{LGcolor}{\llparenthesis} \smidge   \langle \rangle   \smidge \textcolor{LGcolor}{\rrparenthesis}  \\
+\textit{(reflexivity)} & \Rightarrow & \top
+\end{array}
+\end{align*}
+%
+\item ($ \mathrm{unit} _e$) $\SYSTEMnt{t'} \equiv  \mathsf{let} \, \langle \rangle =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}} $;
+%
+\begin{gather*}
+  \begin{align*}
+  \begin{array}{rcrlll}
+  \textit{(goal)} & &  \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]   \mathsf{let} \, \langle \rangle =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}}    \smidge \textcolor{LGcolor}{\rrparenthesis}  & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{let} \, \langle \rangle =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+  \textit{(defn. subst [lhs])} & \Rightarrow &  \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{let} \, \langle \rangle =   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \, \mathsf{in} \,   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}    \smidge \textcolor{LGcolor}{\rrparenthesis}  & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{let} \, \langle \rangle =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+  \textit{(defn. interp [lhs])} & \Rightarrow &  \mathsf{let} \, \langle \rangle =   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{in} \,   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{let} \, \langle \rangle =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+  \textit{(defn. interp [rhs])} & \Rightarrow &  \mathsf{let} \, \langle \rangle =   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{in} \,   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]    \mathsf{let} \, \langle \rangle =   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{in} \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}     \\
+  \textit{(defn. subst [rhs])} & \Rightarrow &  \mathsf{let} \, \langle \rangle =   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{in} \,   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   & \eqStep &   \mathsf{let} \, \langle \rangle =   [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \, \mathsf{in} \,   [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}     \\
+  \textit{(induction on $\SYSTEMnt{t_{{\mathrm{1}}}}$ and $\SYSTEMnt{t_{{\mathrm{2}}}}$)} & \Rightarrow & \top
+  \end{array}
+  \end{align*}
+\end{gather*}
+%
+\item ($\oplus_{i1}$) $\SYSTEMnt{t'} \equiv  \mathsf{inj}_1 \,  \SYSTEMnt{t_{{\mathrm{1}}}} $;
+%
+\begin{align*}
+\begin{array}{rcrlll}
+\textit{(goal)}               &             &  \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMsym{(}   \mathsf{inj}_1 \,  \SYSTEMnt{t_{{\mathrm{1}}}}   \SYSTEMsym{)}   \smidge \textcolor{LGcolor}{\rrparenthesis}  & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{inj}_1 \,  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+\textit{(defn. subst [lhs])}  & \Rightarrow &  \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{inj}_1 \,  \SYSTEMsym{(}   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \SYSTEMsym{)}   \smidge \textcolor{LGcolor}{\rrparenthesis}  & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{inj}_1 \,  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+\textit{(defn. interp [lhs])} & \Rightarrow &  \mathsf{inj}_1 \,   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}     & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{inj}_1 \,  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+\textit{(defn. interp [rhs])} & \Rightarrow &  \mathsf{inj}_1 \,   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}     & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]  \SYSTEMsym{(}   \mathsf{inj}_1 \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \SYSTEMsym{)}  \\
+\textit{(defn. subst [rhs])}  & \Rightarrow &  \mathsf{inj}_1 \,   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}     & \eqStep &  \mathsf{inj}_1 \,  \SYSTEMsym{(}   [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \SYSTEMsym{)}  \\
+\textit{(induction on $\SYSTEMnt{t_{{\mathrm{1}}}}$)} & \Rightarrow & \top
+\end{array}
+\end{align*}
+%
+\item ($\oplus_{i2}$) $\SYSTEMnt{t'} \equiv  \mathsf{inj}_2 \,  \SYSTEMnt{t_{{\mathrm{2}}}} $;
+%
+\begin{align*}
+\begin{array}{rcrlll}
+\textit{(goal)}               &             &  \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMsym{(}   \mathsf{inj}_2 \,  \SYSTEMnt{t_{{\mathrm{2}}}}   \SYSTEMsym{)}   \smidge \textcolor{LGcolor}{\rrparenthesis}  & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{inj}_2 \,  \SYSTEMnt{t_{{\mathrm{2}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+\textit{(defn. subst [lhs])}  & \Rightarrow &  \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{inj}_2 \,  \SYSTEMsym{(}   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}   \SYSTEMsym{)}   \smidge \textcolor{LGcolor}{\rrparenthesis}  & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{inj}_2 \,  \SYSTEMnt{t_{{\mathrm{2}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+\textit{(defn. interp [lhs])} & \Rightarrow &  \mathsf{inj}_2 \,   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}     & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{inj}_2 \,  \SYSTEMnt{t_{{\mathrm{2}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+\textit{(defn. interp [rhs])} & \Rightarrow &  \mathsf{inj}_2 \,   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}     & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]  \SYSTEMsym{(}   \mathsf{inj}_2 \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \SYSTEMsym{)}  \\
+\textit{(defn. subst [rhs])}  & \Rightarrow &  \mathsf{inj}_2 \,   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}     & \eqStep &  \mathsf{inj}_2 \,  \SYSTEMsym{(}   [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \SYSTEMsym{)}  \\
+\textit{(induction on $\SYSTEMnt{t_{{\mathrm{2}}}}$)} & \Rightarrow & \top
+\end{array}
+\end{align*}
+%
+\item ($\oplus_e$) $\SYSTEMnt{t'} \equiv  \mathsf{case} \,  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{y}  \rightarrow  \SYSTEMnt{t_{{\mathrm{2}}}}  ; \, \mathsf{inj2} \,  \SYSTEMmv{z}  \rightarrow  \SYSTEMnt{t_{{\mathrm{3}}}}  \} $ (with $ \SYSTEMmv{y} ,   \SYSTEMmv{z}  \,\#\,  \SYSTEMnt{t}  $);
+%
+\begin{gather*}
+  \begin{align*}
+  \begin{array}{rcl}
+  \textit{(goal)}               &             &  \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]   \mathsf{case} \,  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{y}  \rightarrow  \SYSTEMnt{t_{{\mathrm{2}}}}  ; \, \mathsf{inj2} \,  \SYSTEMmv{z}  \rightarrow  \SYSTEMnt{t_{{\mathrm{3}}}}  \}    \smidge \textcolor{LGcolor}{\rrparenthesis}                                  \\
+                                &             & \quad \equiv  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{case} \,  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{y}  \rightarrow  \SYSTEMnt{t_{{\mathrm{2}}}}  ; \, \mathsf{inj2} \,  \SYSTEMmv{z}  \rightarrow  \SYSTEMnt{t_{{\mathrm{3}}}}  \}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+  \textit{(defn. subst [lhs])}  & \Rightarrow &  \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{case} \,   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{y}  \rightarrow   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}   ; \, \mathsf{inj2} \,  \SYSTEMmv{z}  \rightarrow   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{3}}}}   \}   \smidge \textcolor{LGcolor}{\rrparenthesis}             \\
+                                &             & \quad \equiv  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{case} \,  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{y}  \rightarrow  \SYSTEMnt{t_{{\mathrm{2}}}}  ; \, \mathsf{inj2} \,  \SYSTEMmv{z}  \rightarrow  \SYSTEMnt{t_{{\mathrm{3}}}}  \}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+  \textit{(defn. interp [lhs])} & \Rightarrow &  \mathsf{case} \,   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{y}  \rightarrow   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   ; \, \mathsf{inj2} \,  \SYSTEMmv{z}  \rightarrow   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{3}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \}  \\
+                                &             & \quad \equiv  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{case} \,  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{y}  \rightarrow  \SYSTEMnt{t_{{\mathrm{2}}}}  ; \, \mathsf{inj2} \,  \SYSTEMmv{z}  \rightarrow  \SYSTEMnt{t_{{\mathrm{3}}}}  \}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+  \textit{(defn. interp [rhs])} & \Rightarrow &  \mathsf{case} \,   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{y}  \rightarrow   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   ; \, \mathsf{inj2} \,  \SYSTEMmv{z}  \rightarrow   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{3}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \}  \\
+                                &             & \quad \equiv  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \mathsf{case} \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{y}  \rightarrow   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   ; \, \mathsf{inj2} \,  \SYSTEMmv{z}  \rightarrow   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{3}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \}   \\
+  \textit{(defn. subst [rhs])}  & \Rightarrow &  \mathsf{case} \,   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{y}  \rightarrow   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   ; \, \mathsf{inj2} \,  \SYSTEMmv{z}  \rightarrow   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{3}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \}  \\
+                                &             & \quad \equiv  \mathsf{case} \,   [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{y}  \rightarrow   [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}    ; \, \mathsf{inj2} \,  \SYSTEMmv{z}  \rightarrow   [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{3}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \}  \\
+  \textit{(ind. on $\SYSTEMnt{t_{{\mathrm{1}}}}$, $\SYSTEMnt{t_{{\mathrm{2}}}}$, $\SYSTEMnt{t_{{\mathrm{3}}}}$)} & \Rightarrow & \top
+  \end{array}
+  \end{align*}
+\end{gather*}
+%
+\item ($ \textsf{push}_\otimes     $) $\SYSTEMnt{t'} \equiv  \textsf{push}_\otimes  \SYSTEMnt{t_{{\mathrm{1}}}} $ (with $ \SYSTEMmv{y}  \,\#\,  \SYSTEMnt{t}  \wedge  \SYSTEMmv{z}  \,\#\,  \SYSTEMnt{t} $);
+%
+\begin{gather*}
+\begin{align*}
+\begin{array}{rcrlll}
+\textit{(goal)} & &  \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]   \textsf{push}_\otimes  \SYSTEMnt{t_{{\mathrm{1}}}}    \smidge \textcolor{LGcolor}{\rrparenthesis}  & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \textsf{push}_\otimes  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+\textit{(defn. subst [lhs])} & \Rightarrow &  \textcolor{LGcolor}{\llparenthesis} \smidge   \textsf{push}_\otimes  \SYSTEMsym{(}   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \SYSTEMsym{)}   \smidge \textcolor{LGcolor}{\rrparenthesis}  & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \textsf{push}_\otimes  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+\textit{(defn. interp [lhs])} & \Rightarrow &  \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{in} \,   \mathsf{let} \, \langle  \SYSTEMmv{y} ,  \SYSTEMmv{z}  \rangle =  \SYSTEMmv{x}  \, \mathsf{in} \,   \langle   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}  ,   \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]}   \rangle    & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \textsf{push}_\otimes  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+\textit{(defn. interp [rhs])} & \Rightarrow &  \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{in} \,   \mathsf{let} \, \langle  \SYSTEMmv{y} ,  \SYSTEMmv{z}  \rangle =  \SYSTEMmv{x}  \, \mathsf{in} \,   \langle   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}  ,   \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]}   \rangle    & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]    \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{in} \,   \mathsf{let} \, \langle  \SYSTEMmv{y} ,  \SYSTEMmv{z}  \rangle =  \SYSTEMmv{x}  \, \mathsf{in} \,   \langle   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}  ,   \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]}   \rangle      \\
+\textit{(defn. subst [rhs])} & \Rightarrow &  \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{in} \,   \mathsf{let} \, \langle  \SYSTEMmv{y} ,  \SYSTEMmv{z}  \rangle =  \SYSTEMmv{x}  \, \mathsf{in} \,   \langle   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}  ,   \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]}   \rangle    & \eqStep &   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =   [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \, \mathsf{in} \,   \mathsf{let} \, \langle  \SYSTEMmv{y} ,  \SYSTEMmv{z}  \rangle =  \SYSTEMmv{x}  \, \mathsf{in} \,   \langle   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}  ,   \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]}   \rangle     \\
+\textit{(induction on $\SYSTEMnt{t_{{\mathrm{1}}}}$)} & \Rightarrow & \top
+\end{array}
+\end{align*}
+\end{gather*}
+%
+\item ($ \textsf{push}_\oplus     $) $\SYSTEMnt{t'} \equiv  \textsf{push}_\oplus  \SYSTEMnt{t_{{\mathrm{1}}}} $ (with $ \SYSTEMmv{y}  \,\#\,  \SYSTEMnt{t}  \wedge  \SYSTEMmv{z}  \,\#\,  \SYSTEMnt{t} $);
+%
+\begin{gather*}
+\begin{align*}
+\begin{array}{rcrlll}
+\textit{(goal)} & &  \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]   \textsf{push}_\oplus  \SYSTEMnt{t_{{\mathrm{1}}}}    \smidge \textcolor{LGcolor}{\rrparenthesis}  & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \textsf{push}_\oplus  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+\textit{(defn. subst [lhs])} & \Rightarrow &  \textcolor{LGcolor}{\llparenthesis} \smidge   \textsf{push}_\oplus  \SYSTEMsym{(}   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \SYSTEMsym{)}   \smidge \textcolor{LGcolor}{\rrparenthesis}  & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \textsf{push}_\oplus  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+\textit{(defn. interp [lhs])} & \Rightarrow &  \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{in} \,   \mathsf{case} \,  \SYSTEMmv{x}  \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{y}  \rightarrow   \mathsf{inj}_1 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}    ; \, \mathsf{inj2} \,  \SYSTEMmv{z}  \rightarrow   \mathsf{inj}_2 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]}    \}   & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \textsf{push}_\oplus  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+\textit{(defn. interp [rhs])} & \Rightarrow &  \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{in} \,   \mathsf{case} \,  \SYSTEMmv{x}  \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{y}  \rightarrow   \mathsf{inj}_1 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}    ; \, \mathsf{inj2} \,  \SYSTEMmv{z}  \rightarrow   \mathsf{inj}_2 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]}    \}   & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]    \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{in} \,   \mathsf{case} \,  \SYSTEMmv{x}  \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{y}  \rightarrow   \mathsf{inj}_1 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}    ; \, \mathsf{inj2} \,  \SYSTEMmv{z}  \rightarrow   \mathsf{inj}_2 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]}    \}     \\
+\textit{(defn. subst [rhs])} & \Rightarrow &  \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{in} \,   \mathsf{case} \,  \SYSTEMmv{x}  \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{y}  \rightarrow   \mathsf{inj}_1 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}    ; \, \mathsf{inj2} \,  \SYSTEMmv{z}  \rightarrow   \mathsf{inj}_2 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]}    \}   & \eqStep &   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =   [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \, \mathsf{in} \,   \mathsf{case} \,  \SYSTEMmv{x}  \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{y}  \rightarrow   \mathsf{inj}_1 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}    ; \, \mathsf{inj2} \,  \SYSTEMmv{z}  \rightarrow   \mathsf{inj}_2 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]}    \}    \\
+\textit{(induction on $\SYSTEMnt{t_{{\mathrm{1}}}}$)} & \Rightarrow & \top
+\end{array}
+\end{align*}
+\end{gather*}
+%
+\item ($ \textsf{push}_{\mathrm{unit} }     $) $\SYSTEMnt{t'} \equiv  \textsf{push}_{\mathrm{unit} }  \SYSTEMnt{t_{{\mathrm{1}}}} $ (with $ \SYSTEMmv{y}  \,\#\,  \SYSTEMnt{t} $);
+%
+\begin{gather*}
+\begin{align*}
+\begin{array}{rcrlll}
+\textit{(goal)} & &  \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]   \textsf{push}_{\mathrm{unit} }  \SYSTEMnt{t_{{\mathrm{1}}}}    \smidge \textcolor{LGcolor}{\rrparenthesis}  & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \textsf{push}_{\mathrm{unit} }  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+\textit{(defn. subst [lhs])} & \Rightarrow &  \textcolor{LGcolor}{\llparenthesis} \smidge   \textsf{push}_{\mathrm{unit} }  \SYSTEMsym{(}   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \SYSTEMsym{)}   \smidge \textcolor{LGcolor}{\rrparenthesis}  & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \textsf{push}_{\mathrm{unit} }  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+\textit{(defn. interp [lhs])} & \Rightarrow &  \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]} =   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{in} \,   \mathsf{let} \, \langle \rangle =  \SYSTEMmv{y}  \, \mathsf{in} \,   \langle \rangle    & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   \textsf{push}_{\mathrm{unit} }  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+\textit{(defn. interp [rhs])} & \Rightarrow &  \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]} =   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{in} \,   \mathsf{let} \, \langle \rangle =  \SYSTEMmv{y}  \, \mathsf{in} \,   \langle \rangle    & \eqStep &  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]    \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]} =   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{in} \,   \mathsf{let} \, \langle \rangle =  \SYSTEMmv{y}  \, \mathsf{in} \,   \langle \rangle      \\
+\textit{(defn. subst [rhs])} & \Rightarrow &  \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]} =   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{in} \,   \mathsf{let} \, \langle \rangle =  \SYSTEMmv{y}  \, \mathsf{in} \,   \langle \rangle    & \eqStep &   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]} =   [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \, \mathsf{in} \,   \mathsf{let} \, \langle \rangle =  \SYSTEMmv{y}  \, \mathsf{in} \,   \langle \rangle     \\
+\textit{(induction on $\SYSTEMnt{t_{{\mathrm{1}}}}$)} & \Rightarrow & \top
+\end{array}
+\end{align*}
+\end{gather*}
+\end{itemize}
+\end{proof}
+
+The operational correspondence then follows according to the following proof:
+
+\begin{proof}
+  The proof subsumes the earlier proofs; we add the additional cases here due to the
+  extension of the language from Linear Base to Linear Core.
+
+  We consider the theorem in an expanded form: for every $ \SYSTEMnt{t}  \rightsquigarrow_{\textsc{l} }  \SYSTEMnt{t'} $
+  then $\exists t'' .   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \rightsquigarrow_{\textsc{g} }^\ast  \SYSTEMnt{t''}  \wedge  \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t'}  \smidge \textcolor{LGcolor}{\rrparenthesis}  \equiv \SYSTEMnt{t''}$.
+  %
+  \begin{itemize}
+\item (prodCong)
+\[
+\SYSTEMdruleSemLinprodCong{}
+\]
+%
+By induction, analogously to the case for (congAppL).
+
+
+\item (prodBeta)
+\[
+\SYSTEMdruleSemLinprodBeta{}
+\]
+%
+The interpretation of the reducing term is:
+%
+\[
+  \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{let} \, \langle  \SYSTEMmv{x} ,  \SYSTEMmv{y}  \rangle =   \langle  \SYSTEMnt{t_{{\mathrm{1}}}} ,  \SYSTEMnt{t_{{\mathrm{2}}}}  \rangle   \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{3}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \equiv   \mathsf{let} \, \langle  \SYSTEMmv{x} ,  \SYSTEMmv{y}  \rangle =   \langle   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}  ,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \rangle   \, \mathsf{in} \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{3}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   
+\]
+where $ \SYSTEMmv{x} ,   \SYSTEMmv{y}  \,\#\,  \SYSTEMnt{t}  $.
+%
+Then we construct the reduction in Graded Base:
+%
+\begin{align*}
+\inferrule*[right=\SYSTEMRenameRuleSemGrdprodBeta{}]
+{ }
+{  \mathsf{let} \, \langle  \SYSTEMmv{x} ,  \SYSTEMmv{y}  \rangle =   \langle   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}  ,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \rangle   \, \mathsf{in} \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{3}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \rightsquigarrow_{\textsc{l} }   [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{y}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{3}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}    }
+\end{align*}
+%
+By Lemma~\ref{lemma:interp-lin-to-grd-mod-preserves-subst} then interpreting
+the graded-base reduced term is equal to the linear-base reduced term:
+\begin{align*}
+ \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t_{{\mathrm{1}}}}  /  \SYSTEMmv{x}  ]   [  \SYSTEMnt{t_{{\mathrm{2}}}}  /  \SYSTEMmv{y}  ]  \SYSTEMnt{t_{{\mathrm{3}}}}    \smidge \textcolor{LGcolor}{\rrparenthesis}  & \equiv  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t_{{\mathrm{2}}}}  /  \SYSTEMmv{y}  ]  \SYSTEMnt{t_{{\mathrm{3}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+                                     & \equiv  [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{y}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{3}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   
+\end{align*}
+
+
+\item (unitCong)
+\[
+\SYSTEMdruleSemLinunitCong{}
+\]
+%
+By induction, analogously to the case for (congAppL).
+
+
+\item (unitBeta)
+\[
+\SYSTEMdruleSemLinunitBeta{}
+\]
+%
+The interpretation of the reducing term is:
+%
+\[
+  \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{let} \, \langle \rangle =   \langle \rangle   \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \equiv   \mathsf{let} \, \langle \rangle =   \langle \rangle   \, \mathsf{in} \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   
+\]
+%
+Then we construct the reduction in Graded Base:
+%
+\begin{align*}
+\inferrule*[right=\SYSTEMRenameRuleSemGrdModbetaBox{}]
+{ }
+{  \mathsf{let} \, \langle \rangle =   \langle \rangle   \, \mathsf{in} \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \rightsquigarrow_{\textsc{l} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}  }
+\end{align*}
+%
+By reflexivity then interpreting the graded-base reduced term is equal to the
+linear-base reduced term.
+
+
+\item (congCase)
+\[
+\SYSTEMdruleSemLincongCase{}
+\]
+%
+By induction, analogously to the case for (congAppL).
+
+
+\item (caseInj1)
+\[
+\SYSTEMdruleSemLincaseInjOne{}
+\]
+%
+The interpretation of the reducing term is:
+%
+\[
+  \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{case} \,   \mathsf{inj}_1 \,  \SYSTEMnt{t}   \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{x}  \rightarrow  \SYSTEMnt{t_{{\mathrm{1}}}}  ; \, \mathsf{inj2} \,  \SYSTEMmv{y}  \rightarrow  \SYSTEMnt{t_{{\mathrm{2}}}}  \}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \equiv   \mathsf{case} \,   \mathsf{inj}_1 \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{x}  \rightarrow   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   ; \, \mathsf{inj2} \,  \SYSTEMmv{y}  \rightarrow   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \}  
+\]
+%
+Then we construct the reduction in Graded Base:
+%
+\begin{align*}
+\inferrule*[right=\SYSTEMRenameRuleSemGrdcaseInjOne{}]
+{ }
+{  \mathsf{case} \,   \mathsf{inj}_1 \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{x}  \rightarrow   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   ; \, \mathsf{inj2} \,  \SYSTEMmv{y}  \rightarrow   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \}   \rightsquigarrow_{\textsc{l} }   [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   }
+\end{align*}
+%
+By Lemma~\ref{lemma:interp-lin-to-grd-mod-preserves-subst} then interpreting
+the graded-base reduced term is equal to the linear-base
+reduced term: $  \textcolor{LGcolor}{\llparenthesis} \smidge   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \equiv   [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   $.
+
+
+\item (caseInj2)
+\[
+\SYSTEMdruleSemLincaseInjTwo{}
+\]
+Analogously to the case for (caseInj1).
+
+\item (pushProdCong)
+\[
+\SYSTEMdruleSemLinpushProdCong{}
+\]
+By induction, analogously to the case for (congAppL).
+
+
+\item (pushProdBoxCong)
+\[
+\SYSTEMdruleSemLinpushProdBoxCong{}
+\]
+By induction, analogously to the case for (congAppL).
+
+
+\item (pushProd)
+\[
+\SYSTEMdruleSemLinpushProd{}
+\]
+The interpretation of the reducing term is (with $ \begin{array}{cc}    \SYSTEMmv{z}  \,\#\,  \SYSTEMnt{t_{{\mathrm{1}}}}    \; & \;    \SYSTEMmv{z}  \,\#\,  \SYSTEMnt{t_{{\mathrm{2}}}}    \end{array} $):
+%
+\[
+  \textcolor{LGcolor}{\llparenthesis} \smidge   \textsf{push}_\otimes   \textcolor{coeffectColor}{[}   \langle  \SYSTEMnt{t_{{\mathrm{1}}}} ,  \SYSTEMnt{t_{{\mathrm{2}}}}  \rangle   \textcolor{coeffectColor}{]}    \smidge \textcolor{LGcolor}{\rrparenthesis}   \equiv   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]} =   \textcolor{coeffectColor}{[}   \langle   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}  ,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \rangle   \textcolor{coeffectColor}{]}   \, \mathsf{in} \,   \mathsf{let} \, \langle  \SYSTEMmv{x} ,  \SYSTEMmv{y}  \rangle =  \SYSTEMmv{z}  \, \mathsf{in} \,   \langle   \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]}  ,   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}   \rangle    
+\]
+%
+Then we construct the following reduction sequence in Graded Base:
+%
+\begin{align*}
+& \inferrule*[right=\SYSTEMRenameRuleSemGrdModbetaBox{}]
+{ }
+{  \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]} =   \textcolor{coeffectColor}{[}   \langle   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}  ,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \rangle   \textcolor{coeffectColor}{]}   \, \mathsf{in} \,   \mathsf{let} \, \langle  \SYSTEMmv{x} ,  \SYSTEMmv{y}  \rangle =  \SYSTEMmv{z}  \, \mathsf{in} \,   \langle   \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]}  ,   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}   \rangle     \rightsquigarrow_{\textsc{l} }   [   \langle   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}  ,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \rangle   /  \SYSTEMmv{z}  ]   \mathsf{let} \, \langle  \SYSTEMmv{x} ,  \SYSTEMmv{y}  \rangle =  \SYSTEMmv{z}  \, \mathsf{in} \,   \langle   \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]}  ,   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}   \rangle    } \\
+& \inferrule*[right=\SYSTEMRenameRuleSemGrdprodBeta{}]
+{ }
+{  \mathsf{let} \, \langle  \SYSTEMmv{x} ,  \SYSTEMmv{y}  \rangle =   \textcolor{coeffectColor}{[}   \langle   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}  ,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \rangle   \textcolor{coeffectColor}{]}   \, \mathsf{in} \,   \langle   \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]}  ,   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}   \rangle    \rightsquigarrow_{\textsc{l} }   \langle   \textcolor{coeffectColor}{[}   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \textcolor{coeffectColor}{]}  ,   \textcolor{coeffectColor}{[}   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \textcolor{coeffectColor}{]}   \rangle  }
+\end{align*}
+%
+By the definition of interpretation, $  \textcolor{LGcolor}{\llparenthesis} \smidge   \langle  \SYSTEMnt{t_{{\mathrm{1}}}} ,  \SYSTEMnt{t_{{\mathrm{2}}}}  \rangle   \smidge \textcolor{LGcolor}{\rrparenthesis}   \equiv   \langle   \textcolor{coeffectColor}{[}   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \textcolor{coeffectColor}{]}  ,   \textcolor{coeffectColor}{[}   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \textcolor{coeffectColor}{]}   \rangle  $.
+
+
+\item (pushUnitCong)
+\[
+\SYSTEMdruleSemLinpushUnitCong{}
+\]
+By induction, analogously to the case for (congAppL).
+
+
+\item (pushUnitBoxCong)
+\[
+\SYSTEMdruleSemLinpushUnitBoxCong{}
+\]
+By induction, analogously to the case for (congAppL).
+
+
+\item (pushUnit)
+\[
+\SYSTEMdruleSemLinpushUnit{}
+\]
+The interpretation of the reducing term is:
+%
+\[
+  \textcolor{LGcolor}{\llparenthesis} \smidge   \textsf{push}_\otimes   \textcolor{coeffectColor}{[}   \langle \rangle   \textcolor{coeffectColor}{]}    \smidge \textcolor{LGcolor}{\rrparenthesis}   \equiv   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =   \textcolor{coeffectColor}{[}   \langle \rangle   \textcolor{coeffectColor}{]}   \, \mathsf{in} \,   \mathsf{let} \, \langle \rangle =  \SYSTEMmv{x}  \, \mathsf{in} \,   \langle \rangle    
+\]
+%
+Then we construct the following reduction sequence in Graded Base:
+%
+\begin{align*}
+& \inferrule*[right=\SYSTEMRenameRuleSemGrdModbetaBox{}]
+{ }
+{  \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =   \textcolor{coeffectColor}{[}   \langle \rangle   \textcolor{coeffectColor}{]}   \, \mathsf{in} \,   \mathsf{let} \, \langle \rangle =  \SYSTEMmv{x}  \, \mathsf{in} \,   \langle \rangle     \rightsquigarrow_{\textsc{l} }   [   \langle \rangle   /  \SYSTEMmv{x}  ]   \mathsf{let} \, \langle \rangle =  \SYSTEMmv{x}  \, \mathsf{in} \,   \langle \rangle    } \\
+& \inferrule*[right=\SYSTEMRenameRuleSemGrdunitBeta{}]
+{ }
+{  \mathsf{let} \, \langle \rangle =   \langle \rangle   \, \mathsf{in} \,   \langle \rangle    \rightsquigarrow_{\textsc{l} }   \langle \rangle  }
+\end{align*}
+%
+By the definition of interpretation, $  \textcolor{LGcolor}{\llparenthesis} \smidge   \langle \rangle   \smidge \textcolor{LGcolor}{\rrparenthesis}   \equiv   \langle \rangle  $.
+
+
+\item (pushSumCong)
+\[
+\SYSTEMdruleSemLinpushSumCong{}
+\]
+By induction, analogously to the case for (congAppL).
+
+
+\item (pushSumBoxCong)
+\[
+\SYSTEMdruleSemLinpushSumCong{}
+\]
+By induction, analogously to the case for (congAppL).
+
+
+\item (pushSumInj1)
+\[
+\SYSTEMdruleSemLinpushSumInjOne{}
+\]
+The interpretation of the reducing term is ($ \SYSTEMmv{z}  \,\#\,  \SYSTEMnt{t_{{\mathrm{1}}}} $):
+%
+\[
+  \textcolor{LGcolor}{\llparenthesis} \smidge   \textsf{push}_\oplus   \textcolor{coeffectColor}{[}   \mathsf{inj}_1 \,  \SYSTEMnt{t_{{\mathrm{1}}}}   \textcolor{coeffectColor}{]}    \smidge \textcolor{LGcolor}{\rrparenthesis}   \equiv   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]} =   \textcolor{coeffectColor}{[}   \mathsf{inj}_1 \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \textcolor{coeffectColor}{]}   \, \mathsf{in} \,   \mathsf{case} \,  \SYSTEMmv{z}  \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{x}  \rightarrow   \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]}   ; \, \mathsf{inj2} \,  \SYSTEMmv{y}  \rightarrow   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}   \}   
+\]
+%
+Then we construct the following reduction sequence in Graded Base:
+%
+\begin{gather*}
+    \begin{align*}
+    &\inferrule*[right=\SYSTEMRenameRuleSemGrdModbetaBox{}]
+    { }
+    {  \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]} =   \textcolor{coeffectColor}{[}   \mathsf{inj}_1 \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \textcolor{coeffectColor}{]}   \, \mathsf{in} \,   \mathsf{case} \,  \SYSTEMmv{z}  \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{x}  \rightarrow   \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]}   ; \, \mathsf{inj2} \,  \SYSTEMmv{y}  \rightarrow   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}   \}    \rightsquigarrow_{\textsc{l} }   \mathsf{case} \,   \mathsf{inj}_1 \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{x}  \rightarrow   \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]}   ; \, \mathsf{inj2} \,  \SYSTEMmv{y}  \rightarrow   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}   \}  } \\
+    &\inferrule*[right=\SYSTEMRenameRuleSemGrdcaseInjOne{}]
+    { }
+    {  \mathsf{case} \,   \mathsf{inj}_1 \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{x}  \rightarrow   \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]}   ; \, \mathsf{inj2} \,  \SYSTEMmv{y}  \rightarrow   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}   \}   \rightsquigarrow_{\textsc{l} }   \mathsf{inj}_1 \,   \textcolor{coeffectColor}{[}   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \textcolor{coeffectColor}{]}   }
+    \end{align*}
+\end{gather*}
+%
+By the definition of interpretation, $  \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{inj}_1 \,   \textcolor{coeffectColor}{[}  \SYSTEMnt{t_{{\mathrm{1}}}}  \textcolor{coeffectColor}{]}    \smidge \textcolor{LGcolor}{\rrparenthesis}   \equiv   \mathsf{inj}_1 \,   \textcolor{coeffectColor}{[}   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \textcolor{coeffectColor}{]}   $.
+
+
+
+\item (pushSumInj2)
+\[
+\SYSTEMdruleSemLinpushSumInjTwo{}
+\]
+%
+Analogously to the case for (pushSumInj1).
+  \end{itemize}
+\end{proof}
+
+
+\subsubsection{Equation correspondence}
+\label{app:proofs-lin-core-to-grad-core-eqs}
+
+\begin{proof}
+  The proof subsumes the earlier proofs; we add the additional cases here due to the
+  extension of the language from Linear Base to Linear Core.
+  \begin{itemize}
+  \item \[\SYSTEMdruleLinEqbetaUnit{}\]
+     \begin{align*}
+      \begin{array}{rl}
+        &  \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{let} \, \langle \rangle =   \langle \rangle   \, \mathsf{in} \,  \SYSTEMnt{t}   \smidge \textcolor{LGcolor}{\rrparenthesis}  \\
+        \textit{\{defn. translation\}} & =  \mathsf{let} \, \langle \rangle =   \langle \rangle   \, \mathsf{in} \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+        \textit{\{\SYSTEMRenameRuleGradEqbetaUnit{}\}} &  \equiv_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis} 
+      \end{array}
+    \end{align*}
+
+
+  \item \[\SYSTEMdruleLinEqetaUnit{}\]
+
+    \begin{align*}
+      \begin{array}{rl}
+        &  \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{let} \, \langle \rangle =  \SYSTEMnt{t}  \, \mathsf{in} \,   \langle \rangle    \smidge \textcolor{LGcolor}{\rrparenthesis}  \\
+        \textit{\{defn. translation\}} & =  \mathsf{let} \, \langle \rangle =   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{in} \,   \langle \rangle   \\
+        \textit{\{\SYSTEMRenameRuleGradEqetaUnit{}\}} &  \equiv_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis} 
+      \end{array}
+    \end{align*}
+
+  \item \[ \SYSTEMdruleLinEqbetaProd{}  \]
+    \begin{align*}
+      \begin{array}{rl}
+        &  \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{let} \, \langle  \SYSTEMmv{x} ,  \SYSTEMmv{y}  \rangle =   \langle  \SYSTEMnt{t_{{\mathrm{1}}}} ,  \SYSTEMnt{t_{{\mathrm{2}}}}  \rangle   \, \mathsf{in} \,  \SYSTEMnt{t}   \smidge \textcolor{LGcolor}{\rrparenthesis}  \\
+        \textit{\{defn. translation\}} & =  \mathsf{let} \, \langle  \SYSTEMmv{x'} ,  \SYSTEMmv{y'}  \rangle =   \langle   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}  ,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \rangle   \, \mathsf{in} \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \\
+        \textit{\{\SYSTEMRenameRuleGradEqbetaProd{}\}} &  \equiv_{\textsc{g} }   [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{y}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \\
+      \end{array}
+      \end{align*}
+
+
+  \item \[\SYSTEMdruleLinEqetaProd{}\]
+
+    \begin{align*}
+      \begin{array}{rl}
+        &  \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{let} \, \langle  \SYSTEMmv{x} ,  \SYSTEMmv{y}  \rangle =  \SYSTEMnt{t}  \, \mathsf{in} \,   \langle  \SYSTEMmv{x} ,  \SYSTEMmv{y}  \rangle    \smidge \textcolor{LGcolor}{\rrparenthesis}  \\
+        \textit{\{defn. translation\}} & =  \mathsf{let} \, \langle  \SYSTEMmv{x} ,  \SYSTEMmv{y}  \rangle =   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{in} \,   \langle  \SYSTEMmv{x} ,  \SYSTEMmv{y}  \rangle   \\
+        \textit{\SYSTEMRenameRuleGradEqetaProd{}} &  \equiv_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis} 
+      \end{array}
+      \end{align*}
+
+  \item \[\SYSTEMdruleLinEqbetaSumOne{}\]
+        \begin{align*}
+      \begin{array}{rl}
+        &  \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{case} \,   \mathsf{inj}_1 \,  \SYSTEMnt{t}   \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{x}  \rightarrow  \SYSTEMnt{t_{{\mathrm{1}}}}  ; \, \mathsf{inj2} \,  \SYSTEMmv{y}  \rightarrow  \SYSTEMnt{t_{{\mathrm{2}}}}  \}   \smidge \textcolor{LGcolor}{\rrparenthesis}  \\
+        \textit{\{defn. translation\}} & =  \mathsf{case} \,   \mathsf{inj}_1 \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{x}  \rightarrow   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   ; \, \mathsf{inj2} \,  \SYSTEMmv{y}  \rightarrow   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \}  \\
+        \textit{\{\SYSTEMRenameRuleGradEqbetaSumOne{}\}} &  \equiv_{\textsc{g} }   [   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   /  \SYSTEMmv{x}  ]   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}  
+      \end{array}
+      \end{align*}
+
+      \item  \[\SYSTEMdruleLinEqbetaSumTwo{}\]
+        As above but symmetrically for the other beta rule.
+
+      \item \[\SYSTEMdruleLinEqetaSum{}\]
+
+            \begin{align*}
+      \begin{array}{rl}
+        &  \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{case} \,  \SYSTEMnt{t}  \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{x}  \rightarrow   \mathsf{inj}_1 \,  \SYSTEMmv{x}   ; \, \mathsf{inj2} \,  \SYSTEMmv{y}  \rightarrow   \mathsf{inj}_2 \,  \SYSTEMmv{y}   \}   \smidge \textcolor{LGcolor}{\rrparenthesis}  \\
+        \textit{\{defn. translation\}} & =  \mathsf{case} \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{x}  \rightarrow   \mathsf{inj}_1 \,  \SYSTEMmv{x}   ; \, \mathsf{inj2} \,  \SYSTEMmv{y}  \rightarrow   \mathsf{inj}_2 \,  \SYSTEMmv{y}   \}  \\
+        \textit{\{\SYSTEMRenameRuleGradEqetaSum{}\}} &  \equiv_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis} 
+      \end{array}
+            \end{align*}
+            %
+
+  \item \[\SYSTEMdruleLinEqpushUnitBeta{}\]
+
+    \begin{align*}
+      \begin{array}{rl}
+        &  \textcolor{LGcolor}{\llparenthesis} \smidge   \textsf{push}_{\mathrm{unit} }   \textcolor{coeffectColor}{[}   \langle \rangle   \textcolor{coeffectColor}{]}    \smidge \textcolor{LGcolor}{\rrparenthesis}  \\
+        \textit{\{defn. translation\}} & =  \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =   \textcolor{coeffectColor}{[}   \langle \rangle   \textcolor{coeffectColor}{]}   \, \mathsf{in} \,   \mathsf{let} \, \langle \rangle =  \SYSTEMmv{x}  \, \mathsf{in} \,   \langle \rangle    \\
+        \textit{\{\SYSTEMRenameRuleGradMEqbetaBox \}} &  \equiv_{\textsc{g} }   \mathsf{let} \, \langle \rangle =   \langle \rangle   \, \mathsf{in} \,   \langle \rangle   \\
+        \textit{\{\SYSTEMRenameRuleGradEqbetaUnit{}\}} &  \equiv_{\textsc{g} }   \langle \rangle  \\
+        \textit{\{defn. translation\}} & =  \textcolor{LGcolor}{\llparenthesis} \smidge   \langle \rangle   \smidge \textcolor{LGcolor}{\rrparenthesis} 
+      \end{array}
+    \end{align*}
+
+  \item \[\SYSTEMdruleLinEqpushProdBeta{}\]
+
+    \begin{align*}
+      \begin{array}{rl}
+        &  \textcolor{LGcolor}{\llparenthesis} \smidge   \textsf{push}_\otimes   \textcolor{coeffectColor}{[}   \langle  \SYSTEMnt{t_{{\mathrm{1}}}} ,  \SYSTEMnt{t_{{\mathrm{2}}}}  \rangle   \textcolor{coeffectColor}{]}    \smidge \textcolor{LGcolor}{\rrparenthesis}  \\
+        \textit{\{defn. translation\}} & =  \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =   \textcolor{coeffectColor}{[}   \langle   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}  ,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \rangle   \textcolor{coeffectColor}{]}   \, \mathsf{in} \,   \mathsf{let} \, \langle  \SYSTEMmv{y} ,  \SYSTEMmv{z}  \rangle =  \SYSTEMmv{x}  \, \mathsf{in} \,   \langle   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}  ,   \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]}   \rangle    \\
+        \textit{\{\SYSTEMRenameRuleGradMEqbetaBox \}} &  \equiv_{\textsc{g} }   \mathsf{let} \, \langle  \SYSTEMmv{y} ,  \SYSTEMmv{z}  \rangle =   \langle   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}  ,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \rangle   \, \mathsf{in} \,   \langle   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}  ,   \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]}   \rangle   \\
+        \textit{\{\SYSTEMRenameRuleGradEqbetaProd{}\}} &  \equiv_{\textsc{g} }   \langle   \textcolor{coeffectColor}{[}   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \textcolor{coeffectColor}{]}  ,   \textcolor{coeffectColor}{[}   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \textcolor{coeffectColor}{]}   \rangle  \\
+        \textit{\{defn. translation\}} & =  \textcolor{LGcolor}{\llparenthesis} \smidge   \langle   \textcolor{coeffectColor}{[}  \SYSTEMnt{t_{{\mathrm{1}}}}  \textcolor{coeffectColor}{]}  ,   \textcolor{coeffectColor}{[}  \SYSTEMnt{t_{{\mathrm{2}}}}  \textcolor{coeffectColor}{]}   \rangle   \smidge \textcolor{LGcolor}{\rrparenthesis} 
+      \end{array}
+    \end{align*}
+
+  \item \[\SYSTEMdruleLinEqpushSumBetaOne{}\]
+
+    \begin{align*}
+      \begin{array}{rl}
+        &  \textcolor{LGcolor}{\llparenthesis} \smidge   \textsf{push}_\oplus   \textcolor{coeffectColor}{[}   \mathsf{inj}_1 \,  \SYSTEMnt{t}   \textcolor{coeffectColor}{]}    \smidge \textcolor{LGcolor}{\rrparenthesis}  \\
+        \textit{\{defn. translation\}} & =  \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =   \textcolor{coeffectColor}{[}   \mathsf{inj}_1 \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \textcolor{coeffectColor}{]}   \, \mathsf{in} \,   \mathsf{case} \,  \SYSTEMmv{x}  \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{y}  \rightarrow   \mathsf{inj}_1 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}    ; \, \mathsf{inj2} \,  \SYSTEMmv{z}  \rightarrow   \mathsf{inj}_2 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]}    \}   \\
+        \textit{\{\SYSTEMRenameRuleGradMEqbetaBox \}} &  \equiv_{\textsc{g} }   \mathsf{case} \,   \mathsf{inj}_1 \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{y}  \rightarrow   \mathsf{inj}_1 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}    ; \, \mathsf{inj2} \,  \SYSTEMmv{z}  \rightarrow   \mathsf{inj}_2 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]}    \}  \\
+        \textit{\{\SYSTEMRenameRuleGradEqbetaSumOne{}\}} &  \equiv_{\textsc{g} }   \mathsf{inj}_1 \,   \textcolor{coeffectColor}{[}   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \textcolor{coeffectColor}{]}   \\
+        \textit{\{defn. translation\}} & =  \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{inj}_1 \,   \textcolor{coeffectColor}{[}  \SYSTEMnt{t}  \textcolor{coeffectColor}{]}    \smidge \textcolor{LGcolor}{\rrparenthesis} 
+      \end{array}
+    \end{align*}
+
+  \item \[\SYSTEMdruleLinEqpushSumBetaTwo{}\]
+
+    \begin{align*}
+      \begin{array}{rl}
+        &  \textcolor{LGcolor}{\llparenthesis} \smidge   \textsf{push}_\oplus   \textcolor{coeffectColor}{[}   \mathsf{inj}_2 \,  \SYSTEMnt{t}   \textcolor{coeffectColor}{]}    \smidge \textcolor{LGcolor}{\rrparenthesis}  \\
+        \textit{\{defn. translation\}} & =  \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =   \textcolor{coeffectColor}{[}   \mathsf{inj}_2 \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \textcolor{coeffectColor}{]}   \, \mathsf{in} \,   \mathsf{case} \,  \SYSTEMmv{x}  \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{y}  \rightarrow   \mathsf{inj}_1 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}    ; \, \mathsf{inj2} \,  \SYSTEMmv{z}  \rightarrow   \mathsf{inj}_2 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]}    \}   \\
+        \textit{\{\SYSTEMRenameRuleGradMEqbetaBox \}} &  \equiv_{\textsc{g} }   \mathsf{case} \,   \mathsf{inj}_2 \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{y}  \rightarrow   \mathsf{inj}_1 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}    ; \, \mathsf{inj2} \,  \SYSTEMmv{z}  \rightarrow   \mathsf{inj}_2 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]}    \}  \\
+        \textit{\{\SYSTEMRenameRuleGradEqbetaSumTwo{}\}} &  \equiv_{\textsc{g} }   \mathsf{inj}_2 \,   \textcolor{coeffectColor}{[}   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \textcolor{coeffectColor}{]}   \\
+        \textit{\{defn. translation\}} & =  \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{inj}_2 \,   \textcolor{coeffectColor}{[}  \SYSTEMnt{t}  \textcolor{coeffectColor}{]}    \smidge \textcolor{LGcolor}{\rrparenthesis} 
+      \end{array}
+    \end{align*}
+
+  \item Preservation of congruence equations follows simply by induction and congruence
+    in the target calculus.
+
+
+  \end{itemize}
+\end{proof}

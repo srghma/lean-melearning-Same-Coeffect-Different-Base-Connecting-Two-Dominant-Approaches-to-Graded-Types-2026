@@ -1,0 +1,225 @@
+\citet{DBLP:journals/pacmpl/BernardyBNJS18} develop an extension to GHC/Haskell that
+provides a notion of linear typing by using a graded type system.  The
+core calculus is akin to that of Graded Base, but specialised to
+the $\{0, 1, \omega\}$ semiring (Example~\ref{exm:none-one-tons}). Their calculus has no graded
+modality, but the implementation as part of GHC/Haskell can
+encode
+the \textit{unrestricted} modality
+\texttt{Ur} via an algebraic datatype:\footnote{\url{https://hackage.haskell.org/package/linear-base-0.4.0/docs/Data-Unrestricted-Linear.html\#t:Ur}}
+%
+\begin{haskell}
+data Ur a where
+  Ur :: a -> Ur a
+\end{haskell}
+%
+where the arrow \haskin{->} denotes an $\omega$-graded arrow for the two-point semiring
+$\{1, \omega\}$ ($0$ is not available in the implementation)
+and thus this constructor is essentially of type $A
+\xrightarrow{\omega} \mathsf{Ur}\ A$ in the Graded Base syntax. \citet{DBLP:journals/corr/abs-2112-14966} give a generalisation of this definition to a graded modality:
+%
+\begin{haskell}
+data Box r a where
+   Box :: a %r -> Box r a
+\end{haskell}
+%
+This suggests an alternate Graded Base calculus in relation to Linear Base.
+We previously showed (Section~\ref{subsec:lin-to-grad-cps}) that a type-preserving translation of Linear Base terms into
+Graded Base requires a CPS encoding. By changing the substrate of Graded Base to System F, we have
+\textbf{Graded~Poly~Base}, unlocking the ability for a direct-style
+polymorphic Church encoding of this \texttt{Box} data type:
+%
+\begin{align}
+\label{eq:derived-box}
+   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A}  =  \forall   \beta   .     (   \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }   \beta    )   \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }   \beta    
+\end{align}
+%
+This enables a less intrusive translation, without the need to CPS translate all terms.
+
+\subsection{Graded Poly Base}\label{sec:graded-poly-base}
+We thus extend Graded Base with polymorphic typing, the syntax and
+typing of which is standard:
+%
+\begin{align*}
+t & ::= \ldots \mid  \SYSTEMnt{t}  \text{@}  \SYSTEMnt{A}  \mid  \Lambda  \alpha  .  \SYSTEMnt{t} 
+\tag{Terms} \\
+\SYSTEMnt{A} & ::= \ldots \mid \alpha \mid  \forall  \alpha  .  \SYSTEMnt{B}  \tag{Types}
+\end{align*}
+%
+where $ \alpha ,  \beta $ range over type variables, with
+a corresponding standard substitution at the type-level
+written $ [  \SYSTEMnt{A}  /  \alpha  ]  \SYSTEMnt{B} $.
+Typing judgments are of the form $ \Delta  \vdash_{\textsc{g}_\forall }  \SYSTEMnt{t}  :  \SYSTEMnt{A} $ extending
+the previous typing with:
+%
+\begin{align*}
+\SYSTEMdruleGradPolytyAbs{} \quad
+\SYSTEMdruleGradPolytyApp{}
+\end{align*}
+The operational semantics has the standard $\beta$ rule for type abstraction/application
+and congruence:
+%
+\begin{align*}
+\SYSTEMdruleSemGrdPolytyBeta{} \quad
+\SYSTEMdruleSemGrdPolycongTyApp{}
+\end{align*}
+%
+Introduction and elimination for the derived $\Box_r$ (from~\eqref{eq:derived-box})
+can therefore be derived respectively as follows (with their typing derivations shown):
+%
+%\begin{align*}
+%  \dfrac{ \Delta_{{\mathrm{1}}}  \vdash_{\textsc{g} }  \SYSTEMnt{t}  :  \SYSTEMnt{A} }
+%        {  \textcolor{coeffectColor}{ \SYSTEMnt{r}  \cdot}  \Delta_{{\mathrm{1}}}   \vdash_{\textsc{g} }    \Lambda   \beta   .   \lambda  \SYSTEMmv{f}  .  \SYSTEMmv{f}   \,  \SYSTEMnt{t}   :    \forall   \beta   .   (   \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }   \beta    )    \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }   \beta   }
+%        \Box_i
+%  \qquad
+%  \dfrac{ \Delta_{{\mathrm{1}}}  \vdash_{\textsc{g} }  \SYSTEMnt{t_{{\mathrm{1}}}}  :    \forall   \beta   .   (   \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }   \beta    )    \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }   \beta     \quad
+%           \Delta_{{\mathrm{2}}} ,   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{A}    \vdash_{\textsc{g} }  \SYSTEMnt{t_{{\mathrm{2}}}}  :  \SYSTEMnt{B} }
+%        { \Delta_{{\mathrm{1}}}  \SYSTEMsym{+}  \Delta_{{\mathrm{2}}}  \vdash_{\textsc{g} }   \SYSTEMsym{(}   \SYSTEMnt{t_{{\mathrm{1}}}}  \text{@}  \SYSTEMnt{B}   \SYSTEMsym{)} \,  \SYSTEMsym{(}   \lambda  \SYSTEMmv{x}  .  \SYSTEMnt{t_{{\mathrm{2}}}}   \SYSTEMsym{)}   :  \SYSTEMnt{B} }
+%        \Box_e
+%\end{align*}
+
+\vspace{-1.5em}
+\begin{align}
+\inferrule*[Right=\SYSTEMRenameRuleGradPolytyAbs{}]
+{
+\inferrule*[Right=\SYSTEMRenameRuleGradabs{}]
+{
+\inferrule*[Right=\SYSTEMRenameRuleGradapp{}]
+{  \Delta  \vdash_{\textsc{g}_\forall }  \SYSTEMnt{t}  :  \SYSTEMnt{A}  \quad
+  \inferrule*[Right=\SYSTEMRenameRuleGradvar{}]
+    {\quad}{   \SYSTEMmv{f}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }    \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }   \beta'       \vdash_{\textsc{g}_\forall }  \SYSTEMmv{f}  :    \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }   \beta'     }}
+{    \textcolor{coeffectColor}{ \SYSTEMnt{r}  \cdot}  \Delta  ,   \SYSTEMmv{f}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }    \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }   \beta'       \vdash_{\textsc{g}_\forall }   \SYSTEMmv{f} \,  \SYSTEMnt{t}   :   \beta'   }
+}
+{  \textcolor{coeffectColor}{ \SYSTEMnt{r}  \cdot}  \Delta   \vdash_{\textsc{g}_\forall }    \lambda  \SYSTEMmv{f}  .  \SYSTEMmv{f}  \,  \SYSTEMnt{t}   :    (   \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }   \beta'    )   \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }   \beta'    }
+}
+{
+  \textcolor{coeffectColor}{ \SYSTEMnt{r}  \cdot}  \Delta   \vdash_{\textsc{g}_\forall }    \Lambda   \beta   .   \lambda  \SYSTEMmv{f}  .  \SYSTEMmv{f}   \,  \SYSTEMnt{t}   :    \forall   \beta   .   (   \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }   \beta    )    \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }   \beta   
+}\qquad
+\tag{$\Box_i$}
+\end{align}
+\begin{align}
+\inferrule*[Right=\SYSTEMRenameRuleGradapp{}]
+{
+  \inferrule*[Right=\SYSTEMRenameRuleGradPolytyApp{}]
+     { \Delta_{{\mathrm{1}}}  \vdash_{\textsc{g}_\forall }  \SYSTEMnt{t_{{\mathrm{1}}}}  :    \forall   \beta   .   (   \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }   \beta    )    \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }   \beta   }
+     { \Delta_{{\mathrm{1}}}  \vdash_{\textsc{g}_\forall }   \SYSTEMnt{t_{{\mathrm{1}}}}  \text{@}  \SYSTEMnt{B}   :    (   \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{B}   )   \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }  \SYSTEMnt{B}  }
+  \\ \quad
+  \inferrule*[Right=\SYSTEMRenameRuleGradabs{}]
+    {  \Delta_{{\mathrm{2}}} ,   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{A}    \vdash_{\textsc{g}_\forall }  \SYSTEMnt{t_{{\mathrm{2}}}}  :  \SYSTEMnt{B} }
+    { \Delta_{{\mathrm{2}}}  \vdash_{\textsc{g}_\forall }   \lambda  \SYSTEMmv{x}  .  \SYSTEMnt{t_{{\mathrm{2}}}}   :   \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{B}  }
+}
+{ \Delta_{{\mathrm{1}}}  \SYSTEMsym{+}  \Delta_{{\mathrm{2}}}  \vdash_{\textsc{g}_\forall }   \SYSTEMsym{(}   \SYSTEMnt{t_{{\mathrm{1}}}}  \text{@}  \SYSTEMnt{B}   \SYSTEMsym{)} \,  \SYSTEMsym{(}   \lambda  \SYSTEMmv{x}  .  \SYSTEMnt{t_{{\mathrm{2}}}}   \SYSTEMsym{)}   :  \SYSTEMnt{B} }
+\quad
+\tag{$\Box_e$}
+\end{align}
+%
+\subsubsection{Linear Base to Graded Poly Base Translation}
+\label{subsec:transl-gpb2lb}
+We thus adapt the translation of types to:
+%
+\renewcommand{\triangleq}{& \oldTriangleq &}
+\renewcommand{\equiv}{& \oldEquiv &}
+\renewcommand{\SYSTEMdrule}[4][]{#3 \qquad #2}
+\begin{gather*}
+{\setlength{\arraycolsep}{0.1em}
+\begin{array}{lcl@{\hspace{2em}}r}
+\SYSTEMdruleTranslLtoGTyboxTyPoly{} & \text{(Type translation)}
+\end{array}}
+\end{gather*}
+\let\SYSTEMdrule\oldSYSTEMdrule
+\let\equiv\oldEquiv
+\let\triangleq\oldTriangleq
+%
+We might expect that we can interpret the syntax of terms then directly
+as in the above derivations, i.e.,
+$ \textcolor{LGcolor}{\llparenthesis} \smidge   \textcolor{coeffectColor}{[}  \SYSTEMnt{t}  \textcolor{coeffectColor}{]}   \smidge \textcolor{LGcolor}{\rrparenthesis}  \triangleq   \Lambda   \beta   .    \lambda  \SYSTEMmv{f}  .    \SYSTEMmv{f} \,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}       $
+and
+$ \textcolor{LGcolor}{\llparenthesis} \smidge   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}}   \smidge \textcolor{LGcolor}{\rrparenthesis}  \triangleq  \SYSTEMsym{(}    \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{1}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \text{@}  \SYSTEMnt{B}   \SYSTEMsym{)} \,  \SYSTEMsym{(}   \lambda  \SYSTEMmv{x}  .   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t_{{\mathrm{2}}}}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \SYSTEMsym{)} $.
+However, note the presence of $B$ on the right-hand side of $\Box$-elimination,
+which has now appeared out of nowhere. Instead the translation must
+ingest the entire \emph{typing derivation}, not merely the syntax of terms and types
+separately. We can however translate the types separately.
+
+Thus, we define the translation as mapping from typing derivations to terms,
+where we denote derivation trees by $\Pi$:
+%
+\begin{align*}
+\tag{Term translation}
+\tikz[anchor=base, baseline]{
+    \draw[line width=1pt,   LGcolor] plot[smooth, tension=.9] coordinates {(0,-0.4) (-0.1,-0.2) (-0.14,.25) (-0.1,0.7) (0,0.9)};
+    \draw[line width=1pt, LGcolor] plot[smooth, tension=1] coordinates {(-.11,-0.15) (-0.13,.25) (-.11,0.65)};
+    \draw[thick, LGcolor, cap=round] plot[smooth, tension=1] coordinates {(0,-0.405) (0,0.905)};
+}
+\dfrac
+{\dfrac{\Pi}{ \Gamma  \vdash_{\textsc{l} }  \SYSTEMnt{t}  :  \SYSTEMnt{A} } \quad  \mathrm{graded}( \Gamma ) }
+{  \textcolor{coeffectColor}{ \SYSTEMnt{r}  \cdot}  \Gamma   \vdash_{\textsc{l} }   \textcolor{coeffectColor}{[}  \SYSTEMnt{t}  \textcolor{coeffectColor}{]}   :   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A}  }\SYSTEMRenameRuleLinpr
+\tikz[anchor=base, baseline]{
+    \draw[line width=1pt,   LGcolor] plot[smooth, tension=.9] coordinates {(0,-0.4) (0.1,-0.2) (0.14,.25) (0.1,0.7) (0,0.9)};
+    \draw[line width=1pt, LGcolor] plot[smooth, tension=1] coordinates {(.11,-0.15) (0.13,.25) (.11,0.65)};
+    \draw[thick, LGcolor, cap=round] plot[smooth, tension=1] coordinates {(0,-0.405) (0,0.905)};
+}
+%
+& \;\triangleq\;
+%
+  \Lambda   \beta   .   \lambda  \SYSTEMmv{f}  .  \SYSTEMmv{f}   \,   \textcolor{LGcolor}{\llparenthesis}  \Pi  \textcolor{LGcolor}{\rrparenthesis}   \\[0.5em] %: (A r ->  tyb)
+%%
+\tikz[anchor=base, baseline]{
+    \draw[line width=1pt,   LGcolor] plot[smooth, tension=.9] coordinates {(0,-0.4) (-0.1,-0.2) (-0.14,.25) (-0.1,0.7) (0,0.9)};
+    \draw[line width=1pt, LGcolor] plot[smooth, tension=1] coordinates {(-.11,-0.15) (-0.13,.25) (-.11,0.65)};
+    \draw[thick, LGcolor, cap=round] plot[smooth, tension=1] coordinates {(0,-0.405) (0,0.905)};
+}
+\dfrac
+{\dfrac{\Pi_1}
+            { \Gamma_{{\mathrm{1}}}  \vdash_{\textsc{l} }  \SYSTEMnt{t_{{\mathrm{1}}}}  :   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A}  }
+ \quad
+ \dfrac{\Pi_2}
+            {  \Gamma_{{\mathrm{2}}} ,   \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}  \SYSTEMnt{A} {\textcolor{coeffectColor}{]_{ \SYSTEMnt{r} } } }    \vdash_{\textsc{l} }  \SYSTEMnt{t_{{\mathrm{2}}}}  :  \SYSTEMnt{B} }
+}
+{ \Gamma_{{\mathrm{1}}}  \SYSTEMsym{+}  \Gamma_{{\mathrm{2}}}  \vdash_{\textsc{l} }   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}}   :  \SYSTEMnt{B} }\SYSTEMRenameRuleLinlet
+\tikz[anchor=base, baseline]{
+    \draw[line width=1pt,   LGcolor] plot[smooth, tension=.9] coordinates {(0,-0.4) (0.1,-0.2) (0.14,.25) (0.1,0.7) (0,0.9)};
+    \draw[line width=1pt, LGcolor] plot[smooth, tension=1] coordinates {(.11,-0.15) (0.13,.25) (.11,0.65)};
+    \draw[thick, LGcolor, cap=round] plot[smooth, tension=1] coordinates {(0,-0.405) (0,0.905)};
+}
+& \;\triangleq\;
+ \SYSTEMsym{(}    \textcolor{LGcolor}{\llparenthesis}  \Pi_{{\mathrm{1}}}  \textcolor{LGcolor}{\rrparenthesis}   \text{@}   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}    \SYSTEMsym{)} \,  \SYSTEMsym{(}   \lambda  \SYSTEMmv{x}  .   \textcolor{LGcolor}{\llparenthesis}  \Pi_{{\mathrm{2}}}  \textcolor{LGcolor}{\rrparenthesis}    \SYSTEMsym{)} 
+\end{align*}
+%
+The rest of the translation follows the structure of the previous term
+translation.
+
+In the following, we write $\Pi :  \Gamma  \vdash_{\textsc{l} }  \SYSTEMnt{t}  :  \SYSTEMnt{A} $
+to mean that $\Pi$ is the derivation of a judgment $ \Gamma  \vdash_{\textsc{l} }  \SYSTEMnt{t}  :  \SYSTEMnt{A} $.
+%
+
+\begin{restatable}{thrm}{linToGradTranslationPoly}[Soundness of the Linear Base to Graded Poly Base translation]
+ \begin{itemize}[itemsep=0.5em,topsep=0.5em,leftmargin=1em]
+  \item Type preservation: $\Pi :  \Gamma  \vdash_{\textsc{l} }  \SYSTEMnt{t}  :  \SYSTEMnt{A}  \implies   \textcolor{LGcolor}{\llparenthesis}  \Gamma  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g}_\forall }   \textcolor{LGcolor}{\llparenthesis}  \Pi  \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}  $
+  \item Operational correspondence:  $(\Pi :  \Gamma  \vdash_{\textsc{l} }  \SYSTEMnt{t}  :  \SYSTEMnt{A} ) \wedge (\Pi' :  \Gamma  \vdash_{\textsc{l} }  \SYSTEMnt{t'}  :  \SYSTEMnt{A} ) \wedge ( \SYSTEMnt{t}  \rightsquigarrow_{\textsc{l} }  \SYSTEMnt{t'} ) \implies   \textcolor{LGcolor}{\llparenthesis}  \Pi  \textcolor{LGcolor}{\rrparenthesis}   \rightsquigarrow_{\textsc{g}\forall }^\ast   \textcolor{LGcolor}{\llparenthesis}  \Pi'  \textcolor{LGcolor}{\rrparenthesis}  $
+  \item Equation preservation: $(\Pi :  \Gamma  \vdash_{\textsc{l} }  \SYSTEMnt{t}  :  \SYSTEMnt{A} ) \wedge (\Pi' :  \Gamma  \vdash_{\textsc{l} }  \SYSTEMnt{t'}  :  \SYSTEMnt{A} ) \wedge (\SYSTEMnt{t}  \equiv^{-\eta\Box}_{\textsc{l} }  \SYSTEMnt{t'}) \implies   \textcolor{LGcolor}{\llparenthesis}  \Pi  \textcolor{LGcolor}{\rrparenthesis}   \equiv_{\textsc{g}_\forall}   \textcolor{LGcolor}{\llparenthesis}  \Pi'  \textcolor{LGcolor}{\rrparenthesis}  $
+\end{itemize}
+Appendix~\refappendix{app:lin-to-grad-poly} provides the proofs.
+
+Note the operational correspondence
+needs to have typing derivations of the source term and target term.
+Furthermore, the translation does not preserve $\eta$-equality for the graded modality; only the $\beta$-equality rules, commuting conversions, and congruence rules are preserved;
+we thus denote the subset of the preserved equational theory here as $ \equiv^{-\eta\Box}_{\textsc{l} } $.
+This is because the translation of a term $t$ of type $ \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A} $
+may not be of the form $  \Lambda   \beta   .   \lambda  \SYSTEMmv{f}  .  \SYSTEMmv{f}   \,  \SYSTEMnt{t'} $ for some $t'$ (e.g., it could be just a free variable), which is required for $\eta$-equality to apply.
+Instead, parametricity reasoning (based on the polymorphic typing) would provide that $t$ is \emph{observationally equivalent} to $  \Lambda   \beta   .   \lambda  \SYSTEMmv{f}  .  \SYSTEMmv{f}   \,  \SYSTEMnt{t'} $ for some $t'$,
+and thus the translation preserves $\eta$-equality up to observational equivalence, though not up to syntactic equality;
+we leave the details for further work.
+\label{thrm:linToGradTranslationPoly}
+\end{restatable}
+%
+
+\begin{remark}
+(\haskin{Ur} is not the $!$-modality)
+\citet{DBLP:journals/pacmpl/BernardyBNJS18} suggest \haskin{Ur} as
+an encoding of Linear Logic's $!$-modality, although \citet{hughes2021linear} later show that this
+encoding in Linear Haskell and similarly in Idris 2, as well as the graded modality in Granule, do not exactly correspond to Linear Logic's $!$-modality. Once (multiplicative) products
+are included, Linear Logic does not admit distributing $!$ over products, i.e.,
+$!(A \otimes B) \multimap \,! A\, \otimes \,! B$ is not derivable. However the aforementioned systems permit its derivation due to the interaction between graded modalities and products
+(and similarly sums). We consider calculi with products and sums next
+as this takes us closer towards practical programming and it allows us to uncover
+other expressivity differences in the literature.
+\end{remark}

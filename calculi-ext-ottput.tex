@@ -1,0 +1,336 @@
+We now add a graded modality to
+Graded Base thereby arriving at \textbf{Graded~Modal~Base}. This captures the type system
+features of calculi like \textsc{GraD}~\cite{grad} and a monomorphic
+subset of~\citet{DBLP:journals/pacmpl/AbelB20}, and permits a simple translation to Linear Base.
+
+\subsection{Graded Modal Base}\label{sec:graded-modal-base}
+%
+Graded Modal Base can now share the syntax (and operational semantics) of Linear Base:
+%
+\begin{align*}
+    \SYSTEMnt{t} & ::= \SYSTEMmv{x} \mid  \SYSTEMnt{t_{{\mathrm{1}}}} \,  \SYSTEMnt{t_{{\mathrm{2}}}}  \mid  \lambda  \SYSTEMmv{x}  .  \SYSTEMnt{t}  \mid  \textcolor{coeffectColor}{[}  \SYSTEMnt{t}  \textcolor{coeffectColor}{]}  \mid  \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}} 
+    \tag{shared terms} \\
+  \SYSTEMnt{A} & ::=  \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{B}  \mid  \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A}  \mid  \mathrm{K} 
+    \tag{extended types}
+\end{align*}
+%
+%
+Typing judgments in Graded Modal Base are of the form $ \Delta  \vdash_{\textsc{g}_\square }  \SYSTEMnt{t}  :  \SYSTEMnt{A} $.
+The typing rules are the same as Graded Base with addition of typing for
+graded modal introduction and elimination:
+%
+\begin{align*}
+\begin{array}{c}
+\SYSTEMdruleGradBoxpr{}
+\quad
+\SYSTEMdruleGradBoxlet{}
+\end{array}
+\end{align*}
+%
+The equational theory extends to include $\beta\eta$-equality on
+graded modalities (see Appendix~\refappendix{app:definitions-graded-modal-base}).
+
+\subsection{Translation}
+
+\subsubsection{Linear Base to Graded Modal Base translation}
+\label{subsec:transl-lb2gmb}
+
+We can now translate Linear Base to Graded \emph{Modal} Base as
+a homomorphism on terms, rather than the CPS encoding of Section~\ref{sec:transl}:
+%
+\renewcommand{\triangleq}{& \oldTriangleq &}
+\renewcommand{\equiv}{& \oldEquiv &}
+\renewcommand{\SYSTEMdrule}[4][]{#3 \qquad #2}
+%
+\begin{gather*}
+{\setlength{\arraycolsep}{0.1em}
+\begin{array}{lcl@{\hspace{2em}}r}
+\SYSTEMdruleTranslLtoGTmvar{} \\
+\SYSTEMdruleTranslLtoGTmabs{} \\
+\SYSTEMdruleTranslLtoGTmapp{} \\
+\SYSTEMdruleTranslLtoGTmpr{} \\
+\SYSTEMdruleTranslLtoGTmlet{} & \text{(Term translation)} \\[0.5em]
+\SYSTEMdruleTranslLtoGTyfunTy{} \\
+\SYSTEMdruleTranslLtoGTyboxTy{} \\
+\SYSTEMdruleTranslLtoGTybaseTy{} & \text{(Type translation)} \\[0.5em]
+\SYSTEMdruleTranslLtoGGtxtempty{} \\
+\SYSTEMdruleTranslLtoGGtxtlin{} \\
+\SYSTEMdruleTranslLtoGGtxtgrad{} & \text{(Context translation)}
+\end{array}}
+\end{gather*}
+\let\SYSTEMdrule\oldSYSTEMdrule
+\let\equiv\oldEquiv
+\let\triangleq\oldTriangleq
+%
+For types, we translate $ \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }     $ in the straightforward way, directly
+to the Graded Modal Base graded modality. To translate
+the linear function space we grade the resulting function arrow
+in Graded Modal Base at $1 \in \mathcal{R}$ and similarly for linear assumptions.
+
+\begin{example}
+  \label{exm:k-combinator}
+  The following Linear Base judgment types a $K$-combinator-like expression:
+  $$   \SYSTEMmv{x}  :  \SYSTEMnt{B}    \vdash_{\textsc{l} }   \lambda  \SYSTEMmv{y}  .   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{y}  \, \mathsf{in} \,  \SYSTEMmv{x}    :     \textcolor{coeffectColor}{\square_{ \SYSTEMsym{0} } }  \SYSTEMnt{A}    \multimap  \SYSTEMnt{B}  $$
+  The parameter $y$ is used by eliminating the graded modality,
+  binding to $z$ but then discarding the term. Its translation to Graded Modal Base results
+  in an identical term but with translated types:
+  %
+  $$   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}     \vdash_{\textsc{g} }   \lambda  \SYSTEMmv{y}  .   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{z}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{y}  \, \mathsf{in} \,  \SYSTEMmv{x}    :     \textcolor{coeffectColor}{\square_{ \SYSTEMsym{0} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}     \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}   $$
+  %
+\end{example}
+
+\begin{restatable}{thrm}{linToGradTranslation}[Soundness of the Linear Base to Graded Modal Base translation]\label{thrm:linToGradTranslation}
+  \begin{itemize}[itemsep=0.25em,topsep=0.25em]
+    \item Type preservation: $ \Gamma  \vdash_{\textsc{l} }  \SYSTEMnt{t}  :  \SYSTEMnt{A}  \implies   \textcolor{LGcolor}{\llparenthesis}  \Gamma  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g}_\square }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}  $
+    \item Operational correspondence: $ \SYSTEMnt{t}  \rightsquigarrow_{\textsc{l} }  \SYSTEMnt{t'}  \implies   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \rightsquigarrow_{\textsc{g}\Box }^\ast   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t'}  \smidge \textcolor{LGcolor}{\rrparenthesis}  $
+    \item Equation preservation: $ \SYSTEMnt{t}  \,\equiv_{\textsc{l} }\,  \SYSTEMnt{t'}  \implies   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \,\equiv_{\textsc{g}_\Box}\,   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t'}  \smidge \textcolor{LGcolor}{\rrparenthesis}  $
+  \end{itemize}
+\end{restatable}
+
+\noindent
+Appendix~\refappendix{app:proofs-lin-to-grad-mod} provides the proof along with its supporting lemmas.
+
+\begin{remark}
+  We might consider whether there is a dual to the above, a kind of completeness result,
+i.e., that
+given $ \Delta  \vdash_{\textsc{g} }  \SYSTEMnt{t}  :  \SYSTEMnt{A} $
+there exists $\Gamma, \SYSTEMnt{t'}, \SYSTEMnt{A'}$
+such that $ \Gamma  \vdash_{\textsc{l} }  \SYSTEMnt{t'}  :  \SYSTEMnt{A'} $ and $  \textcolor{LGcolor}{\llparenthesis}  \Gamma  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t'}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A'}  \smidge \textcolor{LGcolor}{\rrparenthesis}  $
+and $\Delta \equiv  \textcolor{LGcolor}{\llparenthesis}  \Gamma  \textcolor{LGcolor}{\rrparenthesis} $
+and $\SYSTEMnt{t} \equiv  \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t'}  \smidge \textcolor{LGcolor}{\rrparenthesis} $
+and $\SYSTEMnt{A} \equiv  \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A'}  \smidge \textcolor{LGcolor}{\rrparenthesis} $.
+However, an easy counterexample is the following judgment:
+$$   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }  \SYSTEMnt{B}    \vdash_{\textsc{g} }   \lambda  \SYSTEMmv{y}  .  \SYSTEMmv{x}   :   \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMsym{0} } }  \SYSTEMnt{B}  .$$
+There is no type in Linear Base which translates to $ \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMsym{0} } }  \SYSTEMnt{B} $ as we always
+translate the linear function type to $ \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }  \SYSTEMnt{B} $. Indeed, the analogous
+term in Linear Base was already shown in Example~\ref{exm:k-combinator}, where
+we see that the result of the translation has type $   \textcolor{coeffectColor}{\square_{ \SYSTEMsym{0} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}     \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}  $.
+
+Thus, the translation from Linear Base to Graded Modal Base is not surjective. Neither
+is it injective: both the linear assumption $ \SYSTEMmv{x}  :  \SYSTEMnt{A} $ and the graded assumption
+$ \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}  \SYSTEMnt{A} {\textcolor{coeffectColor}{]_{ \SYSTEMsym{1} } } } $ are translated to $ \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}  $. For those semirings
+in which $1$ does not capture linearity (e.g., the singleton semiring, any semiring
+where $0 \leq 1$, and others), linear and non-linear
+use is conflated by this translation.
+\end{remark}
+
+\subsubsection{A Linearity-Preserving Linear Base to Graded Modal Base Translation}
+\label{subsec:linearity-preserving}
+
+Instead, we can give an alternate translation which is injective
+and \emph{linearity preserving}: keeping the translation of terms
+as above, we can translate types and grades from Linear Base with semiring $\mathcal{R}$
+into types and grades in Graded Modal Base with semiring $(\mathcal{R} \times \{\SYSTEMsym{0},
+\SYSTEMsym{1},  \omega \})$, i.e., the product semiring (Example~\ref{exm:product})
+of $\mathcal{R}$ with the linearity-capturing semiring (Example~\ref{exm:none-one-tons}).
+%
+\renewcommand{\triangleq}{& \oldTriangleq &}
+\renewcommand{\equiv}{& \oldEquiv &}
+\renewcommand{\SYSTEMdrule}[4][]{#3 \qquad #2}
+%
+\begin{gather*}
+{\setlength{\arraycolsep}{0.1em}
+\begin{array}{lcl@{\hspace{2em}}r}
+\SYSTEMdruleTranslLtoGAltTyfunTy{} \\
+\SYSTEMdruleTranslLtoGAltTyboxTy{} \\
+\SYSTEMdruleTranslLtoGAltTybaseTy{} & \text{(Type translation)} \\[1em]
+%\SYSTEMdruleTranslLtoGAltGtxtempty{} \\
+\SYSTEMdruleTranslLtoGAltGtxtlin{} \\
+\SYSTEMdruleTranslLtoGAltGtxtgrad{} & \text{(Context translation)}
+\end{array}}
+\end{gather*}
+\let\SYSTEMdrule\oldSYSTEMdrule
+\let\equiv\oldEquiv
+\let\triangleq\oldTriangleq
+%
+%\newpage
+Thus, the translation is now injective in the types since we translate a linear assumption $ \SYSTEMmv{x}  :  \SYSTEMnt{A} $ to
+have grade $ \langle  \SYSTEMsym{1}  ,  \SYSTEMsym{1}  \rangle $ but a graded assumption $ \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}  \SYSTEMnt{A} {\textcolor{coeffectColor}{]_{ \SYSTEMnt{r} } } } $ to $ \langle  \SYSTEMnt{r}  ,   \omega   \rangle $
+which is a different grade even if $r = 1$. By taking the pairing with the linearity semiring,
+we can capture the combination of linearity and grading that occurs in Linear Base, but
+now in the Graded Modal Base setting.
+
+  Operational correspondence and equation preservation hold as before in Theorem~\ref{thrm:linToGradTranslation} since the term translation is unchanged. We then re-restablish
+  type preservation of the translation:
+%
+\begin{restatable}{thrm}{linToGradAltTranslation}[Soundness of the Linearity-Preserving Linear Base to Graded Modal Base translation]
+  \begin{itemize}[itemsep=0.2em]
+    \item Type preservation: $ \Gamma  \vdash_{\textsc{l} }  \SYSTEMnt{t}  :  \SYSTEMnt{A}  \implies   \textcolor{LGcolor}{\llparenthesis}  \Gamma  \textcolor{LGcolor}{\rrparenthesis}'   \vdash_{\textsc{g}_\square }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}'  $
+  \end{itemize}
+Appendix~\refappendix{app:proofs-lin-to-grad-mod-alt} provides the proof.
+\end{restatable}
+
+The key insight in this translation is that Linear Base essentially comprises two parallel
+forms of analysis: a graded analysis and a latent linear analysis witnessed by the
+corresponding two forms of typing assumption in Linear Base contexts.
+Our translation here captures these two aspects systematically,
+by taking the product of the same grading semiring and the linearity semiring.
+
+A question may arise here:
+\textit{What is the meaning of a grade such as $ \langle  \SYSTEMsym{2}  ,  \SYSTEMsym{1}  \rangle $,
+where the first component looks non-linear in $\mathcal{R}$
+but the second represents linearity?} Such a grade is not
+in the image of our translation but we may still consider what it is
+like to type terms in Graded (Modal) Base with $\mathcal{R} \times \{0, 1,
+\omega\}$. First, let us decompose $ \langle  \SYSTEMsym{2}  ,  \SYSTEMsym{1}  \rangle $
+into $ \langle  \SYSTEMsym{1}  \SYSTEMsym{+}  \SYSTEMsym{1}  ,  \SYSTEMsym{1}  \rangle $
+for clarity, i.e., for any semiring $\mathcal{R}$ in the first component.
+Such grades could be formed via approximation if
+$\mathcal{R}$ permits $ \SYSTEMsym{1}  \, \textcolor{coeffectColor}{\sqsubseteq} \,  \SYSTEMsym{1}  \SYSTEMsym{+}  \SYSTEMsym{1} $ and thus $  \langle  \SYSTEMsym{1}  ,  \SYSTEMsym{1}  \rangle   \, \textcolor{coeffectColor}{\sqsubseteq} \,   \langle  \SYSTEMsym{1}  \SYSTEMsym{+}  \SYSTEMsym{1}  ,  \SYSTEMsym{1}  \rangle  $
+is an over-approximation of grades, e.g., useful for when calculating the grade
+across multiple program branches. Without such an
+approximation, $ \langle  \SYSTEMsym{1}  \SYSTEMsym{+}  \SYSTEMsym{1}  ,  \SYSTEMsym{1}  \rangle $ cannot be derived from variable use
+and contraction of variables alone since in $(\mathcal{R} \times \{\SYSTEMsym{0},
+\SYSTEMsym{1},  \omega \})$ we have
+$ \langle  \SYSTEMsym{1}  ,  \SYSTEMsym{1}  \rangle   \SYSTEMsym{+}   \langle  \SYSTEMsym{1}  ,  \SYSTEMsym{1}  \rangle  =  \langle  \SYSTEMsym{1}  \SYSTEMsym{+}  \SYSTEMsym{1}  ,   \omega   \rangle $.
+Such a grade could only arise from an open term applying
+a function, e.g.,
+$$    \SYSTEMmv{f}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }    \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{  \langle  \SYSTEMsym{1}  \SYSTEMsym{+}  \SYSTEMsym{1}  ,  \SYSTEMsym{1}  \rangle  } }  \SYSTEMnt{B}     ,   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{  \langle  \SYSTEMsym{1}  \SYSTEMsym{+}  \SYSTEMsym{1}  ,  \SYSTEMsym{1}  \rangle  } }  \SYSTEMnt{A}    \vdash_{\textsc{g} }   \SYSTEMmv{f} \,  \SYSTEMmv{x}   :  \SYSTEMnt{B} .$$
+However there is no well-typed closed term that can be formed to substitute into
+$f$ since we cannot form $ \langle  \SYSTEMsym{1}  \SYSTEMsym{+}  \SYSTEMsym{1}  ,  \SYSTEMsym{1}  \rangle $ without use of such an open term.
+Consequently, for closed terms, we cannot form $ \langle  \SYSTEMsym{1}  \SYSTEMsym{+}  \SYSTEMsym{1}  ,  \SYSTEMsym{1}  \rangle $
+unless it is permitted by approximation in $\mathcal{R}$.
+In the approximation case, it is up to the choice (or design) of semiring
+to permit approximation via the definition of $     \, \textcolor{coeffectColor}{\sqsubseteq} \,     $.
+
+More generally, we may consider the advantage of pairing
+semirings with the linearity semiring. Consider a semiring such as the security
+lattice semiring (Example~\ref{exm:security-lattice}) where $1 =  \mathsf{Lo} $.
+Since $ \mathsf{Lo}  +  \mathsf{Lo}  =  \mathsf{Lo} $ and $ \SYSTEMsym{0}  \, \textcolor{coeffectColor}{\sqsubseteq} \,   \mathsf{Lo}  $ then a $ \mathsf{Lo} $-graded variable
+can represent both linear or non-linear usage. The pairing
+$ \langle   \mathsf{Lo}   ,  \SYSTEMsym{1}  \rangle $ then distinguishes a linear low-security variable
+from $ \langle   \mathsf{Lo}   ,   \omega   \rangle $ which instead represents a non-linear low-security variable.
+Conversely, recall that $0 =  \mathsf{Hi} $,
+giving the translation $  \textcolor{LGcolor}{\llparenthesis} \smidge   \textcolor{coeffectColor}{\square_{  \mathsf{Hi}  } }  \SYSTEMnt{A}   \smidge \textcolor{LGcolor}{\rrparenthesis}'   \equiv   \textcolor{coeffectColor}{\square_{  \langle   \mathsf{Hi}   ,   \omega   \rangle  } }  \SYSTEMnt{A}  $,
+which allows unlimited usage, but limited to $ \mathsf{Hi} $ security contexts.
+
+Our approach here is not necessarily the only sound and injective translation;
+however, it seems particularly illuminating,
+in that the product construction clearly demarcates and represents the two analyses present within Linear Base:
+the explicit coeffect in the grades on the one hand and the latent linearity coeffect of the
+system (not present in Graded Base) on the other.
+
+% is it really a necessary construction? No there might be other choices
+% Lin-completion is not satisfactory as it can give Lin <= 1 + 1
+%
+
+% Reviewer:
+% The goal of translation seems to be to /explain/ one world in terms of another, but the graded world doesn't use semi-rings like this ... so is it an explanation or a proof tool that "just happens" to work?
+
+% Our insight: that the Linear Base is really like having a pair of two semirings
+% one for R and one for linearity, and this conceptually shows that there are two
+% separate kinds of tracking going on , which we then naturally present as a product
+% of two semirings in this translation to Graded Base
+
+% Lin <= 1
+
+% <1, 1>
+
+%Does it matter that it seems to make no sense to "translate back" in the other direction?
+
+\subsubsection{Graded Modal Base to Linear Base Translation}
+\label{subsec:transl-gmb2lb}
+
+\renewcommand{\triangleq}{& \oldTriangleq &}
+\renewcommand{\equiv}{& \oldEquiv &}
+\renewcommand{\SYSTEMdrule}[4][]{#3 \qquad #2}
+
+We can now extend the previous translation from Graded Base to Linear Base
+(Section~\ref{sec:transl}) to translate from Graded Modal Base to Linear Base:
+%
+\begin{gather*}
+{\setlength{\arraycolsep}{0.1em}
+\begin{array}{lcl@{\hspace{2em}}r}
+\SYSTEMdruleTranslGtoLTmvar{} \\
+\SYSTEMdruleTranslGtoLTmabs{}
+\SYSTEMdruleTranslGtoLTmapp{} \\
+\SYSTEMdruleTranslGtoLTmpr{} \\
+\SYSTEMdruleTranslGtoLTmlet{} & \text{(Term translation)} \\[0.75em]
+\SYSTEMdruleTranslGtoLTyfunTy{} \\
+\SYSTEMdruleTranslGtoLTyboxTy{} \\
+\SYSTEMdruleTranslGtoLTybaseTy{} & \text{(Type translation)} \\[0.75em]
+\SYSTEMdruleTranslGtoLGtxtempty{} \\
+\SYSTEMdruleTranslGtoLGtxtgrad{} & \text{(Context translation)}
+\end{array}}
+\end{gather*}
+\let\SYSTEMdrule\oldSYSTEMdrule
+\let\equiv\oldEquiv
+\let\triangleq\oldTriangleq
+%
+The only new parts are the translation of the graded modality which maps directly
+onto the graded modality in Linear Base. We then (re)establish soundness. Appendix~\refappendix{app:proofs-grad-mod-to-lin} provides the proofs.
+%
+\begin{restatable}{thrm}{gradModToLinTranslation}[Soundness of the Graded Modal Base to Linear Base translation]
+\begin{itemize}[itemsep=0.2em]
+  \item Type preservation: $ \Delta  \vdash_{\textsc{g}_\square }  \SYSTEMnt{t}  :  \SYSTEMnt{A}  \implies   \textcolor{GLcolor}{\llbracket}  \Delta  \textcolor{GLcolor}{\rrbracket}   \vdash_{\textsc{l} }   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   :   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}  $
+  \item Operational correspondence: $ \SYSTEMnt{t}  \rightsquigarrow_{\textsc{g}\Box}  \SYSTEMnt{t'}  \implies   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   \rightsquigarrow_{\textsc{l} }^\ast   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t'}  \textcolor{GLcolor}{\rrbracket}  $
+  \item Equation preservation: $ \SYSTEMnt{t}  \,\equiv_{\textsc{g}_\Box}\,  \SYSTEMnt{t'}  \implies   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   \,\equiv_{\textsc{l} }\,   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t'}  \textcolor{GLcolor}{\rrbracket}  $.
+ \end{itemize}
+  \label{ref:gradModToLinTranslation}
+\end{restatable}
+%
+
+\subsubsection{Mutual relationship}
+\label{subsec:mutual-relationship}
+
+Given the pair of translations here, we might wonder: what is the relationship between
+the translations? Are they mutually inverse? By considering just the translation of function
+types we can quickly see that the translations are not inverse:
+%
+\begin{align*}
+ \textcolor{GLcolor}{\llbracket}   \textcolor{LGcolor}{\llparenthesis} \smidge   \SYSTEMnt{A}  \multimap  \SYSTEMnt{B}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \textcolor{GLcolor}{\rrbracket}  & =   \textcolor{GLcolor}{\llbracket}   \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }  \SYSTEMnt{B}   \textcolor{GLcolor}{\rrbracket}   \equiv    \textcolor{coeffectColor}{\square_{ \SYSTEMsym{1} } }    \textcolor{GLcolor}{\llbracket}   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \textcolor{GLcolor}{\rrbracket}     \multimap    \textcolor{GLcolor}{\llbracket}   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \textcolor{GLcolor}{\rrbracket}    
+\\
+ \textcolor{LGcolor}{\llparenthesis} \smidge   \textcolor{GLcolor}{\llbracket}   \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{B}   \textcolor{GLcolor}{\rrbracket}   \smidge \textcolor{LGcolor}{\rrparenthesis}  & =   \textcolor{LGcolor}{\llparenthesis} \smidge    \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A}   \multimap  \SYSTEMnt{B}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \equiv    \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \textcolor{LGcolor}{\llparenthesis} \smidge   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}   \smidge \textcolor{LGcolor}{\rrparenthesis}    \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }   \textcolor{LGcolor}{\llparenthesis} \smidge   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{B}  \textcolor{GLcolor}{\rrbracket}   \smidge \textcolor{LGcolor}{\rrparenthesis}   
+\end{align*}
+%
+Similarly, given $   \SYSTEMmv{x}  :  \SYSTEMnt{A}    \vdash_{\textsc{l} }  \SYSTEMmv{x}  :  \SYSTEMnt{A} $ in Linear Base
+then its translation to Graded Modal Base is $   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }  \SYSTEMnt{A}    \vdash_{\textsc{g}_\square }  \SYSTEMmv{x}  :  \SYSTEMnt{A} $
+which is translated back to Linear Base as $   \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}  \SYSTEMnt{A} {\textcolor{coeffectColor}{]_{ \SYSTEMsym{1} } } }    \vdash_{\textsc{l} }  \SYSTEMmv{x}  :  \SYSTEMnt{A} $.
+
+However, by composing operational correspondence theorems, then round-tripping the translations
+yields a term that corresponds operationally to the original, in both directions:
+%
+\begin{corollary}[Observational isomorphism]
+If $ \SYSTEMnt{t}  \rightsquigarrow_{\textsc{l} }  \SYSTEMnt{t'} $ then $  \textcolor{GLcolor}{\llbracket}   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \textcolor{GLcolor}{\rrbracket}   \rightsquigarrow_{\textsc{l} }^\ast   \textcolor{GLcolor}{\llbracket}   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t'}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \textcolor{GLcolor}{\rrbracket}  $
+and if $ \SYSTEMnt{t}  \rightsquigarrow_{\textsc{g}\Box}  \SYSTEMnt{t'} $ then $  \textcolor{LGcolor}{\llparenthesis} \smidge   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \rightsquigarrow_{\textsc{g}\Box }^\ast   \textcolor{LGcolor}{\llparenthesis} \smidge   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t'}  \textcolor{GLcolor}{\rrbracket}   \smidge \textcolor{LGcolor}{\rrparenthesis}  $.
+\end{corollary}
+%
+We might also wonder if there is an adjoint relationship between the translations. If $ \textcolor{GLcolor}{\llbracket}   -   \textcolor{GLcolor}{\rrbracket}  \dashv  \textcolor{LGcolor}{\llparenthesis} \smidge   -   \smidge \textcolor{LGcolor}{\rrparenthesis} $ then we would expect to be able to construct a mapping in the category of types (whose morphisms are derivations of judgments with source as inputs and the target as the result):
+%
+\[
+\eta_A : A \rightarrow  \textcolor{GLcolor}{\llbracket}   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \textcolor{GLcolor}{\rrbracket} 
+\]
+%
+However, there is no such mapping for $ \SYSTEMnt{A}  \multimap  \SYSTEMnt{B} $ to $  \textcolor{GLcolor}{\llbracket}   \textcolor{LGcolor}{\llparenthesis} \smidge   \SYSTEMnt{A}  \multimap  \SYSTEMnt{B}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \textcolor{GLcolor}{\rrbracket}   \equiv    \textcolor{coeffectColor}{\square_{ \SYSTEMsym{1} } }   \textcolor{GLcolor}{\llbracket}   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \textcolor{GLcolor}{\rrbracket}    \multimap   \textcolor{GLcolor}{\llbracket}   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{B}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \textcolor{GLcolor}{\rrbracket}   $ in general since this is undefined for a higher-order type.
+
+Consider $  (    \mathrm{K}   \multimap   \mathrm{K}    )   \multimap   \mathrm{K}  $ for the base type $ \mathrm{K} $ whose translation between
+the systems is the identity, and thus $ \textcolor{GLcolor}{\llbracket}   \textcolor{LGcolor}{\llparenthesis} \smidge   \mathrm{K}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \textcolor{GLcolor}{\rrbracket}  =  \mathrm{K} $. Then $\eta$ would need to provide
+a derivation of the judgment:
+%
+\begin{align*}
+  (    \mathrm{K}   \multimap   \mathrm{K}    )   \multimap   \mathrm{K}   \vdash   \textcolor{coeffectColor}{\square_{ \SYSTEMsym{1} } }   (    \textcolor{coeffectColor}{\square_{ \SYSTEMsym{1} } }   \mathrm{K}    \multimap   \mathrm{K}    )    \multimap   \mathrm{K}  
+\end{align*}
+%
+Such a derivation would require us to map a value of type $ \textcolor{coeffectColor}{\square_{ \SYSTEMsym{1} } }   (    \textcolor{coeffectColor}{\square_{ \SYSTEMsym{1} } }   \mathrm{K}    \multimap   \mathrm{K}    )  $
+to one of type $  \mathrm{K}   \multimap   \mathrm{K}  $. We can certainly derive $ \textcolor{coeffectColor}{\square_{ \SYSTEMsym{1} } }   (    \textcolor{coeffectColor}{\square_{ \SYSTEMsym{1} } }   \mathrm{K}    \multimap   \mathrm{K}    )   \vdash   \textcolor{coeffectColor}{\square_{ \SYSTEMsym{1} } }   \mathrm{K}    \multimap   \mathrm{K}  $ by elimination
+and dereliction, but $  \textcolor{coeffectColor}{\square_{ \SYSTEMsym{1} } }   \mathrm{K}    \multimap   \mathrm{K}   \not\vdash   \mathrm{K}   \multimap   \mathrm{K}  $. To see why, consider
+the single-point semiring $0 = 1$ and thus a function typed $  \textcolor{coeffectColor}{\square_{ \SYSTEMsym{1} } }   \mathrm{K}    \multimap   \mathrm{K}  $ may not use its argument
+at all, whereas $  \mathrm{K}   \multimap   \mathrm{K}  $ must use its argument exactly once.
+
+Given the above negative result, we could then consider the opposite adjoint relationship, i.e., perhaps
+ $ \textcolor{LGcolor}{\llparenthesis} \smidge   -   \smidge \textcolor{LGcolor}{\rrparenthesis}  \dashv  \textcolor{GLcolor}{\llbracket}   -   \textcolor{GLcolor}{\rrbracket} $? In which case, we would require the counit
+ operation:
+\[
+\epsilon_A :  \textcolor{GLcolor}{\llbracket}   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \textcolor{GLcolor}{\rrbracket}  \to A
+\]
+%
+However, there is no such mapping, even in a first-order case: for
+$  \textcolor{GLcolor}{\llbracket}   \textcolor{LGcolor}{\llparenthesis} \smidge    \mathrm{K}   \multimap   \mathrm{K}    \smidge \textcolor{LGcolor}{\rrparenthesis}   \textcolor{GLcolor}{\rrbracket}   \equiv    \textcolor{coeffectColor}{\square_{ \SYSTEMsym{1} } }   \textcolor{GLcolor}{\llbracket}   \textcolor{LGcolor}{\llparenthesis} \smidge   \mathrm{K}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \textcolor{GLcolor}{\rrbracket}    \multimap   \textcolor{GLcolor}{\llbracket}   \textcolor{LGcolor}{\llparenthesis} \smidge   \mathrm{K}   \smidge \textcolor{LGcolor}{\rrparenthesis}   \textcolor{GLcolor}{\rrbracket}   $ we need to
+map to $  \mathrm{K}   \multimap   \mathrm{K}  $ but as described above, no such derivation is possible.
+
+Thus the translations are neither inverses nor adjoint. We leave it as future work to
+consider whether more complex invertible translations are possible.
+
+\subsection{Generalised $\Box$-elimination}
+\label{sec:flattening}
+\input{flattening-ottput}

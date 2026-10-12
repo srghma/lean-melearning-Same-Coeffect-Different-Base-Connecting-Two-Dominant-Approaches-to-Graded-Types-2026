@@ -1,0 +1,466 @@
+We present in turn two representative calculi for
+the two dominant styles of graded coeffects:
+Linear Base (Section~\ref{sec:linear-base}) and
+Graded Base (Section~\ref{sec:graded-base}).
+
+\subsection{Linear Base}
+\label{sec:linear-base}
+
+As discussed in the introduction, linear-base systems take
+linear $\lambda$-calculus as their core. Such systems include
+the core quantitative coeffect calculus of \citet{brunel2014core},
+ the combined graded system for effects and coeffects of \citet{DBLP:conf/icfp/GaboardiKOBU16},
+$\lambda\mathcal{R}$ of \citet{wood2020linear},
+the core of Granule by \citet{DBLP:journals/pacmpl/OrchardLE19},
+and associated work~\cite{DBLP:journals/corr/abs-2112-14966}.
+
+The term syntax of our idealised system, Linear Base, is as follows:
+%
+\begin{align*}
+    \SYSTEMnt{t} & ::= \SYSTEMmv{x} \mid  \SYSTEMnt{t_{{\mathrm{1}}}} \,  \SYSTEMnt{t_{{\mathrm{2}}}}  \mid  \lambda  \SYSTEMmv{x}  .  \SYSTEMnt{t}  \mid  \textcolor{coeffectColor}{[}  \SYSTEMnt{t}  \textcolor{coeffectColor}{]}  \mid  \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}} 
+  \tag{terms}
+\end{align*}
+%
+Terms comprise variables, applications, and abstraction as standard. Graded modal introduction
+(formally \emph{promotion}, informally \emph{boxing}) is via $ \textcolor{coeffectColor}{[}  \SYSTEMnt{t}  \textcolor{coeffectColor}{]} $, which for now we can
+think of as wrapping a term in a constructor. Graded modal elimination eliminates this constructor
+via a \emph{let} binding, unwrapping the boxed value, which we refer to as \emph{unboxing}.
+
+\noindent
+Linear Base types include a linear function space, a
+\emph{graded modality} which can be understood as generalising Linear Logic's exponential
+modality $!$, and a base type $ \mathrm{K} $ so that types are well-founded:
+%
+\begin{align*}
+  \SYSTEMnt{A} & ::=  \SYSTEMnt{A}  \multimap  \SYSTEMnt{B}  \mid  \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A}  \mid  \mathrm{K} 
+  \tag{types}
+\end{align*}
+%
+Here $\SYSTEMnt{r}$ is drawn from a pre-ordered
+semiring $(\mathcal{R}, \cdot, 1, +, 0, \sqsubseteq)$
+(where addition $+$ and multiplication $\cdot$ must
+be monotonic wrt. to $\sqsubseteq$)
+parameterising the calculus.
+
+An intuition for $ \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A} $ is that it describes some capability $r$
+with which terms of type $A$ contained inside can be used. For example,
+for the natural numbers semiring $\mathbb{N}$ then $ \textcolor{coeffectColor}{\square_{ \SYSTEMsym{2} } }  \SYSTEMnt{A} $ denotes two copies
+of an $A$, or in essence that its contents can be used twice.
+
+Typing judgments are of the form $ \Gamma  \vdash_{\textsc{l} }  \SYSTEMnt{t}  :  \SYSTEMnt{A} $, relating a context $\Gamma$, term $\SYSTEMnt{t}$, and type $\SYSTEMnt{A}$. Contexts comprise linear assumptions
+$ \SYSTEMmv{x}  :  \SYSTEMnt{A} $ and graded assumptions $ \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}  \SYSTEMnt{A} {\textcolor{coeffectColor}{]_{ \SYSTEMnt{r} } } } $
+with grade $\SYSTEMnt{r} \in \mathcal{R}$, of the form:
+%
+\begin{align*}
+  \tag{contexts}
+  \Gamma ::=  \emptyset  \mid  \Gamma ,   \SYSTEMmv{x}  :  \SYSTEMnt{A}   \mid  \Gamma ,   \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}  \SYSTEMnt{A} {\textcolor{coeffectColor}{]_{ \SYSTEMnt{r} } } }  
+\end{align*}
+%
+Contexts can be \textit{added} if they are disjoint in their linear assumptions and
+using semiring addition to combine grades of any graded assumptions shared
+between two contexts:
+%
+\begin{definition}[Context addition]
+    For contexts $\Gamma_{{\mathrm{1}}}, \Gamma_{{\mathrm{2}}}$, then $\Gamma_{{\mathrm{1}}}  \SYSTEMsym{+}  \Gamma_{{\mathrm{2}}}$ is a partial operation
+    computing the combined
+    context providing \textit{contraction} on graded assumptions. Context addition is specified:
+\begin{align*}
+\Gamma + \emptyset = \Gamma \quad
+ (   \Gamma_{{\mathrm{1}}} ,   \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}  \SYSTEMnt{A} {\textcolor{coeffectColor}{]_{ \SYSTEMnt{r} } } }    )   \SYSTEMsym{+}   (   \Gamma_{{\mathrm{2}}} ,   \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}  \SYSTEMnt{A} {\textcolor{coeffectColor}{]_{ \SYSTEMnt{s} } } }    )  & =   (  \Gamma_{{\mathrm{1}}}  \SYSTEMsym{+}  \Gamma_{{\mathrm{2}}}  )  ,   \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}  \SYSTEMnt{A} {\textcolor{coeffectColor}{]_{  \SYSTEMnt{r}  \SYSTEMsym{+}  \SYSTEMnt{s}  } } }   \\
+\emptyset + \Gamma = \Gamma \hspace{5.4em}  (   \Gamma_{{\mathrm{1}}} ,   \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}  \SYSTEMnt{A} {\textcolor{coeffectColor}{]_{ \SYSTEMnt{r} } } }    )   \SYSTEMsym{+}  \Gamma_{{\mathrm{2}}} & =   (  \Gamma_{{\mathrm{1}}}  \SYSTEMsym{+}  \Gamma_{{\mathrm{2}}}  )  ,   \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}  \SYSTEMnt{A} {\textcolor{coeffectColor}{]_{ \SYSTEMnt{r} } } }   & \mathrm{if}\ x \not\in \mathsf{dom}(\Gamma_{{\mathrm{2}}}) \\
+ (   \Gamma_{{\mathrm{1}}} ,   \SYSTEMmv{x}  :  \SYSTEMnt{A}    )   \SYSTEMsym{+}  \Gamma_{{\mathrm{2}}} & =   (  \Gamma_{{\mathrm{1}}}  \SYSTEMsym{+}  \Gamma_{{\mathrm{2}}}  )  ,   \SYSTEMmv{x}  :  \SYSTEMnt{A}   & \mathrm{if}\ x \not\in \mathsf{dom}(\Gamma_{{\mathrm{2}}})
+\end{align*}
+That is, we union the disjoint parts of the contexts, and for the non-disjoint parts
+of the contexts we merge with semiring addition. If the two contexts share linear assumptions
+or if the two contexts share graded assumptions that do not agree on the type, then
+the addition is undefined (in practical terms, this amounts to a linearity error).
+Contexts are unordered, i.e., \emph{exchange} is permitted.
+\end{definition}
+%
+We define two predicates for denoting contexts containing only graded assumptions
+and those containing graded assumptions all with the same grade:
+%
+\begin{definition}[Graded contexts]
+\label{dfn:graded-contexts}
+  A context $\Gamma$ has property $ \mathrm{graded}( \Gamma ) $ if it contains only graded
+  assumptions, and $ \mathrm{graded}( \Gamma , \textcolor{coeffectColor}{ \SYSTEMnt{r} }) $ if it contains only graded assumptions which are
+  of grade $\SYSTEMnt{r}$. These predicates are defined inductively:
+\begin{align*}
+  \begin{array}{c}
+\SYSTEMdrulePredicateGradednil{}
+\quad
+\SYSTEMdrulePredicateGradedgrad{}
+\qquad
+\SYSTEMdrulePredicateGradedAtnil{}
+\quad
+\SYSTEMdrulePredicateGradedAtgrad{}
+\end{array}
+\end{align*}
+\end{definition}
+%
+\noindent
+Lastly, contexts which contain only graded assumptions can be \emph{scaled} by
+a grade:
+%
+\begin{definition}[Scalar multiplication]
+  A context $\Gamma$ where $ \mathrm{graded}( \Gamma ) $ can be \emph{scaled}
+  $ \textcolor{coeffectColor}{ \SYSTEMnt{r}  \cdot}  \Gamma $, defined:
+  %
+  \begin{align*}
+         \textcolor{coeffectColor}{ \SYSTEMnt{r}  \cdot}   \emptyset   \triangleq  \emptyset 
+    \qquad
+         \textcolor{coeffectColor}{ \SYSTEMnt{r}  \cdot}   (   \Gamma' ,   \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}  \SYSTEMnt{A} {\textcolor{coeffectColor}{]_{ \SYSTEMnt{s} } } }    )   \triangleq   (   \textcolor{coeffectColor}{ \SYSTEMnt{r}  \cdot}  \Gamma'   )  ,   \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}  \SYSTEMnt{A} {\textcolor{coeffectColor}{]_{   \SYSTEMnt{r}  \cdot  \SYSTEMnt{s}   } } }  
+  \end{align*}
+  %
+\end{definition}
+%
+%
+\begin{figure}[t]
+  \raggedright\noindent\framebox{$ \Gamma  \vdash_{\textsc{l} }  \SYSTEMnt{t}  :  \SYSTEMnt{A} $} \quad Typing rules
+\begin{gather*}
+\begin{align*}
+  \begin{array}{c}
+\SYSTEMdruleLinvar{}
+\quad
+\SYSTEMdruleLinabs{}
+\quad
+\SYSTEMdruleLinapp{}
+\\[1.25em]
+\SYSTEMdruleLinweak{}
+\quad
+\SYSTEMdruleLinder{}
+\quad
+\SYSTEMdruleLinpr{}
+\\[1.25em]
+\SYSTEMdruleLinlet{}
+\qquad
+\SYSTEMdruleLinapprox{}
+\end{array}
+\end{align*}
+\end{gather*}
+\caption{Linear Base typing.}
+\label{fig:linear-base-types}
+\end{figure}
+
+% \newpage
+Figure~\ref{fig:linear-base-types} defines typing rules. The \textit{variable}
+($\SYSTEMRenameRuleLinvar{}$) and \textit{abstraction} ($\SYSTEMRenameRuleLinabs{}$) rules are standard for the
+linear $\lambda$-calculus. The \textit{application} ($\SYSTEMRenameRuleLinapp{}$) rule is close to that of the
+$\lambda$-calculus, but the separate contexts of the premises are added in the conclusion.
+\textit{Weakening} ($\SYSTEMRenameRuleLinweak{}$) allows unused assumptions to be added, as long as they
+are graded at the zero of the semiring. \textit{Dereliction} ($\SYSTEMRenameRuleLinder{}$) treats a linear
+assumption as a graded assumption at the one element of the semiring, which connects the linear and
+non-linear worlds. \textit{Promotion} ($\SYSTEMRenameRuleLinpr{}$) introduces grading to terms, making
+use of scalar context multiplication to propagate the resource requirements to the assumptions. The
+\textit{let} or \textit{unboxing} rule ($\SYSTEMRenameRuleLinlet{}$) eliminates an $\SYSTEMnt{r}$-graded
+modality, making the unboxed value of $\SYSTEMnt{t_{{\mathrm{1}}}}$ available in the body of $\SYSTEMnt{t_{{\mathrm{2}}}}$ according to the capabilities
+afforded by $\SYSTEMnt{r}$. \textit{Approximation} ($\SYSTEMRenameRuleLinapprox{}$) allows treating an $\SYSTEMnt{r}$-graded assumption as $\SYSTEMnt{s}$-graded if $ \SYSTEMnt{r}  \, \textcolor{coeffectColor}{\sqsubseteq} \,  \SYSTEMnt{s} $. Note the direction of the graded
+inequality in the premise is according to \citet{petricek2014coeffects}. The opposite polarity is
+also used in the literature, for example by \citet{brunel2014core}, without any semantic difference.
+
+
+\begin{example}
+\label{exm:nat-eq}
+The natural numbers semiring $(\mathbb{N}, \ast, 1, +, 0, \equiv)$ whose ordering
+is equality (i.e., a discrete ordering) captures a notion of exact usage.
+For example, the following captures the typing of a linear function $f$ that
+takes two inputs of type $\SYSTEMnt{A}$. The inputs are provided by first eliminating
+an assumption $ \SYSTEMmv{x}  :   \textcolor{coeffectColor}{\square_{ \SYSTEMsym{2} } }  \SYSTEMnt{A}  $ into a graded assumption $ \SYSTEMmv{y}  : \textcolor{coeffectColor}{[}  \SYSTEMnt{A} {\textcolor{coeffectColor}{]_{ \SYSTEMsym{2} } } } $ which is then
+used twice to apply $f$:
+%
+\begin{align*}
+\inferrule*[right=\SYSTEMRenameRuleLinlet{}]
+{
+\ldots
+   \inferrule*[right=\SYSTEMRenameRuleLinapp{}]
+    {\inferrule*[right=\SYSTEMRenameRuleLinder{}]
+      {\inferrule*[right=\SYSTEMRenameRuleLinapp{}]
+        {\ldots}
+        {    \SYSTEMmv{f}  :    \SYSTEMnt{A}  \multimap  \SYSTEMnt{A}   \multimap  \SYSTEMnt{B}    ,   \SYSTEMmv{y}  :  \SYSTEMnt{A}    \vdash_{\textsc{l} }   \SYSTEMmv{f} \,  \SYSTEMmv{y}   :   \SYSTEMnt{A}  \multimap  \SYSTEMnt{B}  }}
+        {    \SYSTEMmv{f}  :    \SYSTEMnt{A}  \multimap  \SYSTEMnt{A}   \multimap  \SYSTEMnt{B}    ,   \SYSTEMmv{y}  : \textcolor{coeffectColor}{[}  \SYSTEMnt{A} {\textcolor{coeffectColor}{]_{ \SYSTEMsym{1} } } }    \vdash_{\textsc{l} }   \SYSTEMmv{f} \,  \SYSTEMmv{y}   :   \SYSTEMnt{A}  \multimap  \SYSTEMnt{B}  }
+      \,
+      \inferrule*[right=\SYSTEMRenameRuleLinder{}]
+           {\inferrule*[right=\SYSTEMRenameRuleLinvar{}]
+             {\quad}
+             {   \SYSTEMmv{y}  :  \SYSTEMnt{A}    \vdash_{\textsc{l} }  \SYSTEMmv{y}  :  \SYSTEMnt{A} }
+           }
+           {   \SYSTEMmv{y}  : \textcolor{coeffectColor}{[}  \SYSTEMnt{A} {\textcolor{coeffectColor}{]_{ \SYSTEMsym{1} } } }    \vdash_{\textsc{l} }  \SYSTEMmv{y}  :  \SYSTEMnt{A} }
+     \hspace{-2em}}
+     {    \SYSTEMmv{f}  :    \SYSTEMnt{A}  \multimap  \SYSTEMnt{A}   \multimap  \SYSTEMnt{B}    ,   \SYSTEMmv{y}  : \textcolor{coeffectColor}{[}  \SYSTEMnt{A} {\textcolor{coeffectColor}{]_{ \SYSTEMsym{2} } } }    \vdash_{\textsc{l} }    \SYSTEMmv{f} \,  \SYSTEMmv{y}  \,  \SYSTEMmv{y}   :  \SYSTEMnt{B} \hspace{-6em}}
+\hspace{-5em}}
+{    \SYSTEMmv{f}  :    \SYSTEMnt{A}  \multimap  \SYSTEMnt{A}   \multimap  \SYSTEMnt{B}    ,   \SYSTEMmv{x}  :   \textcolor{coeffectColor}{\square_{ \SYSTEMsym{2} } }  \SYSTEMnt{A}     \vdash_{\textsc{l} }     \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{x}  \, \mathsf{in} \,  \SYSTEMmv{f}  \,  \SYSTEMmv{y}  \,  \SYSTEMmv{y}   :  \SYSTEMnt{B} }
+\end{align*}
+%
+\end{example}
+
+\begin{example}[None-one-tons~\cite{McBride2016,quantitative-type-theory}, a.k.a. the Linearity Semiring]
+  \label{exm:none-one-tons}
+  Linearity can be captured with the semiring $\mathcal{R} = \{\SYSTEMsym{0}, \SYSTEMsym{1},  \omega \}$, with the required laws for $0$ and $1$, and $\SYSTEMsym{1}  \SYSTEMsym{+}  \SYSTEMsym{1} =  \omega $ and $ \omega   \SYSTEMsym{+}  \SYSTEMnt{r} =  \omega  = \SYSTEMnt{r}  \SYSTEMsym{+}   \omega $ and $  \omega   \cdot   \omega   =  \omega $, and ordering $ \SYSTEMsym{0}  \, \textcolor{coeffectColor}{\sqsubseteq} \,   \omega  $ and $ \SYSTEMsym{1}  \, \textcolor{coeffectColor}{\sqsubseteq} \,   \omega  $. This captures linear reasoning in a graded modal setting~\cite{DBLP:journals/pacmpl/AbelB20,DBLP:journals/pacmpl/AbelDE23},
+  with $\SYSTEMsym{1}$ denoting linearity and $ \omega $ for
+  non-linearity, and $\SYSTEMsym{0}$ providing a slightly finer-grained
+  view when non-linearly discarding.
+\end{example}
+
+\begin{example}[Security~\cite{DBLP:journals/pacmpl/AbelB20,DBLP:conf/icfp/GaboardiKOBU16,mycroftfest2024}]
+\label{exm:security-lattice}
+Consider a semi-lattice of security levels $\mathcal{L} = \{\mathsf{Lo},
+\mathsf{Hi}\}$ with ordering such that $\mathsf{Hi} \succeq \mathsf{Lo}$.
+This forms a semiring with multiplication as join $\cdot = \vee$
+with unit $1 = \mathsf{Lo}$, and addition as meet $+ = \wedge$
+with unit $0 = \mathsf{Hi}$. We can type a function which maps
+low-security to high-security values, using approximation where we set $\sqsubseteq \; = \; \succeq$:
+
+\vspace{-1.5em}
+\begin{align*}
+\inferrule*[right=\SYSTEMRenameRuleLinapprox{}]
+{
+ \inferrule*[right=\SYSTEMRenameRuleLinpr{}]
+ {
+ \inferrule*[right=\SYSTEMRenameRuleLinder{}]
+  {
+    \inferrule*[right=\SYSTEMRenameRuleLinvar{}]
+      {\quad}
+      {   \SYSTEMmv{x}  :  \SYSTEMnt{A}    \vdash_{\textsc{l} }  \SYSTEMmv{x}  :  \SYSTEMnt{A} }
+  }
+  {   \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}  \SYSTEMnt{A} {\textcolor{coeffectColor}{]_{  \mathsf{Lo}  } } }    \vdash_{\textsc{l} }  \SYSTEMmv{x}  :  \SYSTEMnt{A} }
+ }
+ {   \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}  \SYSTEMnt{A} {\textcolor{coeffectColor}{]_{  \mathsf{Hi}  } } }    \vdash_{\textsc{l} }   \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]}   :   \textcolor{coeffectColor}{\square_{  \mathsf{Hi}  } }  \SYSTEMnt{A}   \qquad \mathsf{Hi} \succeq \mathsf{Lo}}
+}
+{   \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}  \SYSTEMnt{A} {\textcolor{coeffectColor}{]_{  \mathsf{Lo}  } } }    \vdash_{\textsc{l} }   \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]}   :   \textcolor{coeffectColor}{\square_{  \mathsf{Hi}  } }  \SYSTEMnt{A}  }
+\end{align*}
+%
+A function mapping from $ \mathsf{Hi} $ to $ \mathsf{Lo} $ values is derivable but cannot
+use its input. This \emph{non-interference} property is proved by
+\citet{DBLP:journals/pacmpl/AbelB20} and \citet{mycroftfest2024}.
+\end{example}
+
+\begin{example}[Product]
+  \label{exm:product}
+Given two pre-ordered semirings $\mathcal{R}$ and $\mathcal{S}$,
+their product $\mathcal{R} \times \mathcal{S}$ is a semiring, with
+zero element $\langle 0 , 0 \rangle \in (\mathcal{R} \times \mathcal{S})$,
+one element $\langle 1 , 1 \rangle \in (\mathcal{R} \times \mathcal{S})$, and
+operations and ordering acting pointwise. This is a standard
+algebraic construction which has been used in graded systems to combine
+analyses (e.g.~\cite{DBLP:journals/pacmpl/OrchardLE19}).
+
+Section~\ref{subsec:linearity-preserving} uses this construction to
+compose the linearity semiring (Example~\ref{exm:none-one-tons}) with some other
+given semiring, thereby making explicit the linearity analysis inherent to Linear Base.
+
+\citet{DBLP:journals/pacmpl/BianchiniDGZ23} present the \emph{smash product} construction
+as a variation on the product construction which has some preconditions and filters
+out the elements of the product that have either the left or the right $ = 0$,
+instead providing a single canonical $\SYSTEMsym{0}$ element.
+\end{example}
+
+\begin{lemma}[Admissibility of substitution]
+  There are two admissible substitutions:
+  \begin{enumerate}
+  \item (Linear) If $ \Gamma_{{\mathrm{1}}}  \vdash_{\textsc{l} }  \SYSTEMnt{t_{{\mathrm{1}}}}  :  \SYSTEMnt{A} $ and $  \Gamma_{{\mathrm{2}}} ,   \SYSTEMmv{x}  :  \SYSTEMnt{A}    \vdash_{\textsc{l} }  \SYSTEMnt{t_{{\mathrm{2}}}}  :  \SYSTEMnt{B} $
+    then $ \Gamma_{{\mathrm{1}}}  \SYSTEMsym{+}  \Gamma_{{\mathrm{2}}}  \vdash_{\textsc{l} }   [  \SYSTEMnt{t_{{\mathrm{1}}}}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}   :  \SYSTEMnt{B} $;
+
+  \item (Graded) If $ \Gamma_{{\mathrm{1}}}  \vdash_{\textsc{l} }  \SYSTEMnt{t_{{\mathrm{1}}}}  :  \SYSTEMnt{A} $ and $ \mathrm{graded}( \Gamma_{{\mathrm{1}}} ) $ and
+    $  \Gamma_{{\mathrm{2}}} ,   \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}  \SYSTEMnt{A} {\textcolor{coeffectColor}{]_{ \SYSTEMnt{r} } } }    \vdash_{\textsc{l} }  \SYSTEMnt{t_{{\mathrm{2}}}}  :  \SYSTEMnt{B} $
+    then $  \textcolor{coeffectColor}{ \SYSTEMnt{r}  \cdot}  \Gamma_{{\mathrm{1}}}   \SYSTEMsym{+}  \Gamma_{{\mathrm{2}}}  \vdash_{\textsc{l} }   [  \SYSTEMnt{t_{{\mathrm{1}}}}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}   :  \SYSTEMnt{B} $.
+  \end{enumerate}
+  \label{lemma:linear-base-sub-admiss}
+\end{lemma}
+
+
+\begin{remark}
+In the literature (e.g.~\citet{brunel2014core,DBLP:conf/icfp/GaboardiKOBU16,DBLP:journals/pacmpl/OrchardLE19}),
+the graded context predicates (\ref{dfn:graded-contexts}) are often presented instead as partial identity functions on contexts:
+written $[ \Gamma ]$, the function is identity when the context contains only
+graded assumptions and is undefined otherwise, preventing a rule from
+being applied (and similarly $[ \Gamma ]_r$ for contexts
+containing only assumptions graded by $r$).
+We chose to make the predicates explicit for clarity.
+\end{remark}
+
+\paragraph{Operational Semantics}
+
+Figure~\ref{fig:linear-base-ops-and-eqns} (first group) gives the
+operational semantics, which is that of the call-by-name
+$\lambda$-calculus with an additional congruence rule
+for graded modal elimination and $\beta$-reduction of graded modal
+introduction followed by elimination. %Note the rule for
+%evaluating inside of a graded modal introduction in keeping with
+%the call-by-name style.
+
+Note that the operational semantics we consider for each calculus in this paper represents the standard
+models given in the literature in question, with progress and
+preservation theorems, but these do not track specific resource
+behaviour operationally (see discussion of resource-aware operational
+models in Section~\ref{sec:raos}).
+
+Appendix~\refappendix{app:definitions} gives the definition of syntactic
+substitution which is standard.
+
+\begin{figure}[t]
+\raggedright\noindent\framebox{$ \SYSTEMnt{t}  \rightsquigarrow_{\textsc{l} }  \SYSTEMnt{t} $} \quad Operational semantics (Call-By-Name)
+\begin{align*}
+  \begin{array}{c}
+  \SYSTEMdruleSemLinbeta{}
+  \quad
+  \SYSTEMdruleSemLincongAppL{}
+  \\[1em]
+  \SYSTEMdruleSemLinbetaBox{}
+  \quad
+  \SYSTEMdruleSemLincongLetL{} \\[1em]
+  \end{array}
+\end{align*}
+\bigskip
+
+\raggedright\noindent\framebox{$ \SYSTEMnt{t}  \,\equiv_{\textsc{l} }\,  \SYSTEMnt{t'} $}
+\hspace{1em} Equational theory (congruence rules omitted).
+\begin{gather*}
+\begin{align*}
+  \begin{array}{c}
+\SYSTEMdruleLinEqbeta{} \;\;
+\SYSTEMdruleLinEqeta{} \;\;
+\SYSTEMdruleLinEqbetaBox{} \\[1em]
+\SYSTEMdruleLinEqetaBox{} \quad
+\SYSTEMdruleLinEqletCommBox{}  \\[1em]
+\SYSTEMdruleLinEqletCommOne{} \, \SYSTEMdruleLinEqletCommTwo{}
+  \end{array}
+\end{align*}
+\end{gather*}
+\caption{Linear Base - Operational semantics and equations}
+\label{fig:linear-base-ops-and-eqns}
+\end{figure}
+
+
+\paragraph{Equational theory}
+
+Figure~\ref{fig:linear-base-ops-and-eqns} (second group) defines an equational theory, giving the key rules.
+For brevity, we omit the congruence rules which apply to all
+sub-term positions. Note that $ \rightsquigarrow_{\textsc{l} }  \subseteq  \equiv_{\textsc{l} } $.
+
+\begin{definition}[Freshness]
+  We make use of freshness here and throughout. It is defined as follows:
+  \begin{align*}
+    x_1, \ldots, x_n \# t \triangleq \{x_1, \ldots, x_n\} \cap \mathsf{fv}(t) = \emptyset
+  \end{align*}
+\end{definition}
+
+\subsection{Graded Base}
+\label{sec:graded-base}
+The next calculus, Graded Base, is representative of the coeffect systems of
+\citet{DBLP:conf/icalp/PetricekOM13,petricek2014coeffects},
+the generalised bounded linear type system of \citet{ghica2014bounded},
+the simply-typed core of work by \citet{DBLP:journals/pacmpl/AbelB20}, \citet{grad}, and \citet{DBLP:journals/pacmpl/AbelDE23},
+the OO-based approach of \citet{DBLP:journals/pacmpl/BianchiniDGZS22},
+and others.
+The syntax of terms is that of the $\lambda$-calculus:
+%
+\begin{align*}
+    \SYSTEMnt{t} & ::= \SYSTEMmv{x} \mid  \SYSTEMnt{t_{{\mathrm{1}}}} \,  \SYSTEMnt{t_{{\mathrm{2}}}}  \mid  \lambda  \SYSTEMmv{x}  .  \SYSTEMnt{t} 
+  \tag{terms}
+\end{align*}
+%
+We use $t$ to also range over Graded Base terms but disambiguate which
+calculus terms belong to via the context of their later use (in translations).
+Type comprise graded functions and a base type $ \mathrm{K}  $:
+%
+\begin{align*}
+  \SYSTEMnt{A} & ::=  \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{B}  \mid  \mathrm{K} 
+  \tag{types} \\
+  \Delta & ::=  \emptyset  \mid  \Delta ,   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{A}  
+  \tag{contexts}
+\end{align*}
+%
+Instead of a linear function type and graded modality, Graded Base has just a \emph{graded function type}, where $r \in \mathcal{R}$. Contexts contain only graded assumptions which we instead denote as $ \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{A} $.
+
+Figure~\ref{fig:graded-base} (first group) gives the typing with judgments of the form $ \Delta  \vdash_{\textsc{g} }  \SYSTEMnt{t}  :  \SYSTEMnt{A} $. Note the singleton context graded at $\SYSTEMsym{1}$
+in the \textit{variable} rule. The \textit{abstraction} rule introduces its binding into the context
+graded at $\SYSTEMnt{r}$, per the graded function arrow. In the \textit{application} rule, the function
+arrow propagates the function's resource requirements onto its argument $\SYSTEMnt{t_{{\mathrm{2}}}}$ via scalar
+multiplication on $\Delta_{{\mathrm{2}}}$ (i.e., the context of $\SYSTEMnt{t_{{\mathrm{2}}}}$). Weakening scales by $0$ all the grades in an additional context $\Delta'$.
+%
+\begin{figure}[t]
+\raggedright\noindent\framebox{$ \Delta  \vdash_{\textsc{g} }  \SYSTEMnt{t}  :  \SYSTEMnt{A} $} \quad Typing rules
+\begin{align*}
+\begin{array}{c}
+\SYSTEMdruleGradvar{}
+\quad
+\SYSTEMdruleGradweak{}
+\quad
+\SYSTEMdruleGradapprox{}
+\\[1.25em]
+\SYSTEMdruleGradabs{}
+\quad
+\SYSTEMdruleGradapp{}
+\end{array}
+\end{align*}
+\bigskip
+
+\raggedright\noindent\framebox{$ \SYSTEMnt{t}  \rightsquigarrow_{\textsc{g} }  \SYSTEMnt{t'} $} \quad Operational semantics
+\vspace{-1em}
+\begin{align*}
+  \begin{array}{c}
+  \SYSTEMdruleSemGrdbeta{}
+  \quad
+  \SYSTEMdruleSemGrdcongAppL{}
+  \end{array}
+\end{align*}
+\bigskip
+
+\raggedright\noindent\framebox{$ \SYSTEMnt{t}  \equiv_{\textsc{g} }  \SYSTEMnt{t'} $} \quad Equational theory (congruence rules omitted)
+\vspace{-1em}
+\begin{align*}
+  \begin{array}{c}
+\SYSTEMdruleGradEqbeta{} \quad
+\SYSTEMdruleGradEqeta{}
+  \end{array}
+\end{align*}
+\caption{Graded Base system}
+\label{fig:graded-base}
+\end{figure}
+
+Graded substitution is admissible, akin to the second clause
+of Linear Base substitution (Lemma~\ref{lemma:linear-base-sub-admiss}):
+%
+\begin{lemma}[Admissibility of substitution]
+   If $ \Delta_{{\mathrm{1}}}  \vdash_{\textsc{g} }  \SYSTEMnt{t_{{\mathrm{1}}}}  :  \SYSTEMnt{A} $ and
+    $  \Delta_{{\mathrm{2}}} ,   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{A}    \vdash_{\textsc{g} }  \SYSTEMnt{t_{{\mathrm{2}}}}  :  \SYSTEMnt{B} $ then\\
+    $  \textcolor{coeffectColor}{ \SYSTEMnt{r}  \cdot}  \Delta_{{\mathrm{1}}}   \SYSTEMsym{+}  \Delta_{{\mathrm{2}}}  \vdash_{\textsc{g} }   [  \SYSTEMnt{t_{{\mathrm{1}}}}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}   :  \SYSTEMnt{B} $.
+\end{lemma}
+
+\begin{example}
+The simply-typed $\lambda$-calculus is recovered
+by instantiating Graded Base with the single-point semiring $\mathcal{R} = \{\bullet\}$.
+\end{example}
+%
+\begin{example}
+The higher-order function $h =  \lambda  \SYSTEMmv{f}  .    \lambda  \SYSTEMmv{x}  .   \SYSTEMmv{f} \,  \SYSTEMsym{(}   \SYSTEMmv{f} \,  \SYSTEMmv{x}   \SYSTEMsym{)}    $ mentioned in the introduction, composing a function with
+itself twice, has the following derivation for its body:
+%
+\begin{gather*}
+\inferrule*[right=\SYSTEMRenameRuleGradapp{}]
+{\inferrule*[right=\SYSTEMRenameRuleGradvar{}]{\;}{   \SYSTEMmv{f}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }   (   \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{A}   )     \vdash_{\textsc{g} }  \SYSTEMmv{f}  :   \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{A}  }
+%
+ \inferrule*[right=\SYSTEMRenameRuleGradapp{}]
+ {\inferrule*[right=\SYSTEMRenameRuleGradvar{}]{\;}{   \SYSTEMmv{f}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }   (   \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{A}   )     \vdash_{\textsc{g} }  \SYSTEMmv{f}  :   \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{A}  }
+ %
+  \inferrule*[right=\SYSTEMRenameRuleGradvar{}]{\;}{   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }  \SYSTEMnt{A}    \vdash_{\textsc{g} }  \SYSTEMmv{x}  :  \SYSTEMnt{A} }}
+  {    \SYSTEMmv{f}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }   (   \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{A}   )    ,   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{A}    \vdash_{\textsc{g} }   \SYSTEMmv{f} \,  \SYSTEMmv{x}   :  \SYSTEMnt{A}  }
+\hspace{-3em}}
+{    \SYSTEMmv{f}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{(}  \SYSTEMsym{1}  \SYSTEMsym{+}  \SYSTEMsym{1}  \SYSTEMsym{)} } }   (   \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{A}   )    ,   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{(}   \SYSTEMnt{r}  \cdot  \SYSTEMnt{r}   \SYSTEMsym{)} } }  \SYSTEMnt{A}    \vdash_{\textsc{g} }   \SYSTEMmv{f} \,  \SYSTEMsym{(}   \SYSTEMmv{f} \,  \SYSTEMmv{x}   \SYSTEMsym{)}   :  \SYSTEMnt{A} }
+\end{gather*}
+%
+\end{example}
+All the semirings mentioned in Section~\ref{sec:linear-base} (Linear Base) can also be used with
+Graded Base.
+
+
+\paragraph{Operational Semantics and Equational theory}
+
+Figure~\ref{fig:graded-base} (second group) gives the
+operational semantics, which is that of the CBN
+$\lambda$-calculus. Appendix~\refappendix{app:definitions} gives the definition of syntactic
+substitution which is standard.
+
+Figure~\ref{fig:graded-base} (third group) defines an equational theory
+for the calculus, giving the key rules but omitting the congruence
+rules which apply to all sub-term positions. Note $ \rightsquigarrow_{\textsc{g} }  \, \subseteq \,  \equiv_{\textsc{g} } $.

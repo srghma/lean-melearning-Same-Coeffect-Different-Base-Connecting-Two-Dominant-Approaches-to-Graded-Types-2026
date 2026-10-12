@@ -1,0 +1,501 @@
+\begin{definition}[Freshness]
+  \begin{align*}
+    x_1, \ldots, x_n \# t \triangleq \{x_1, \ldots, x_n\} \cap \mathsf{fv}(t) = \emptyset
+  \end{align*}
+\end{definition}
+
+\subsection{Linear Base}
+
+\begin{align}
+    \SYSTEMnt{t} & ::= \SYSTEMmv{x} \mid  \SYSTEMnt{t_{{\mathrm{1}}}} \,  \SYSTEMnt{t_{{\mathrm{2}}}}  \mid  \lambda  \SYSTEMmv{x}  .  \SYSTEMnt{t}  \mid  \textcolor{coeffectColor}{[}  \SYSTEMnt{t}  \textcolor{coeffectColor}{]}  \mid  \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}} 
+    \tag{terms} \\
+  \SYSTEMnt{A} & ::=  \SYSTEMnt{A}  \multimap  \SYSTEMnt{B}  \mid  \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A}  \mid  \mathrm{K} 
+  \tag{types} \\
+    \tag{contexts}
+  \Gamma & ::=  \emptyset  \mid  \Gamma ,   \SYSTEMmv{x}  :  \SYSTEMnt{A}   \mid  \Gamma ,   \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}  \SYSTEMnt{A} {\textcolor{coeffectColor}{]_{ \SYSTEMnt{r} } } }  
+\end{align}
+
+\paragraph{Typing}
+
+\begin{gather*}
+\begin{align*}
+  \begin{array}{c}
+\SYSTEMdruleLinvar{}
+\quad
+\SYSTEMdruleLinabs{}
+\quad
+\SYSTEMdruleLinapp{}
+\\[2em]
+\SYSTEMdruleLinweak{}
+\quad
+\SYSTEMdruleLinder{}
+\quad
+\SYSTEMdruleLinpr{}
+\\[2em]
+\SYSTEMdruleLinlet{}
+\qquad
+\SYSTEMdruleLinapprox{}
+\\
+\end{array}
+\end{align*}
+\end{gather*}
+
+\paragraph{Operational Semantics}
+
+\begin{gather*}
+\begin{align*}
+  \begin{array}{c}
+  \SYSTEMdruleSemLinbeta{}
+  \quad
+  \SYSTEMdruleSemLincongAppL{}
+  \\[2em]
+  \SYSTEMdruleSemLinbetaBox{}
+  \quad
+  \SYSTEMdruleSemLincongLetL{} \\[2em]
+  \end{array}
+\end{align*}
+\end{gather*}
+
+\paragraph{Equational Theory}
+
+  \begin{gather*}
+\begin{align*}
+  \begin{array}{c}
+\SYSTEMdruleLinEqbeta{} \quad
+\SYSTEMdruleLinEqeta{} \\[2em]
+\SYSTEMdruleLinEqbetaBox{} \quad
+\SYSTEMdruleLinEqetaBox{} \\[2em]
+\SYSTEMdruleLinEqletCommBox{} \\[2em]
+\SYSTEMdruleLinEqletCommOne{} \\[2em]
+\SYSTEMdruleLinEqletCommTwo{} \\[2em]
+\SYSTEMdruleLinEqcongApp{} \quad
+\SYSTEMdruleLinEqcongAbs{} \\[2em]
+\SYSTEMdruleLinEqcongPr{} \quad
+\SYSTEMdruleLinEqcongLet{}
+  \end{array}
+\end{align*}
+\end{gather*}
+
+\subsection{Linear Core}
+\label{app:definitions-linear-core}
+
+\begin{align}
+  \notag    \SYSTEMnt{t} & ::= \SYSTEMmv{x} \mid  \SYSTEMnt{t_{{\mathrm{1}}}} \,  \SYSTEMnt{t_{{\mathrm{2}}}}  \mid  \lambda  \SYSTEMmv{x}  .  \SYSTEMnt{t}  \mid  \textcolor{coeffectColor}{[}  \SYSTEMnt{t}  \textcolor{coeffectColor}{]}  \mid  \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}}  \mid  \langle  \SYSTEMnt{t_{{\mathrm{1}}}} ,  \SYSTEMnt{t_{{\mathrm{2}}}}  \rangle  \mid  \mathsf{let} \, \langle  \SYSTEMmv{x} ,  \SYSTEMmv{y}  \rangle =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}}  \mid  \langle \rangle  \mid  \mathsf{let} \, \langle \rangle =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}}  \\
+         \mid & \; \mathsf{inj}_1 \,  \SYSTEMnt{t}  \mid  \mathsf{inj}_2 \,  \SYSTEMnt{t}  \mid  \mathsf{case} \,  \SYSTEMnt{t}  \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{x}  \rightarrow  \SYSTEMnt{t_{{\mathrm{1}}}}  ; \, \mathsf{inj2} \,  \SYSTEMmv{y}  \rightarrow  \SYSTEMnt{t_{{\mathrm{2}}}}  \} 
+    \tag{terms} \\
+  \SYSTEMnt{A} & ::=  \SYSTEMnt{A}  \multimap  \SYSTEMnt{B}  \mid  \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A}  \mid  \SYSTEMnt{A}  \otimes  \SYSTEMnt{B}  \mid  \mathrm{unit}  \mid  \SYSTEMnt{A}  \oplus  \SYSTEMnt{B} 
+  \tag{types} \\
+    \tag{contexts}
+  \Gamma & ::=  \emptyset  \mid  \Gamma ,   \SYSTEMmv{x}  :  \SYSTEMnt{A}   \mid  \Gamma ,   \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}  \SYSTEMnt{A} {\textcolor{coeffectColor}{]_{ \SYSTEMnt{r} } } }  
+\end{align}
+
+\paragraph{Typing}
+
+Linear Base typing plus the following:
+
+\begin{gather*}
+\begin{align*}
+  \begin{array}{c}
+    \SYSTEMdruleLinprodi{}
+\quad
+\SYSTEMdruleLinprode{}
+\\[2em]
+\SYSTEMdruleLinuniti{}
+\quad
+\SYSTEMdruleLinunite{}
+\quad
+\SYSTEMdruleLinsumiOne{}
+\\[2em]
+\SYSTEMdruleLinsumiTwo{}
+\quad
+\SYSTEMdruleLinsume{}
+\end{array}
+\end{align*}
+\end{gather*}
+
+\paragraph{Operational Semantics}
+
+Linear Base operational semantics plus the following:
+
+\begin{gather*}
+\begin{align*}
+  \begin{array}{c}
+    \SYSTEMdruleSemLinprodCong{}
+    \;\;
+    \SYSTEMdruleSemLinprodBeta{}
+    \\[2em]
+    \SYSTEMdruleSemLinunitCong{}
+    \;\;
+    \SYSTEMdruleSemLinunitBeta{}
+    \\[2em]
+    \SYSTEMdruleSemLincongCase{}
+    \\[2em]
+    \;\;
+    \SYSTEMdruleSemLincaseInjOne{}
+    \;\;
+    \SYSTEMdruleSemLincaseInjTwo{}
+  \end{array}
+\end{align*}
+\end{gather*}
+
+\paragraph{Equational Theory}
+
+Linear Base equational theory plus the following:
+
+  \begin{gather*}
+\begin{align*}
+  \begin{array}{c}
+     \SYSTEMdruleLinEqbetaUnit{} \quad
+\SYSTEMdruleLinEqetaUnit{} \\[2em]
+\SYSTEMdruleLinEqbetaProd{}
+\SYSTEMdruleLinEqetaProd{} \\[2em]
+\SYSTEMdruleLinEqbetaSumOne{} \quad
+\SYSTEMdruleLinEqbetaSumTwo{} \\[2em]
+\SYSTEMdruleLinEqetaSum{} \\[2em]
+    \SYSTEMdruleLinEqcongUnitE{}
+\SYSTEMdruleLinEqcongProdE{} \\[2em]
+\SYSTEMdruleLinEqcongProdI{}
+\SYSTEMdruleLinEqcongSumIOne{}
+\SYSTEMdruleLinEqcongSumITwo{} \\[2em]
+\SYSTEMdruleLinEqcongSumE{}
+  \end{array}
+\end{align*}
+\end{gather*}
+
+\subsection{Linear Push Core}
+\label{app:definitions-linear-push-core}
+
+\begin{align}
+  \notag    \SYSTEMnt{t} & ::= \SYSTEMmv{x} \mid  \SYSTEMnt{t_{{\mathrm{1}}}} \,  \SYSTEMnt{t_{{\mathrm{2}}}}  \mid  \lambda  \SYSTEMmv{x}  .  \SYSTEMnt{t}  \mid  \textcolor{coeffectColor}{[}  \SYSTEMnt{t}  \textcolor{coeffectColor}{]}  \mid  \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}}  \mid  \langle  \SYSTEMnt{t_{{\mathrm{1}}}} ,  \SYSTEMnt{t_{{\mathrm{2}}}}  \rangle  \mid  \mathsf{let} \, \langle  \SYSTEMmv{x} ,  \SYSTEMmv{y}  \rangle =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}}  \mid  \langle \rangle  \mid  \mathsf{let} \, \langle \rangle =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}}  \\
+  \notag  \mid & \; \mathsf{inj}_1 \,  \SYSTEMnt{t}  \mid  \mathsf{inj}_2 \,  \SYSTEMnt{t}  \mid  \mathsf{case} \,  \SYSTEMnt{t}  \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{x}  \rightarrow  \SYSTEMnt{t_{{\mathrm{1}}}}  ; \, \mathsf{inj2} \,  \SYSTEMmv{y}  \rightarrow  \SYSTEMnt{t_{{\mathrm{2}}}}  \}  \\
+  \mid & \;  \textsf{push}_\otimes  \SYSTEMnt{t}  \mid  \textsf{push}_\oplus  \SYSTEMnt{t}  \mid  \textsf{push}_{\mathrm{unit} }  \SYSTEMnt{t} 
+    \tag{terms} \\
+  \SYSTEMnt{A} & ::=  \SYSTEMnt{A}  \multimap  \SYSTEMnt{B}  \mid  \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A}  \mid  \SYSTEMnt{A}  \otimes  \SYSTEMnt{B}  \mid  \mathrm{unit}  \mid  \SYSTEMnt{A}  \oplus  \SYSTEMnt{B} 
+  \tag{types} \\
+    \tag{contexts}
+  \Gamma & ::=  \emptyset  \mid  \Gamma ,   \SYSTEMmv{x}  :  \SYSTEMnt{A}   \mid  \Gamma ,   \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}  \SYSTEMnt{A} {\textcolor{coeffectColor}{]_{ \SYSTEMnt{r} } } }  
+\end{align}
+
+\paragraph{Typing}
+
+Linear Core typing plus the following:
+
+\begin{gather*}
+\begin{align*}
+  \begin{array}{c}
+    \SYSTEMdruleLinpushprod{}
+\quad
+\SYSTEMdruleLinpushsum{} \\[1.5em]
+\,
+\SYSTEMdruleLinpushunit{} \\
+\end{array}
+\end{align*}
+\end{gather*}
+
+\paragraph{Operational Semantics}
+
+Linear Core operational semantics plus the following:
+
+\begin{gather*}
+\begin{align*}
+  \begin{array}{c}
+    \SYSTEMdruleSemLinpushProd{}
+    \;\;
+    \SYSTEMdruleSemLinpushSumInjOne{}
+    \;\;
+    \SYSTEMdruleSemLinpushSumInjTwo{}
+    \\[1.5em]
+    \SYSTEMdruleSemLinpushProdCong{}
+    \quad
+    \SYSTEMdruleSemLinpushSumCong{}
+    \\[1.5em]
+    \SYSTEMdruleSemLinpushProdBoxCong{}
+    \quad
+    \SYSTEMdruleSemLinpushSumBoxCong{}
+    \\[1.5em]
+    \SYSTEMdruleSemLinpushUnitCong{}
+    \quad
+    \SYSTEMdruleSemLinpushUnitBoxCong{}
+    \quad
+    \SYSTEMdruleSemLinpushUnit{}
+  \end{array}
+\end{align*}
+\end{gather*}
+
+\paragraph{Equational Theory}
+
+Linear Core equational theory plus the following:
+
+  \begin{gather*}
+\begin{align*}
+  \begin{array}{c}
+\SYSTEMdruleLinEqpushProdCong{} \quad
+\SYSTEMdruleLinEqpushProdBeta{} \\[2em]
+\SYSTEMdruleLinEqpushProdEta{} \\[2em]
+\SYSTEMdruleLinEqpushSumCong{} \\[2em]
+\SYSTEMdruleLinEqpushSumBetaOne{} \quad
+\SYSTEMdruleLinEqpushSumBetaTwo{} \\[2em]
+\SYSTEMdruleLinEqpushSumEta{} \\[2em]
+\SYSTEMdruleLinEqpushUnitCong{} \quad
+\SYSTEMdruleLinEqpushUnitBeta{}
+  \end{array}
+\end{align*}
+\end{gather*}
+
+\subsection{Graded Base}
+
+
+\begin{align*}
+    \SYSTEMnt{t} & ::= \SYSTEMmv{x} \mid  \SYSTEMnt{t_{{\mathrm{1}}}} \,  \SYSTEMnt{t_{{\mathrm{2}}}}  \mid  \lambda  \SYSTEMmv{x}  .  \SYSTEMnt{t} 
+    \tag{terms} \\
+      \SYSTEMnt{A} & ::=  \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{B}  \mid  \mathrm{K} 
+  \tag{types} \\
+  \Delta & ::=  \emptyset  \mid  \Delta ,   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{A}  
+  \tag{contexts}
+\end{align*}
+
+\paragraph{Typing}
+
+\begin{gather*}
+\begin{align*}
+\begin{array}{c}
+\SYSTEMdruleGradvar{}
+\;
+\SYSTEMdruleGradweak{}
+\;
+\SYSTEMdruleGradapprox{}
+\\[1em]
+\SYSTEMdruleGradabs{}
+\quad
+\SYSTEMdruleGradapp{} \\
+\end{array}
+\end{align*}
+\end{gather*}
+
+\paragraph{Operational Semantics}
+
+\begin{gather*}
+\begin{align*}
+  \begin{array}{c}
+  \SYSTEMdruleSemGrdbeta{}
+  \quad
+  \SYSTEMdruleSemGrdcongAppL{} \\
+  \end{array}
+\end{align*}
+\end{gather*}
+
+\paragraph{Equational Theory}
+
+  \begin{gather*}
+\begin{align*}
+  \begin{array}{c}
+\SYSTEMdruleGradEqbeta{} \quad
+\SYSTEMdruleGradEqeta{} \\[2em]
+\SYSTEMdruleGradEqcongApp{} \quad
+\SYSTEMdruleGradEqcongAbs{} \\
+  \end{array}
+\end{align*}
+\end{gather*}
+
+
+
+\subsection{Graded Modal Base}
+\label{app:definitions-graded-modal-base}
+
+
+\begin{align*}
+      \SYSTEMnt{t} & ::= \SYSTEMmv{x} \mid  \SYSTEMnt{t_{{\mathrm{1}}}} \,  \SYSTEMnt{t_{{\mathrm{2}}}}  \mid  \lambda  \SYSTEMmv{x}  .  \SYSTEMnt{t}  \mid  \textcolor{coeffectColor}{[}  \SYSTEMnt{t}  \textcolor{coeffectColor}{]}  \mid  \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}} 
+    \tag{terms} \\
+  \SYSTEMnt{A} & ::=  \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{B}  \mid  \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A}  \mid  \mathrm{K} 
+    \tag{types} \\
+  \Delta & ::=  \emptyset  \mid  \Delta ,   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{A}  
+  \tag{contexts}
+\end{align*}
+
+\paragraph{Typing}
+
+Graded Base typing plus the following:
+
+\begin{gather*}
+\begin{align*}
+  \begin{array}{c}\
+\SYSTEMdruleGradBoxpr{}
+\quad
+\SYSTEMdruleGradBoxlet{}
+\end{array}
+\end{align*}
+\end{gather*}
+
+\paragraph{Operational Semantics}
+
+Graded Base operational semantics plus the following:
+
+\begin{gather*}
+\begin{align*}
+  \begin{array}{c}
+  \SYSTEMdruleSemGrdModbetaBox{}
+  \quad
+  \SYSTEMdruleSemGrdModcongLetL{} \\
+  \end{array}
+\end{align*}
+\end{gather*}
+
+\paragraph{Equational Theory}
+
+Graded Base equational theory plus the following:
+
+  \begin{gather*}
+\begin{align*}
+  \begin{array}{c}
+\SYSTEMdruleGradMEqbetaBox{} \quad
+\SYSTEMdruleGradMEqetaBox{} \\[2em]
+\SYSTEMdruleGradMEqletCommBox{} \\[2em]
+\SYSTEMdruleGradMEqletCommOne{} \\[2em]
+\SYSTEMdruleGradMEqletCommTwo{} \quad
+\SYSTEMdruleGradMEqcongPr{} \\[2em]
+\SYSTEMdruleGradMEqcongLet{} \\
+  \end{array}
+\end{align*}
+\end{gather*}
+
+\subsection{Graded Poly Base}
+\label{app:definitions-graded-poly-base}
+
+
+\begin{align*}
+      \SYSTEMnt{t} & ::= \SYSTEMmv{x} \mid  \SYSTEMnt{t_{{\mathrm{1}}}} \,  \SYSTEMnt{t_{{\mathrm{2}}}}  \mid  \lambda  \SYSTEMmv{x}  .  \SYSTEMnt{t}  \mid  \SYSTEMnt{t}  \text{@}  \SYSTEMnt{A}  \mid  \Lambda  \alpha  .  \SYSTEMnt{t} 
+    \tag{terms} \\
+  \SYSTEMnt{A} & ::=  \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{B}  \mid  \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A}  \mid \alpha \mid  \forall  \alpha  .  \SYSTEMnt{B}  \mid  \mathrm{K} 
+    \tag{types} \\
+  \Delta & ::=  \emptyset  \mid  \Delta ,   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{A}  
+  \tag{contexts}
+\end{align*}
+
+\paragraph{Typing}
+
+Graded Base typing plus the following:
+
+\begin{gather*}
+\begin{align*}
+  \begin{array}{c}
+    \SYSTEMdruleGradPolytyAbs{} \quad
+\SYSTEMdruleGradPolytyApp{} \\
+\end{array}
+\end{align*}
+\end{gather*}
+
+\paragraph{Operational Semantics}
+
+Graded Base operational semantics plus the following:
+
+\begin{gather*}
+\begin{align*}
+  \begin{array}{c}
+\SYSTEMdruleSemGrdPolytyBeta{} \quad
+\SYSTEMdruleSemGrdPolycongTyApp{} \\
+  \end{array}
+\end{align*}
+\end{gather*}
+
+\paragraph{Equational Theory}
+
+Graded Base equational theory the following:
+
+  \begin{gather*}
+\begin{align*}
+  \begin{array}{c}
+\SYSTEMdruleGradPolyEqbetaTy{} \quad
+\SYSTEMdruleGradPolyEqetaTy{} \\[2em]
+\SYSTEMdruleGradPolyEqtyAppCong{} \quad
+\SYSTEMdruleGradPolyEqtyAbsCong{} \\
+  \end{array}
+\end{align*}
+\end{gather*}
+
+
+\subsection{Graded Modal Core}
+\label{app:definitions-graded-core}
+
+
+\begin{align*}
+\notag  \SYSTEMnt{t} ::= & \SYSTEMmv{x} \mid  \SYSTEMnt{t_{{\mathrm{1}}}} \,  \SYSTEMnt{t_{{\mathrm{2}}}}  \mid  \lambda  \SYSTEMmv{x}  .  \SYSTEMnt{t}  \mid  \textcolor{coeffectColor}{[}  \SYSTEMnt{t}  \textcolor{coeffectColor}{]}  \mid  \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}}  \\
+\notag   \mid & \;  \langle  \SYSTEMnt{t_{{\mathrm{1}}}} ,  \SYSTEMnt{t_{{\mathrm{2}}}}  \rangle  \mid  \mathsf{let} \, \langle  \SYSTEMmv{x} ,  \SYSTEMmv{y}  \rangle =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}}  \mid  \langle \rangle  \mid  \mathsf{let} \, \langle \rangle =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}}  \\
+         \mid & \; \mathsf{inj}_1 \,  \SYSTEMnt{t}  \mid  \mathsf{inj}_2 \,  \SYSTEMnt{t}  \mid  \mathsf{case} \,  \SYSTEMnt{t}  \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{x}  \rightarrow  \SYSTEMnt{t_{{\mathrm{1}}}}  ; \, \mathsf{inj2} \,  \SYSTEMmv{y}  \rightarrow  \SYSTEMnt{t_{{\mathrm{2}}}}  \} 
+    \tag{terms} \\
+  \SYSTEMnt{A} & ::=  \SYSTEMnt{A}  \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{B}  \mid  \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A}  \mid  \SYSTEMnt{A}  \times  \SYSTEMnt{B}  \mid  \mathrm{unit}  \mid  \SYSTEMnt{A}  +  \SYSTEMnt{B} 
+    \tag{types} \\
+  \Delta & ::=  \emptyset  \mid  \Delta ,   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{A}  
+  \tag{contexts}
+\end{align*}
+
+\paragraph{Typing}
+
+Graded Modal Base typing plus the following:
+
+\begin{gather*}
+\begin{align*}
+  \begin{array}{c}
+    \SYSTEMdruleGradprodi{}
+\quad
+\SYSTEMdruleGradprode{}
+\\[2em]
+\SYSTEMdruleGraduniti{}
+\quad
+\SYSTEMdruleGradunite{}
+\quad
+\SYSTEMdruleGradsumiOne{}
+\\[2em]
+\SYSTEMdruleGradsumiTwo{}
+\quad
+\SYSTEMdruleGradsume{} \\
+\end{array}
+\end{align*}
+\end{gather*}
+
+\paragraph{Operational Semantics}
+
+Graded Modal Base operational semantics plus the following:
+
+\begin{gather*}
+\begin{align*}
+  \begin{array}{c}
+      \SYSTEMdruleSemGrdprodCong{}
+  \quad
+  \SYSTEMdruleSemGrdprodBeta{}
+  \\[1.25em]
+  \SYSTEMdruleSemGrdunitCong{}
+  \quad
+  \SYSTEMdruleSemGrdunitBeta{}
+  \\[1.25em]
+  \SYSTEMdruleSemGrdcongCase{}
+  \\[1.25em]
+  \SYSTEMdruleSemGrdcaseInjOne{}
+  \\[1.25em]
+  \SYSTEMdruleSemGrdcaseInjTwo{} \\[2em]
+  \end{array}
+\end{align*}
+\end{gather*}
+
+\paragraph{Equational Theory}
+
+Graded Modal Base equational theory plus the following:
+%
+  \begin{gather*}
+\begin{align*}
+  \begin{array}{c}
+ \SYSTEMdruleGradEqbetaUnit{} \quad
+\SYSTEMdruleGradEqetaUnit{} \\[2em]
+\SYSTEMdruleGradEqbetaProd{}
+\SYSTEMdruleGradEqetaProd{} \\[2em]
+\SYSTEMdruleGradEqbetaSumOne{} \quad
+\SYSTEMdruleGradEqbetaSumTwo{} \\[2em]
+\SYSTEMdruleGradEqetaSum{} \\[2em]
+    \SYSTEMdruleGradEqcongUnitE{} \quad
+\SYSTEMdruleGradEqcongProdE{} \\[2em]
+\SYSTEMdruleGradEqcongProdI{} \quad
+\SYSTEMdruleGradEqcongSumIOne{} \quad
+\SYSTEMdruleGradEqcongSumITwo{} \\[2em]
+\SYSTEMdruleGradEqcongSumE{}
+  \end{array}
+\end{align*}
+\end{gather*}

@@ -1,0 +1,368 @@
+\subsection{Proof of Soundness for Graded Base to Linear Base}
+\label{app:proofs-grad-to-lin}
+
+\ifextended\gradToLinTranslation*\fi
+
+\noindent
+Type preservation is in Appendix~\ref{app:proofs-grad-to-lin-typ},
+operational correspondence in Appendix~\ref{app:proofs-grad-to-lin-ops},
+and equation preservation in Appendix~\ref{app:proofs-grad-to-lin-eqs}.
+
+\subsubsection{Type preservation}
+\label{app:proofs-grad-to-lin-typ}
+
+\begin{lemma}[The interpretation of a zeroed Graded Base context gives a Linear Base context
+that is graded at zero]
+\label{lemma:zero-interp-lemma-grad-to-lin}
+For all graded-base contexts $\Delta$, the predicate $ \mathrm{graded}(  \textcolor{GLcolor}{\llbracket}   \textcolor{coeffectColor}{ \SYSTEMsym{0}  \cdot}  \Delta   \textcolor{GLcolor}{\rrbracket}  , \textcolor{coeffectColor}{ \SYSTEMsym{0} }) $ holds.
+\end{lemma}
+
+\begin{proof} By induction on the structure of $\Delta$.
+\begin{itemize}
+  \item (empty context)
+  For $ \emptyset $, we prove the goal $ \mathrm{graded}(  \textcolor{GLcolor}{\llbracket}   \textcolor{coeffectColor}{ \SYSTEMsym{0}  \cdot}   \emptyset    \textcolor{GLcolor}{\rrbracket}  , \textcolor{coeffectColor}{ \SYSTEMsym{0} }) $ syntactically: % todo: phrasing
+
+    \begin{align*}
+  \begin{array}{rll}
+ \textit{(defn. graded)} & &  \mathrm{graded}(  \emptyset  , \textcolor{coeffectColor}{ \SYSTEMsym{0} })  \\
+ \textit{(defn. interepretation)}& \implies &  \mathrm{graded}(  \textcolor{GLcolor}{\llbracket}   \emptyset   \textcolor{GLcolor}{\rrbracket}  , \textcolor{coeffectColor}{ \SYSTEMsym{0} })  \\
+ \textit{(defn. multiplication)}  & \implies &  \mathrm{graded}(  \textcolor{GLcolor}{\llbracket}   \textcolor{coeffectColor}{ \SYSTEMsym{0}  \cdot}   \emptyset    \textcolor{GLcolor}{\rrbracket}  , \textcolor{coeffectColor}{ \SYSTEMsym{0} }) 
+ \end{array}
+ \end{align*}
+
+  \item (graded context extension)
+  For $ \Delta ,   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{A}  $,
+
+  By induction, we have that $ \mathrm{graded}(  \textcolor{GLcolor}{\llbracket}   \textcolor{coeffectColor}{ \SYSTEMsym{0}  \cdot}  \Delta   \textcolor{GLcolor}{\rrbracket}  , \textcolor{coeffectColor}{ \SYSTEMsym{0} }) $, from which we conclude
+  with the following steps:
+  %
+  \begin{align*}
+  \begin{array}{rll}
+\textit{(i.h.)}\;\;  & &  \mathrm{graded}(  \textcolor{GLcolor}{\llbracket}   \textcolor{coeffectColor}{ \SYSTEMsym{0}  \cdot}  \Delta   \textcolor{GLcolor}{\rrbracket}  , \textcolor{coeffectColor}{ \SYSTEMsym{0} })  \\
+\textit{(defn. graded)} \;\;  & \implies & \mathrm{graded}(   \textcolor{GLcolor}{\llbracket}   \textcolor{coeffectColor}{ \SYSTEMsym{0}  \cdot}  \Delta   \textcolor{GLcolor}{\rrbracket}  ,   \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}  {\textcolor{coeffectColor}{]_{ \SYSTEMsym{0} } } }   , \textcolor{coeffectColor}{ \SYSTEMsym{0} })  \\
+\textit{(defn. interpretation)} \;\;  & \implies &    \mathrm{graded}(  \textcolor{GLcolor}{\llbracket}    (   \textcolor{coeffectColor}{ \SYSTEMsym{0}  \cdot}  \Delta   )  ,   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMsym{0} } }  \SYSTEMnt{A}    \textcolor{GLcolor}{\rrbracket}  , \textcolor{coeffectColor}{ \SYSTEMsym{0} })  \\
+\textit{(defn. multiplication)} \;\;  &  \implies &  \mathrm{graded}(  \textcolor{GLcolor}{\llbracket}   \textcolor{coeffectColor}{ \SYSTEMsym{0}  \cdot}   (   \Delta ,   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{A}    )    \textcolor{GLcolor}{\rrbracket}  , \textcolor{coeffectColor}{ \SYSTEMsym{0} }) 
+\end{array}
+  \end{align*}
+  %
+\end{itemize}
+\end{proof}
+
+\begin{lemma}[Interpretation of a graded context is graded in Linear Base]
+\label{lemma:interp-grad-ctx-is-graded}
+For all contexts $\Delta$, $ \mathrm{graded}(  \textcolor{GLcolor}{\llbracket}  \Delta  \textcolor{GLcolor}{\rrbracket}  ) $.
+\end{lemma}
+
+\begin{proof} By induction over the structure of $\Delta$.
+\begin{itemize}
+  \item (empty context)
+      \begin{align*}
+  \begin{array}{rll}
+ \textit{(defn. graded)} & &  \mathrm{graded}(  \emptyset  )  \\
+ \textit{(defn. interpretation)} & \implies &  \mathrm{graded}(  \textcolor{GLcolor}{\llbracket}   \emptyset   \textcolor{GLcolor}{\rrbracket}  ) 
+ \end{array}
+ \end{align*}
+
+  \item (graded context extension)
+        \begin{align*}
+  \begin{array}{rll}
+\textit{(i.h.)} & &  \mathrm{graded}(  \textcolor{GLcolor}{\llbracket}  \Delta  \textcolor{GLcolor}{\rrbracket}  )  \\
+\textit{(defn. graded)} & \implies &  \mathrm{graded}(   \textcolor{GLcolor}{\llbracket}  \Delta  \textcolor{GLcolor}{\rrbracket}  ,   \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}  {\textcolor{coeffectColor}{]_{ \SYSTEMnt{r} } } }   )  \\
+\textit{(defn. interpretation)} & \implies &  \mathrm{graded}(  \textcolor{GLcolor}{\llbracket}   \Delta ,   \SYSTEMmv{x}  :_{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{A}    \textcolor{GLcolor}{\rrbracket}  ) 
+\end{array}
+\end{align*}
+
+\end{itemize}
+\end{proof}
+
+
+\begin{proof}
+  By induction on the typing derivations of Graded Base.
+\begin{itemize}
+\item (var)
+$$
+\SYSTEMdruleGradvar{}
+$$
+Therefore we construct the goal typing:
+$$
+\inferrule*[Right=\SYSTEMRenameRuleLinder{}]
+ {\inferrule*[Right=\SYSTEMRenameRuleLinvar{}]
+    { }
+    {   \SYSTEMmv{x}  :   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}     \vdash_{\textsc{l} }  \SYSTEMmv{x}  :   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}  }
+ }
+ {   \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}  {\textcolor{coeffectColor}{]_{ \SYSTEMsym{1} } } }    \vdash_{\textsc{l} }  \SYSTEMmv{x}  :   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}  }
+$$
+
+\item (abs)
+$$
+\SYSTEMdruleGradabs{}
+$$
+By induction on the premise we have $   \textcolor{GLcolor}{\llbracket}  \Delta  \textcolor{GLcolor}{\rrbracket}  ,   \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}  {\textcolor{coeffectColor}{]_{ \SYSTEMnt{r} } } }    \vdash_{\textsc{l} }   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   :   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{B}  \textcolor{GLcolor}{\rrbracket}  $.
+
+Then we construct, with $y \# t$:
+$$
+\inferrule*[Right=\SYSTEMRenameRuleLinabs{}]
+    {\inferrule*[Right=\SYSTEMRenameRuleLinlet{}]
+      {\inferrule*[Right=\SYSTEMRenameRuleLinvar{}]
+         { }{   \SYSTEMmv{y}  :   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}      \vdash_{\textsc{l} }  \SYSTEMmv{y}  :   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}   }
+       \\
+        \inferrule*{ih}{   \textcolor{GLcolor}{\llbracket}  \Delta  \textcolor{GLcolor}{\rrbracket}  ,   \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}  {\textcolor{coeffectColor}{]_{ \SYSTEMnt{r} } } }    \vdash_{\textsc{l} }   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   :   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{B}  \textcolor{GLcolor}{\rrbracket}  }
+      }
+      {   \textcolor{GLcolor}{\llbracket}  \Delta  \textcolor{GLcolor}{\rrbracket}  ,   \SYSTEMmv{y}  :   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}      \vdash_{\textsc{l} }   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{y}  \, \mathsf{in} \,   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}    :   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{B}  \textcolor{GLcolor}{\rrbracket}  }
+     }
+    {  \textcolor{GLcolor}{\llbracket}  \Delta  \textcolor{GLcolor}{\rrbracket}   \vdash_{\textsc{l} }   \lambda  \SYSTEMmv{y}  .   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{y}  \, \mathsf{in} \,   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}     :    \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}    \multimap   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{B}  \textcolor{GLcolor}{\rrbracket}   }
+$$
+which satisfies the goal.
+
+\item (app)
+$$
+\SYSTEMdruleGradapp{}
+$$
+By induction we have: $  \textcolor{GLcolor}{\llbracket}  \Delta_{{\mathrm{1}}}  \textcolor{GLcolor}{\rrbracket}   \vdash_{\textsc{l} }   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{1}}}}  \textcolor{GLcolor}{\rrbracket}   :    \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}    \multimap   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{B}  \textcolor{GLcolor}{\rrbracket}   $
+and $  \textcolor{GLcolor}{\llbracket}  \Delta_{{\mathrm{2}}}  \textcolor{GLcolor}{\rrbracket}   \vdash_{\textsc{l} }   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{2}}}}  \textcolor{GLcolor}{\rrbracket}   :   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}  $.
+
+Then we construct:
+%
+$$
+\inferrule*[Right=\SYSTEMRenameRuleLinapp{}]
+    {  \textcolor{GLcolor}{\llbracket}  \Delta_{{\mathrm{1}}}  \textcolor{GLcolor}{\rrbracket}   \vdash_{\textsc{l} }   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{1}}}}  \textcolor{GLcolor}{\rrbracket}   :    \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}    \multimap   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{B}  \textcolor{GLcolor}{\rrbracket}   
+    \\\inferrule*[Right=\SYSTEMRenameRuleLinpr{}]
+        {  \textcolor{GLcolor}{\llbracket}  \Delta_{{\mathrm{2}}}  \textcolor{GLcolor}{\rrbracket}   \vdash_{\textsc{l} }   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{2}}}}  \textcolor{GLcolor}{\rrbracket}   :   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}  }
+        {  \textcolor{coeffectColor}{ \SYSTEMnt{r}  \cdot}   \textcolor{GLcolor}{\llbracket}  \Delta_{{\mathrm{2}}}  \textcolor{GLcolor}{\rrbracket}    \vdash_{\textsc{l} }   \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{2}}}}  \textcolor{GLcolor}{\rrbracket}   \textcolor{coeffectColor}{]}   :   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}   }}
+    {  \textcolor{GLcolor}{\llbracket}  \Delta_{{\mathrm{1}}}  \textcolor{GLcolor}{\rrbracket}   \SYSTEMsym{+}   \textcolor{coeffectColor}{ \SYSTEMnt{r}  \cdot}   \textcolor{GLcolor}{\llbracket}  \Delta_{{\mathrm{2}}}  \textcolor{GLcolor}{\rrbracket}    \vdash_{\textsc{l} }    \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{1}}}}  \textcolor{GLcolor}{\rrbracket}  \,   \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{2}}}}  \textcolor{GLcolor}{\rrbracket}   \textcolor{coeffectColor}{]}    :   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{B}  \textcolor{GLcolor}{\rrbracket}  }
+$$
+    Since translation of contexts is a homomorphism then:
+    $ \textcolor{GLcolor}{\llbracket}  \Delta_{{\mathrm{1}}}  \SYSTEMsym{+}   \textcolor{coeffectColor}{ \SYSTEMnt{r}  \cdot}  \Delta_{{\mathrm{2}}}   \textcolor{GLcolor}{\rrbracket}  \equiv  \textcolor{GLcolor}{\llbracket}  \Delta_{{\mathrm{1}}}  \textcolor{GLcolor}{\rrbracket}   \SYSTEMsym{+}   \textcolor{coeffectColor}{ \SYSTEMnt{r}  \cdot}   \textcolor{GLcolor}{\llbracket}  \Delta_{{\mathrm{2}}}  \textcolor{GLcolor}{\rrbracket}  $
+
+\item (weak)
+$$
+\SYSTEMdruleGradweak{}
+$$
+By induction on the premises we have $  \textcolor{GLcolor}{\llbracket}  \Delta  \textcolor{GLcolor}{\rrbracket}   \vdash_{\textsc{l} }   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   :   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}  $.
+
+Therefore we construct:
+%
+$$
+\inferrule*[Right=\SYSTEMRenameRuleLinweak{}]
+    {  \textcolor{GLcolor}{\llbracket}  \Delta  \textcolor{GLcolor}{\rrbracket}   \vdash_{\textsc{l} }   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   :   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}   \quad  \mathrm{graded}(  \textcolor{GLcolor}{\llbracket}   \textcolor{coeffectColor}{ \SYSTEMsym{0}  \cdot}  \Delta'   \textcolor{GLcolor}{\rrbracket}  , \textcolor{coeffectColor}{ \SYSTEMsym{0} }) }
+    {   \textcolor{GLcolor}{\llbracket}  \Delta  \textcolor{GLcolor}{\rrbracket}   ,    \textcolor{GLcolor}{\llbracket}   \textcolor{coeffectColor}{ \SYSTEMsym{0}  \cdot}  \Delta'   \textcolor{GLcolor}{\rrbracket}     \vdash_{\textsc{l} }   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   :   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}  }
+$$
+%
+where the second premise is provided by Lemma~\ref{lemma:zero-interp-lemma-grad-to-lin}.
+%
+\item (approx)
+$$
+\SYSTEMdruleGradapprox{}
+$$
+% $$
+% \SYSTEMdruleLinapprox{}
+% $$
+By induction on the premise we have\\
+$   \textcolor{GLcolor}{\llbracket}  \Delta  \textcolor{GLcolor}{\rrbracket}  ,   \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{B}  \textcolor{GLcolor}{\rrbracket}  {\textcolor{coeffectColor}{]_{ \SYSTEMnt{s} } } }    \vdash_{\textsc{l} }   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   :   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}  $.
+
+Therefore we can construct:
+%
+$$
+\inferrule*[Right=\SYSTEMRenameRuleLinapprox]
+{ \begin{array}{cc}     \textcolor{GLcolor}{\llbracket}  \Delta  \textcolor{GLcolor}{\rrbracket}  ,   \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{B}  \textcolor{GLcolor}{\rrbracket}  {\textcolor{coeffectColor}{]_{ \SYSTEMnt{s} } } }    \vdash_{\textsc{l} }   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   :   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}    \; & \;   \SYSTEMnt{s}  \, \textcolor{coeffectColor}{\sqsubseteq} \,  \SYSTEMnt{r}   \end{array} }
+{   \textcolor{GLcolor}{\llbracket}  \Delta  \textcolor{GLcolor}{\rrbracket}  ,   \SYSTEMmv{x}  : \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{B}  \textcolor{GLcolor}{\rrbracket}  {\textcolor{coeffectColor}{]_{ \SYSTEMnt{s} } } }    \vdash_{\textsc{l} }   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   :   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}   }
+$$
+%
+\end{itemize}
+\end{proof}
+
+\subsubsection{Operational correspondence}
+\label{app:proofs-grad-to-lin-ops}
+
+\begin{lemma}[Interpretation preserves substitution]
+\label{lemma:interp-grd-to-lin-preserves-subst}
+For all Graded Base terms $\SYSTEMnt{t}, \SYSTEMnt{t'}$ then
+$ \textcolor{GLcolor}{\llbracket}   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t'}   \textcolor{GLcolor}{\rrbracket}  \equiv  [   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   /  \SYSTEMmv{x}  ]   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t'}  \textcolor{GLcolor}{\rrbracket}  $.
+\end{lemma}
+
+\begin{proof}
+By induction on the receiving term $\SYSTEMnt{t'}$:
+%
+\begin{itemize}
+\item (var) $\SYSTEMnt{t'} \equiv \SYSTEMmv{y}$:
+
+\begin{itemize}
+\item $\SYSTEMmv{x} \equiv \SYSTEMmv{y}$ then we refine the goal:
+%
+\begin{align*}
+\begin{array}{rcrlll}
+\textit{(goal)} & &  \textcolor{GLcolor}{\llbracket}   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMmv{x}   \textcolor{GLcolor}{\rrbracket}  & \eqStep &  [   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   /  \SYSTEMmv{x}  ]   \textcolor{GLcolor}{\llbracket}  \SYSTEMmv{x}  \textcolor{GLcolor}{\rrbracket}   \\
+\textit{(defn. subst [lhs])} & \Rightarrow &  \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}  & \eqStep &  [   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   /  \SYSTEMmv{x}  ]   \textcolor{GLcolor}{\llbracket}  \SYSTEMmv{x}  \textcolor{GLcolor}{\rrbracket}   \\
+\textit{(defn. interp [rhs])} & \Rightarrow &  \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}  & \eqStep &  [   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   /  \SYSTEMmv{x}  ]  \SYSTEMmv{x}  \\
+\textit{(defn. subst [rhs])} & \Rightarrow &  \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}  & \eqStep &  \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}  \\
+\textit{(reflexivity)} & \Rightarrow & \top
+\end{array}
+\end{align*}
+
+\item $\SYSTEMmv{x} \not\equiv \SYSTEMmv{y}$ then we refine the goal:
+%
+\begin{align*}
+\begin{array}{rcrlll}
+\textit{(goal)} & &  \textcolor{GLcolor}{\llbracket}   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMmv{y}   \textcolor{GLcolor}{\rrbracket}  & \eqStep &  [   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   /  \SYSTEMmv{x}  ]   \textcolor{GLcolor}{\llbracket}  \SYSTEMmv{y}  \textcolor{GLcolor}{\rrbracket}   \\
+\textit{(defn. subst [lhs])} & \Rightarrow & \SYSTEMmv{y} & \eqStep &  [   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   /  \SYSTEMmv{x}  ]   \textcolor{GLcolor}{\llbracket}  \SYSTEMmv{y}  \textcolor{GLcolor}{\rrbracket}   \\
+\textit{(defn. interp [rhs])} & \Rightarrow & \SYSTEMmv{y} & \eqStep &  [   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   /  \SYSTEMmv{x}  ]  \SYSTEMmv{y}  \\
+\textit{(defn. subst [rhs])} & \Rightarrow & \SYSTEMmv{y} & \eqStep & \SYSTEMmv{y} \\
+\textit{(reflexivity)} & \Rightarrow & \top
+\end{array}
+\end{align*}
+\end{itemize}
+% END (var)
+\item (abs) $\SYSTEMnt{t'} \equiv  \lambda  \SYSTEMmv{y}  .  \SYSTEMnt{t_{{\mathrm{1}}}} $ (with $ \SYSTEMmv{y}  \,\#\,  \SYSTEMnt{t} $);
+%
+\begin{gather*}
+\begin{align*}
+\begin{array}{rcrlll}
+\textit{(goal)} & &  \textcolor{GLcolor}{\llbracket}   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMsym{(}   \lambda  \SYSTEMmv{y}  .  \SYSTEMnt{t_{{\mathrm{1}}}}   \SYSTEMsym{)}   \textcolor{GLcolor}{\rrbracket}  & \eqStep &  [   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   /  \SYSTEMmv{x}  ]   \textcolor{GLcolor}{\llbracket}  \SYSTEMsym{(}   \lambda  \SYSTEMmv{y}  .  \SYSTEMnt{t_{{\mathrm{1}}}}   \SYSTEMsym{)}  \textcolor{GLcolor}{\rrbracket}   \\
+\textit{(defn. subst [lhs])} & \Rightarrow &  \textcolor{GLcolor}{\llbracket}   \lambda  \SYSTEMmv{y}  .   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}    \textcolor{GLcolor}{\rrbracket}  & \eqStep &  [   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   /  \SYSTEMmv{x}  ]   \textcolor{GLcolor}{\llbracket}  \SYSTEMsym{(}   \lambda  \SYSTEMmv{y}  .  \SYSTEMnt{t_{{\mathrm{1}}}}   \SYSTEMsym{)}  \textcolor{GLcolor}{\rrbracket}   \\
+\textit{(defn. interp [rhs])} & \Rightarrow &  \textcolor{GLcolor}{\llbracket}   \lambda  \SYSTEMmv{y}  .   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}    \textcolor{GLcolor}{\rrbracket}  & \eqStep &  [   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   /  \SYSTEMmv{x}  ]   \lambda  \SYSTEMmv{y'}  .   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{y'}  \, \mathsf{in} \,   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{1}}}}  \textcolor{GLcolor}{\rrbracket}     \\
+\textit{(defn. subst [rhs])} & \Rightarrow &  \textcolor{GLcolor}{\llbracket}   \lambda  \SYSTEMmv{y}  .   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}    \textcolor{GLcolor}{\rrbracket}  & \eqStep &  \lambda  \SYSTEMmv{y'}  .   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{y'}  \, \mathsf{in} \,   [   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   /  \SYSTEMmv{x}  ]   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{1}}}}  \textcolor{GLcolor}{\rrbracket}     \\
+\textit{(defn. interp [lhs])} & \Rightarrow &  \lambda  \SYSTEMmv{y'}  .   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{y'}  \, \mathsf{in} \,   \textcolor{GLcolor}{\llbracket}   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \textcolor{GLcolor}{\rrbracket}    & \eqStep &  \lambda  \SYSTEMmv{y'}  .   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{y'}  \, \mathsf{in} \,   [   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   /  \SYSTEMmv{x}  ]   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{1}}}}  \textcolor{GLcolor}{\rrbracket}     \\
+\textit{(induction on $t1$)} & \Rightarrow & \top &
+\end{array}
+\end{align*}
+\end{gather*}
+% END (abs)
+\item (app) $\SYSTEMnt{t'} \equiv  \SYSTEMnt{t_{{\mathrm{1}}}} \,  \SYSTEMnt{t_{{\mathrm{2}}}} $;
+%
+\begin{gather*}
+\begin{align*}
+\begin{array}{rcrlll}
+\textit{(goal)} & &  \textcolor{GLcolor}{\llbracket}   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMsym{(}   \SYSTEMnt{t_{{\mathrm{1}}}} \,  \SYSTEMnt{t_{{\mathrm{2}}}}   \SYSTEMsym{)}   \textcolor{GLcolor}{\rrbracket}  & \eqStep &  [   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   /  \SYSTEMmv{x}  ]   \textcolor{GLcolor}{\llbracket}   \SYSTEMnt{t_{{\mathrm{1}}}} \,  \SYSTEMnt{t_{{\mathrm{2}}}}   \textcolor{GLcolor}{\rrbracket}   \\
+\textit{(defn. subst [lhs])} & \Rightarrow &  \textcolor{GLcolor}{\llbracket}     [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \,    [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}     \textcolor{GLcolor}{\rrbracket}  & \eqStep &  [   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   /  \SYSTEMmv{x}  ]   \textcolor{GLcolor}{\llbracket}   \SYSTEMnt{t_{{\mathrm{1}}}} \,  \SYSTEMnt{t_{{\mathrm{2}}}}   \textcolor{GLcolor}{\rrbracket}   \\
+\textit{(defn. interp [rhs])} & \Rightarrow &  \textcolor{GLcolor}{\llbracket}     [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \,    [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}     \textcolor{GLcolor}{\rrbracket}  & \eqStep &  [   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   /  \SYSTEMmv{x}  ]  \SYSTEMsym{(}    \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{1}}}}  \textcolor{GLcolor}{\rrbracket}  \,   \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{2}}}}  \textcolor{GLcolor}{\rrbracket}   \textcolor{coeffectColor}{]}    \SYSTEMsym{)}  \\
+\textit{(defn. subst [rhs])} & \Rightarrow &  \textcolor{GLcolor}{\llbracket}     [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \,    [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}     \textcolor{GLcolor}{\rrbracket}  & \eqStep &  \SYSTEMsym{(}   [   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   /  \SYSTEMmv{x}  ]   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{1}}}}  \textcolor{GLcolor}{\rrbracket}    \SYSTEMsym{)} \,  \SYSTEMsym{(}   [   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   /  \SYSTEMmv{x}  ]   \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{2}}}}  \textcolor{GLcolor}{\rrbracket}   \textcolor{coeffectColor}{]}    \SYSTEMsym{)}  \\
+\textit{(defn. interp [lhs])} & \Rightarrow &   \textcolor{GLcolor}{\llbracket}   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \textcolor{GLcolor}{\rrbracket}  \,   \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}   \textcolor{GLcolor}{\rrbracket}   \textcolor{coeffectColor}{]}   & \eqStep &  \SYSTEMsym{(}   [   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   /  \SYSTEMmv{x}  ]   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{1}}}}  \textcolor{GLcolor}{\rrbracket}    \SYSTEMsym{)} \,  \SYSTEMsym{(}   [   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   /  \SYSTEMmv{x}  ]   \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{2}}}}  \textcolor{GLcolor}{\rrbracket}   \textcolor{coeffectColor}{]}    \SYSTEMsym{)}  \\
+\textit{(defn. subst [rhs])} & \Rightarrow &   \textcolor{GLcolor}{\llbracket}   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{1}}}}   \textcolor{GLcolor}{\rrbracket}  \,   \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}   [  \SYSTEMnt{t}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}   \textcolor{GLcolor}{\rrbracket}   \textcolor{coeffectColor}{]}   & \eqStep &  \SYSTEMsym{(}   [   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   /  \SYSTEMmv{x}  ]   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{1}}}}  \textcolor{GLcolor}{\rrbracket}    \SYSTEMsym{)} \,   \textcolor{coeffectColor}{[}   [   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   /  \SYSTEMmv{x}  ]   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{2}}}}  \textcolor{GLcolor}{\rrbracket}    \textcolor{coeffectColor}{]}   \\
+\textit{(induction on $\SYSTEMnt{t_{{\mathrm{1}}}}$ and $\SYSTEMnt{t_{{\mathrm{2}}}}$)} & \Rightarrow & \top
+\end{array}
+\end{align*}
+\end{gather*}
+\end{itemize}
+% END (app)
+\end{proof}
+
+The operational correspondence now follows via the following proof:
+
+\begin{proof}
+For convenience, we expand the statement to $ \SYSTEMnt{t}  \rightsquigarrow_{\textsc{g} }  \SYSTEMnt{t'} $
+  then $\exists t'' .   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   \rightsquigarrow_{\textsc{l} }^\ast  \SYSTEMnt{t''} $
+   $\, \wedge \,  \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t'}  \textcolor{GLcolor}{\rrbracket}  \equiv \SYSTEMnt{t''}$.
+
+By induction on reductions:
+%
+\begin{itemize}
+\item (beta)
+\[
+\SYSTEMdruleSemGrdbeta{}
+\]
+%
+The interpretation of the reducing term is:
+%
+\[
+  \textcolor{GLcolor}{\llbracket}   \SYSTEMsym{(}   \lambda  \SYSTEMmv{x}  .  \SYSTEMnt{t_{{\mathrm{2}}}}   \SYSTEMsym{)} \,  \SYSTEMnt{t_{{\mathrm{1}}}}   \textcolor{GLcolor}{\rrbracket}   \equiv   \SYSTEMsym{(}   \lambda  \SYSTEMmv{y}  .   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{y}  \, \mathsf{in} \,   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{2}}}}  \textcolor{GLcolor}{\rrbracket}     \SYSTEMsym{)} \,   \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{1}}}}  \textcolor{GLcolor}{\rrbracket}   \textcolor{coeffectColor}{]}   
+\]
+where $y \# t$.
+%
+Then we construct the following reduction sequence in Linear Base:
+%
+\begin{align*}
+& \inferrule*[right=\SYSTEMRenameRuleSemLinbeta{}]
+{ }
+{  \SYSTEMsym{(}   \lambda  \SYSTEMmv{y}  .   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{y}  \, \mathsf{in} \,   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{2}}}}  \textcolor{GLcolor}{\rrbracket}     \SYSTEMsym{)} \,   \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{1}}}}  \textcolor{GLcolor}{\rrbracket}   \textcolor{coeffectColor}{]}    \rightsquigarrow_{\textsc{l} }   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =   \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{1}}}}  \textcolor{GLcolor}{\rrbracket}   \textcolor{coeffectColor}{]}   \, \mathsf{in} \,   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{2}}}}  \textcolor{GLcolor}{\rrbracket}   }
+\\
+& \inferrule*[right=\SYSTEMRenameRuleSemLinbetaBox{}]
+{ }
+{  \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =   \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{1}}}}  \textcolor{GLcolor}{\rrbracket}   \textcolor{coeffectColor}{]}   \, \mathsf{in} \,   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{2}}}}  \textcolor{GLcolor}{\rrbracket}    \rightsquigarrow_{\textsc{l} }   [   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{1}}}}  \textcolor{GLcolor}{\rrbracket}   /  \SYSTEMmv{x}  ]   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{2}}}}  \textcolor{GLcolor}{\rrbracket}   }
+\end{align*}
+%
+And since $ \textcolor{GLcolor}{\llbracket}   [  \SYSTEMnt{t_{{\mathrm{1}}}}  /  \SYSTEMmv{x}  ]  \SYSTEMnt{t_{{\mathrm{2}}}}   \textcolor{GLcolor}{\rrbracket}  \equiv
+ [   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{1}}}}  \textcolor{GLcolor}{\rrbracket}   /  \SYSTEMmv{x}  ]   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{2}}}}  \textcolor{GLcolor}{\rrbracket}  $
+by Lemma~\ref{lemma:interp-grd-to-lin-preserves-subst}
+then the goal is satisfied.
+
+\item (congAppL)
+\[
+\SYSTEMdruleSemGrdcongAppL{}
+\]
+%
+The interpretation of the reducing term is:
+%
+\[
+  \textcolor{GLcolor}{\llbracket}   \SYSTEMnt{t_{{\mathrm{1}}}} \,  \SYSTEMnt{t_{{\mathrm{2}}}}   \textcolor{GLcolor}{\rrbracket}   \equiv    \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{1}}}}  \textcolor{GLcolor}{\rrbracket}  \,   \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{2}}}}  \textcolor{GLcolor}{\rrbracket}   \textcolor{coeffectColor}{]}   
+\]
+%
+By induction on $ \SYSTEMnt{t_{{\mathrm{1}}}}  \rightsquigarrow_{\textsc{g} }  \SYSTEMnt{t'_{{\mathrm{1}}}} $, we have
+$\exists \SYSTEMnt{t''_{{\mathrm{1}}}} .   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{1}}}}  \textcolor{GLcolor}{\rrbracket}   \rightsquigarrow_{\textsc{l} }^\ast  \SYSTEMnt{t''_{{\mathrm{1}}}}  \wedge
+ \SYSTEMnt{t''_{{\mathrm{1}}}}  \equiv   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t'_{{\mathrm{1}}}}  \textcolor{GLcolor}{\rrbracket}  $. Therefore, we construct
+a chain of reductions in Linear Base:
+%
+\[
+\inferrule*[right=\SYSTEMRenameRuleSemLincongAppL{}]
+{  \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{1}}}}  \textcolor{GLcolor}{\rrbracket}   \rightsquigarrow_{\textsc{l} }  \SYSTEMnt{t''_{{\mathrm{1}}\,\SYSTEMmv{i}}} }
+{   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{1}}}}  \textcolor{GLcolor}{\rrbracket}  \,   \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{2}}}}  \textcolor{GLcolor}{\rrbracket}   \textcolor{coeffectColor}{]}    \rightsquigarrow_{\textsc{l} }   \SYSTEMnt{t''_{{\mathrm{1}}\,\SYSTEMmv{i}}} \,   \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{2}}}}  \textcolor{GLcolor}{\rrbracket}   \textcolor{coeffectColor}{]}   }
+\;\;
+\cdots
+\;\;
+\inferrule*[right=\SYSTEMRenameRuleSemLincongAppL{}]
+{  \SYSTEMnt{t''_{{\mathrm{1}}\,\SYSTEMmv{m}}} \,  \SYSTEMnt{t_{{\mathrm{1}}}}   \rightsquigarrow_{\textsc{l} }  \SYSTEMnt{t''_{{\mathrm{1}}}} }
+{  \SYSTEMnt{t''_{{\mathrm{1}}\,\SYSTEMmv{m}}} \,   \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{2}}}}  \textcolor{GLcolor}{\rrbracket}   \textcolor{coeffectColor}{]}    \rightsquigarrow_{\textsc{l} }   \SYSTEMnt{t''_{{\mathrm{1}}}} \,   \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{2}}}}  \textcolor{GLcolor}{\rrbracket}   \textcolor{coeffectColor}{]}   }
+\]
+%
+where $m$ is the length of the reduction sequence from
+the induction.
+
+satisfying the goal, since $ \SYSTEMnt{t''_{{\mathrm{1}}}}  \equiv   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t'_{{\mathrm{1}}}}  \textcolor{GLcolor}{\rrbracket}  $
+and therefore
+$  \SYSTEMnt{t''_{{\mathrm{1}}}} \,   \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{2}}}}  \textcolor{GLcolor}{\rrbracket}   \textcolor{coeffectColor}{]}    \equiv    \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t'_{{\mathrm{1}}}}  \textcolor{GLcolor}{\rrbracket}  \,   \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{2}}}}  \textcolor{GLcolor}{\rrbracket}   \textcolor{coeffectColor}{]}   $.
+%
+
+
+
+\end{itemize}
+\end{proof}
+
+\subsubsection{Equation preservation}
+\label{app:proofs-grad-to-lin-eqs}
+
+%\gradToLinEq*
+
+\begin{proof}
+  By induction on the definition of the equational theory.
+  %
+  \begin{itemize}
+  \item \[\SYSTEMdruleGradEqbeta{}\]
+    %
+    Follows by Theorem~\ref{thrm:gradToLinTranslation} (preservation of operational
+    semantics), since this includes the $\beta$ case as a reduction.
+
+  \item \[\SYSTEMdruleGradEqeta{}\]
+
+    Preservation then follows by:
+    %
+    \begin{align*}
+      \begin{array}{rll}
+                                  &  \textcolor{GLcolor}{\llbracket}    \lambda  \SYSTEMmv{x}  .  \SYSTEMnt{t}  \,  \SYSTEMmv{x}   \textcolor{GLcolor}{\rrbracket}  &  \\
+   \textit{\{defn. translation\}} & =   \lambda  \SYSTEMmv{y}  .   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{y}  \, \mathsf{in} \,   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}    \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]}   \\
+   \textit{\{\SYSTEMRenameRuleLinEqcongAbs{}+\SYSTEMRenameRuleLinEqletCommOne\}}
+                                  & \equiv_L   \lambda  \SYSTEMmv{y}  .   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   \,  \SYSTEMsym{(}   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{y}  \, \mathsf{in} \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]}    \SYSTEMsym{)}  \\
+   \textit{\{\SYSTEMRenameRuleLinEqcongAbs{}+\SYSTEMRenameRuleLinEqbetaBox\}}
+                                  & \equiv_L   \lambda  \SYSTEMmv{y}  .   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   \,  \SYSTEMmv{y}  \\
+   \textit{\{\SYSTEMRenameRuleLinEqeta\}}
+                                  & \equiv_L  \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket} 
+      \end{array}
+    \end{align*}
+    %
+
+    %
+  \item The remaining rules are congruences and all follow by induction with
+    the translation.
+
+  \end{itemize}
+  %
+
+\end{proof}

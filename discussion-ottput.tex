@@ -1,0 +1,246 @@
+\subsection{Is one approach better than the other?}
+\label{sec:better}
+A natural question at this point from the language designer's perspective is: which approach to
+linearity should I use in my language? We do not try to offer an authoritative answer, but instead give
+some observations and points to consider.
+
+Clearly, graded-base style approaches afford a simpler system for the end-user with less syntactic overhead. The
+pervasive grading obviates the need for most promotions and \textsf{let}-unboxings.
+But while having explicit \textsf{push} syntax is an additional burden to the user of a
+linear-base system, in practice this is not necessary. For example, Granule handles this implicitly
+via pattern matching~\cite{DBLP:journals/pacmpl/OrchardLE19, hughes2021linear}.
+
+On the flip-side, it may be desirable to disallow \textsf{push} for reasoning about certain
+domains, where a coeffect should not distribute over the components of a pair. An example for this
+might be for reasoning about interdependent threads that need to run in parallel. Given what we
+have shown in this paper, linear base systems would seem better equipped to offer this more restrictive
+modality, however \citet{hughes2021linear} have shown that it is possible to recover the non-distributive behaviour of the $\Box$-modality with respect to products in a graded-base setting.
+They argue that any useful language implementation would reasonably have to offer both flavours of
+the modality.
+
+What about the burden for the language designer? Empirically, the authors have found that proofs for
+graded-base systems are significantly shorter, due, in part, to the homogeneous treatment of
+assumptions, i.e. the lack of split between linear and non-linear free variables. Especially
+when retrofitting linear or coeffect types to an existing language, only Graded Base offers a
+backwards-compatible way and in such settings this is the only practical option (see, e.g.,
+the addition of graded types to Haskell for linearity~\cite{DBLP:journals/pacmpl/BernardyBNJS18}).
+
+\subsection{Graded Type Systems in Practice}
+\label{sec:wild}
+The \haskin{LinearTypes} language extension available since GHC 9.0.1~\cite{GHCLinearTypes}
+enables Linear Haskell in the context of an
+industrial-strength programming language. As discussed in this paper, Linear Haskell is a graded-base system, which is currently semiring-monomorphic: in the theory
+of \citet{DBLP:journals/pacmpl/BernardyBNJS18} the \textit{none-one-tons} semiring is used,
+$\{0, 1, \omega\}$. However, as of the time of writing,
+the implementation in GHC offers no $0$, and
+thus the grades range over $\{1, \omega\}$, written in Haskell as \haskin{One} and \haskin{Many}, respectively.
+Consider the following Linear Haskell program:
+%
+\begin{haskell}
+{-# LANGUAGE LinearTypes #-}
+{-# LANGUAGE DataKinds #-}
+import GHC.Types
+const :: a %One -> b %Many -> a
+const x y = x
+\end{haskell}
+%
+By default arrows are \haskin{Many} graded, thus the above can also be written
+as:
+%
+\begin{haskell}[firstnumber=last]
+const' :: a %One -> b -> a
+const' x y = x
+\end{haskell}
+%
+Notably, Linear Haskell supports \textit{multiplicity polymorphism}, however the multiplicities
+are inhabited by a single semiring.
+Future work would be a \haskin{GradedTypes} extension to generalise Haskell to be polymorphic over
+semirings, a feature supported by Granule, where \citet{DBLP:journals/pacmpl/OrchardLE19} use an
+SMT-solver to discharge constraints over the grades. It is not yet clear how this could be
+practically integrated with GHC, perhaps as a compiler plugin akin to Liquid Haskell \cite{Vazou2020LiquidHaskell}.
+
+Idris 2 also implements a graded-base system, based on Quantitative
+Type Theory (due initially to \citet{McBride2016} and later adapted
+slightly by \citet{quantitative-type-theory}), also providing
+grades in the \textit{none-one-tons} semiring~\cite{DBLP:conf/ecoop/Brady21,DBLP:journals/darts/Brady21}. For example, \haskin{const} can be rendered in Idris 2:
+%
+\begin{haskell}
+const : {0 a : Type} -> {0 b : Type} -> a -> (0 x : b) -> a
+const x y = x
+\end{haskell}
+
+Granule is a research language serving as a test bed for ideas
+in graded types~\cite{DBLP:journals/pacmpl/OrchardLE19}. In our classification,
+Granule is a linear-base system by default.
+
+Semiring-graded modalities written here as $ \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A} $ in the
+core calculi are written as `\granin{a [r]}' in Granule.
+While Granule uses \granin{->}  for the function arrow (\texttt{->} in ASCII), as in Haskell or ML, it is really a linear arrow.
+Our running example looks as follows in Granule:
+%
+\begin{granule}
+const : forall {a : Type, b : Type, s : Semiring} . a -> b [0 : s] -> a
+const x y = let [_] = y in x
+\end{granule}
+%
+Granule also includes a language extension that changes its semantics to Graded
+Base and whose syntax for graded arrows is borrowed from Linear Haskell, but supporting
+semiring polymorphism:
+%
+\begin{granule}
+language GradedBase
+const' : forall {a : Type, b : Type, s : Semiring} . a -> b % (0 : s) -> a
+const' x y = x
+\end{granule}
+%
+%The graded-base approach has been explored as a target
+%for program synthesis~\cite{DBLP:conf/esop/HughesO24}.
+
+
+\subsection{Comparison with Effects}
+\label{sec:comparison-with-effects}
+%
+Here we have considered the relationship between Linear Base
+with linear function spaces and linear assumptions as well
+as graded, and Graded Base where grades are pervasive. This
+situation is somewhat analogous to the relationship between
+\emph{effect systems} and \emph{monads}.
+
+The type-and-effect systems of Gifford and
+Lucassen~[\citeyear{gifford1986integrating,lucassen1988polymorphic}]
+provide a technique for augmenting a type system with information
+about the side effects a program may perform whilst computing
+a result. Judgments and function arrows carry effect information:
+%
+\begin{align*}
+\Gamma \vdash M : \tau, F \qquad\quad
+\Gamma' \vdash \lambda x . M' : \sigma \xrightarrow{F'} \tau, \emptyset
+\end{align*}
+%
+i.e., the program $M$ computes a result of type $\tau$ and may perform side effects described by
+$F$. Traditionally $F$ is a set of effect `labels', describing
+operations that have been performed.  This was later generalised to
+semilattices and ordered
+monoids~\cite{nielson1999type,DBLP:conf/birthday/MycroftOP16},
+enabling other kinds of analysis. On the right,
+the function term encapsulates side effects $F'$ and is itself pure,
+marked with $\emptyset$. This is analogous to Graded Base, where coeffect grades annotate function types
+(instead representing usage of the parameter).
+
+Monads on the other hand provide a semantic technique for giving a
+denotational model of various kinds of
+effect~\cite{DBLP:journals/iandc/Moggi91,DBLP:conf/lics/Moggi89}.
+The \emph{monadic meta language} provides a type constructor $T$
+where $T \tau$ captures the type of computations performing some side
+effects in order to compute a $\tau$ value~\cite{DBLP:journals/iandc/Moggi91}.
+Thus, terms of the monadic meta language have types
+of the form:
+%
+\begin{align*}
+\Gamma \vdash M : T \tau \qquad\quad
+\Gamma \vdash \lambda x . M' : \sigma \rightarrow T \tau
+\end{align*}
+%
+On the right is an example of a function that encapsulates
+side effects in its result, but the function itself does not need
+wrapping in the monadic $T$ constructor since abstraction is pure
+(side-effect free). This is analogous to Linear Base if we had
+only a single comonadic modality.
+
+\citet{wadler2003marriage} observed that the structure of effect systems
+and the structure of the monadic meta language are the same.
+They thus married the two by annotating the monadic constructor
+with effect information, i.e.,
+%
+\begin{align*}
+\Gamma \vdash M : T_F \tau \qquad\quad
+\Gamma' \vdash \lambda x . M' : T_\emptyset (\sigma \rightarrow T_{F'} \tau)
+\end{align*}
+%
+Later, this indexed structure was captured generally by the notion of
+\emph{graded monads}~\cite{DBLP:conf/popl/Katsumata14,DBLP:journals/corr/OrchardPM14}. Graded
+monads generalise monads to a family of constructors indexed by the
+elements of a monoid, and whose operations are stratified and
+accounted for by the monoidal structure. Graded monads thus unify
+the semantics of effects with a syntactic analysis in the types.
+
+Linear Base with graded modality $ \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A} $ is thus a dual
+notion to the graded monadic calculus, unifying the semantics of
+coeffects with a static analysis in the types, but with linearity
+as its base typing system. We could thus see Linear Base as a \emph{graded comonadic meta language}.
+In contrast, Graded Base is analogous to effect systems. Indeed the early
+work on \emph{coeffect systems} (captured here as Graded Base) has no graded modality and was motivated
+by dualising effect systems~\cite{DBLP:conf/icalp/PetricekOM13,petricek2014coeffects}.
+As seen, without this graded modality, Graded Base cannot localise information
+to sub-parts of complex types as discussed in Section~\ref{sec:prods-sums}.
+
+\subsection{Adjoint Relationship}
+
+\citet{DBLP:journals/corr/abs-2401-17199} follow
+the Mixed Linear and Non-Linear logic approach of \citet{DBLP:conf/csl/Benton94}
+to provide a pair of graded calculi with an adjunction mediating between them.
+One calculus is a linear-base system with linear functions
+and a mixed context of linear and graded assumptions. The other calculus
+is a graded-base system but with no graded function arrow. A modality
+$\mathsf{Lin}$ embeds formulae from the linear-base system into the graded-base. Conversely, a graded modality
+$\mathsf{Grd}_r$ embeds formulae from the graded-base system into
+the linear-base system, capturing their grade $r$ and incurring a promotion (scaling of
+the graded context). From $\mathsf{Lin}$ and
+$\mathsf{Grd}_r$ a graded comonadic modality is derived following the adjoint resolution of graded
+comonads~\cite{DBLP:conf/fossacs/FujiiKM16}. %They then study the categorical semantics for this system.
+
+The work seems related but on a more semantic level. Whilst we showed
+that our translation is not adjoint in Section~\ref{sec:transl}, our two calculi have
+function types on both sides which seemed to be the main blocker to forming an adjunction.
+Further work is to ascertain whether our translation could
+be restricted to the systems considered by \citet{DBLP:journals/corr/abs-2401-17199} and then used
+as a model of the adjunction by using our
+translations as the semantics of the modalities operating on
+syntactic categories of terms. Another avenue
+would be to explore whether generalising function spaces on the graded-base
+side would undermine their adjunction construction in general.
+
+\input{cartesian-base}
+
+\subsection{Resource-Aware Operational Semantics}
+\label{sec:raos}
+
+The operational semantics presented here leverage standard $\lambda$-calculus CBN operational semantics,
+which are typical for the literature studied.
+More recent work has developed \emph{resource-aware} operational
+semantics~\cite{grad, DBLP:journals/pacmpl/BianchiniDGZ23, DBLP:journals/corr/abs-2311-11795, DBLP:conf/ecoop/BianchiniDGZ23}. These approaches are based on an abstract machine
+approach with a variable environment, rather than a substitution-based model.
+Conceptually, a resource-aware semantics keeps track not just of variable mappings in the evaluation environment,
+but more broadly tracks resource supplies, which are consumed by variable use,
+thereby making the connection between static and dynamic resource guarantees:
+A \emph{resource-sound} type system only accepts \emph{well-resourced} programs,
+whose evaluation under the resource-aware operational semantics respects the static resource bounds,
+meaning (1) evaluation does not get stuck due to depletion (\emph{resource progress});
+and (2) every evaluation step leads to a program with comparable resource requirements
+under the (transitive) approximation relation ($\sqsubseteq$) of the resource algebra (\emph{resource conservation}).
+
+Most recently, \citet{DBLP:journals/corr/abs-2507-13792} extend these guarantees to the converse property,
+ensuring both upper and lower resource bounds, thereby also preventing unused resources (\emph{wastefulness}).
+
+Extending the various flavours of linear- and graded-base calculi and their translations,
+which form the substrate of this paper, to such resource-aware operational semantics goes
+beyond the scope of what we are able to investigate here. Instead, we leave this as future work.
+
+\subsection{Conclusion}
+\label{sec:conclusion}
+
+Our goal here has been to serve as a bridge between two different approaches
+in the literature for constructing graded type systems that capture coeffects (context dependence).
+We answer the long open question about the relationship between
+the linear-base and graded-base styles and give a detailed analysis and metatheoretic results. Overall we see that we can translate between
+the two flavours: with Linear Base and Graded Base having mutual embeddings
+(but requiring a global CPS encoding for the Linear Base into Graded Base direction);
+Linear Base and Graded Modal Base having (more straightforward) mutual embeddings;
+and Linear Push Core and Graded Modal Core having mutual embeddings: these are the points
+where the two styles of calculi can be inter-translated (see Figure~\ref{fig:relationship}).
+
+Now that graded types for tracking various kinds of program property are moving
+from the laboratory to the field, with Haskell~\cite{DBLP:journals/pacmpl/BernardyBNJS18}, Idris~\cite{DBLP:conf/ecoop/Brady21}, Granule~\cite{DBLP:journals/pacmpl/OrchardLE19}, and lately OCaml with its moding system~\cite{DBLP:journals/pacmpl/LorenzenWDEL24,DBLP:journals/pacmpl/GeorgesPEWDECPD25},
+our hope is that this study can serve as a design guide for
+further theoretical work and for language designers wishing to integrate graded types
+in some way, drawing from a wider arsenal of techniques and metatheoretic results.

@@ -1,0 +1,189 @@
+\newif\ifextended
+\extendedtrue
+\ifextended
+\documentclass[acmsmall, screen, nonacm]{acmart}
+\else
+\documentclass[acmsmall]{acmart}
+\fi
+
+\AtEndPreamble{%
+    \theoremstyle{acmdefinition}%
+    \newtheorem{remark}[theorem]{Remark}}
+% \usepackage{amssymb}
+% \usepackage{amsmath}
+% \usepackage{amsfonts}
+\usepackage{mathpartir}
+\usepackage{thm-restate}
+\usepackage{resizegather}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{enumitem}
+% \usepackage[numbers]{natbib}
+
+\newcommand{\eqStep}[0]{\hspace{2pt}\equiv\hspace{2pt}}
+\newcommand{\smidge}[0]{\hspace{0.7pt}} % make [| . |] more balanced wrt to (| . |)
+
+\input{system-ott}
+\input{names}
+\input{listings-preamble}
+
+\bibliographystyle{ACM-Reference-Format}
+\citestyle{acmauthoryear}
+
+\declaretheorem[name=Theorem,style=definition]{thrm}
+\declaretheorem[name=Lemma,style=definition]{lemm}
+
+\frenchspacing
+\setlist[itemize]{itemsep=.6em}
+
+\author{Vilem Liepelt}
+\orcid{0000-0002-2198-1819}
+\affiliation{%
+    \institution{University of Kent}
+    \department{School of Computing}
+    \country{UK}
+}
+\email{mail@vilem.net}
+
+\author{Danielle Marshall}
+\orcid{0000-0002-4284-3757}
+\affiliation{%
+    \institution{Royal Holloway, University of London}
+    \department{Department of Computer Science}
+    \country{UK}
+}
+\email{Danielle.Marshall@rhul.ac.uk}
+
+\author{Dominic Orchard}
+\orcid{0000-0002-7058-7842}
+\affiliation{%
+    \institution{University of Kent}
+    \department{School of Computing}
+    \country{UK}
+}
+\affiliation{%
+    \institution{University of Cambridge}
+    \department{Department of Computer Science and Technology}
+    \country{UK}
+}
+\email{D.A.Orchard@kent.ac.uk}
+
+\setcopyright{cc}
+\setcctype{by}
+\ifextended
+  \title{Same Coeffect, Different Base: Connecting Two Dominant Approaches to Graded Types {\small(with appendices)}}
+  \pagestyle{plain}
+\else
+  \title{Same Coeffect, Different Base:\\Connecting Two Dominant Approaches to Graded Types}
+  \usepackage{xr}
+  \externaldocument[A-]{appendix}
+  \acmDOI{10.1145/3828697}
+  \acmYear{2026}
+  \acmJournal{PACMPL}
+  \acmVolume{10}
+  \acmNumber{ICFP}
+  \acmArticle{299}
+  \acmMonth{8}
+  \acmSubmissionID{icfp26main-p85-p}
+  \received{2026-02-19}
+  \received[accepted]{2026-05-13}
+  \keywords{graded modal types, graded types, linear types, coeffects}
+
+  \renewcommand{\shortauthors}{Vilem Liepelt, Danielle Marshall and Dominic Orchard}
+  \ccsdesc[500]{Theory of computation~Linear logic}
+  \ccsdesc[500]{Theory of computation~Modal and temporal logics}
+  \ccsdesc[300]{Theory of computation~Program specifications}
+  \ccsdesc[300]{Theory of computation~Program verification}
+  \ccsdesc[300]{Theory of computation~Functional constructs}
+  \ccsdesc[500]{Theory of computation~Type theory}
+\fi
+
+\newcommand{\refappendix}[1]{%
+  \ifextended
+    \ref{#1}%
+  \else
+    \ref{A-#1}~\cite{extended-version}%
+  \fi
+}
+
+\begin{document}
+
+\begin{abstract}
+\emph{Graded types} provide a way to augment a type system with fine-grained
+information, e.g., to track side effects or context dependence and resource
+use (called \emph{coeffects}). Graded types for coeffects have found their way into languages such as Haskell, Idris, and
+Granule, enabling resourceful reasoning via coeffect analysis with varying levels of generality.
+Two separate lineages of graded coeffect system have emerged in the last decade: those
+in which coeffect annotations are pervasive, requiring annotations on function
+types (which we call \emph{graded-base}) and those in which coeffects are added
+by way of a graded modal type operator atop linear types (which we call
+\emph{linear-base}). The latter has its origins in Girard's Linear Logic which
+has been a rich humus for programming language research focused on resources,
+whereas the graded-base approach emerged in the mid-2010s, seeing rapid adoption
+in programming language theory and practice, e.g. in QTT and Linear Haskell. The
+relationship between these two styles has however remained an open question. We answer this
+question by giving translations between pairs of calculi of both lineages that
+we prove type-, grade- and operational-semantics preserving. We show that the same notions of context
+dependence can be expressed in either style, building a bridge
+between the two lineages that enables transfer of results and ideas, while
+helping language designers to make better informed choices.
+\end{abstract}
+\maketitle
+\ifextended
+\textit{\textbf{Extended Version:}
+The official version of this paper (\href{https://doi.org/10.1145/3828697}{doi.org/10.1145/3828697}) appears in the proceedings of the
+2026 ACM SIGPLAN International Conference on Functional Programming (ICFP 2026).
+The appendices included herein provide proofs and definitions omitted due to space constraints.}
+\fi
+\iffalse
+\begin{quotation}\noindent
+\textit{One clearly needs more subtle logical tools taking into account that it costs something to make a
+deduction, a guess, etc.; linear logic [...] could serve as a prototype for a more serious approach
+to this subject.}
+
+---Jean-Yves Girard, 1987 \cite{girard1987linear}
+\end{quotation}
+\fi
+\section{Introduction}
+\input{introduction-ottput}
+
+\section{The Two Calculi: Linear and Graded Base}
+\label{sec:calculi}
+\input{calculi-ottput}
+
+\subsection{Translation}
+\label{sec:transl}
+\input{translation-ottput}
+
+\section{Extending Graded Base with a Graded Modality}
+\label{sec:calculi-with-modality}
+\input{calculi-ext-ottput}
+
+\section{Deriving a Graded Modality with a Polymorphic Graded Base}
+\label{sec:poly}
+\input{deriving-gmodality-ottput}
+
+\section{Extending Linear Base and Graded Modal Base with Products and Sums}
+\label{sec:prods-sums}
+\input{products-sums-ottput}
+
+\section{Discussion and Conclusion}
+\label{sec:discussion}
+\input{discussion-ottput}
+
+\paragraph{Acknowledgments}
+
+We thank the anonymous reviewers of this work for their comments and feedback.
+During its early stages, this work was partly supported by EPSRC grant EP/T013516/1.
+Orchard also received support through Schmidt Sciences, LLC.
+
+\bibliography{references}
+
+\ifextended
+\newpage
+\appendix
+\input{appendix-body}
+\fi
+
+\end{document}

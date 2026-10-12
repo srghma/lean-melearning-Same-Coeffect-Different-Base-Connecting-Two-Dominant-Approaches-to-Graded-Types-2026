@@ -1,0 +1,548 @@
+Thus far the calculi studied have only covered the implicational
+fragments of the two approaches, i.e., just function types and
+variables.  Adding product and sum types to the calculi brings the
+theory closer to a useful basis for understanding actual
+programming languages such as the linear-types extension to Haskell (graded-base) or Granule
+(linear-base).
+We thus now add products and sums to Linear Base and Graded Modal Base
+following standard approaches in the literature for both flavours
+of linear-base and graded-base systems.  This raises interesting questions
+that delineate the expressive power of linear- vs. graded-base
+calculi. From linear-base to graded-base, a straightforward
+homomorphic translation is possible. However, for the opposite
+direction we will see a difference in expressivity that needs handling
+by extending the linear-base system.
+
+\paragraph{Syntax} We extend Linear Base and Graded Modal Base (which already share the same
+syntax) to \textbf{Linear~Core} and \textbf{Graded~Modal~Core} respectively, with the same extended syntax:
+%
+\begin{align*}
+  \SYSTEMnt{t} & ::= ... \mid  \langle  \SYSTEMnt{t_{{\mathrm{1}}}} ,  \SYSTEMnt{t_{{\mathrm{2}}}}  \rangle  \mid  \mathsf{let} \, \langle  \SYSTEMmv{x} ,  \SYSTEMmv{y}  \rangle =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}}  \mid  \langle \rangle  \mid  \mathsf{let} \, \langle \rangle =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}}  \\
+         \mid & \; \mathsf{inj}_1 \,  \SYSTEMnt{t}  \mid  \mathsf{inj}_2 \,  \SYSTEMnt{t}  \mid  \mathsf{case} \,  \SYSTEMnt{t}  \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{x}  \rightarrow  \SYSTEMnt{t_{{\mathrm{1}}}}  ; \, \mathsf{inj2} \,  \SYSTEMmv{y}  \rightarrow  \SYSTEMnt{t_{{\mathrm{2}}}}  \} 
+  \tag{terms}
+\end{align*}
+%
+These additional term formers provide product introduction and elimination, unit introduction
+and elimination, and sum (coproduct) introductions and elimination respectively.
+
+The operational semantics are the standard call-by-name operational semantics for products and sums given in Figure~\ref{fig:linear-core} for Linear Core, with the same
+added to operational semantics of Graded Modal Core. We elide the $\beta\eta$-equational theory which is standard (see Appendices~\refappendix{app:definitions-linear-core} and
+~\refappendix{app:definitions-graded-core}).
+
+\begin{figure}[t]
+\raggedright\noindent\framebox{$ \SYSTEMnt{t}  \rightsquigarrow_{\textsc{l} }  \SYSTEMnt{t} $} \quad Standard operational semantics (Call-By-Name) for products, units, and sums
+\begin{gather*}
+  \begin{array}{c}
+  \SYSTEMdruleSemLinprodCong{}
+  \;
+  \SYSTEMdruleSemLinprodBeta{}
+  \\[1.5em]
+  \SYSTEMdruleSemLinunitCong{}
+  \quad
+  \SYSTEMdruleSemLinunitBeta{}
+  \\[1.5em]
+  \SYSTEMdruleSemLincongCase{}
+  \\[1.5em]
+  \SYSTEMdruleSemLincaseInjOne{}
+  \\[1.5em]
+  \SYSTEMdruleSemLincaseInjTwo{}
+  \end{array}
+\end{gather*}
+\bigskip
+
+\raggedright\noindent\framebox{$ \Gamma  \vdash_{\textsc{l} }  \SYSTEMnt{t}  :  \SYSTEMnt{A} $} \quad Typing rules
+\begin{gather*}
+\begin{align*}
+\begin{array}{c}
+\SYSTEMdruleLinprodi{}
+\quad
+\SYSTEMdruleLinprode{}
+\\[1.5em]
+\SYSTEMdruleLinuniti{}
+\quad
+\SYSTEMdruleLinunite{}
+\quad
+\SYSTEMdruleLinsumiOne{}
+\\[1.5em]
+\SYSTEMdruleLinsumiTwo{}
+\quad
+\SYSTEMdruleLinsume{}
+\end{array}
+\end{align*}
+\end{gather*}
+\caption{Linear Core semantics and typing}
+\label{fig:linear-core}
+\end{figure}
+
+% The additional syntax for types differs only in
+%the symbol used for the type constructors of sums and products.
+% ($     \otimes     $ vs $     \times     $ and $     \oplus     $ vs $     +     $).
+% \newpage
+To type the new syntax, we extend the type system of Linear Base to Linear Core
+(Section~\ref{sec:linear-core}), and extend Graded Modal Base to
+Graded Modal Core (Section~\ref{sec:graded-core}).
+Section~\ref{sec:linear-core-to-graded} then gives the
+translation from Linear Core to Graded Modal Core which is
+straightforwardly homomorphic.
+Section~\ref{sec:no-trans-graded-core-to-linear-core} then
+shows that the opposite direction is not possible, requiring an
+extension of Linear Core to \textbf{Linear~Push~Core} in
+Section~\ref{sec:linear-push-core}, at the cost of weakening the correspondence between our $\Box$-modality
+and Linear Logic's $!$-modality.  We then give the translation
+from Graded Modal Core to Linear Push Core
+(Section~\ref{sec:trans-graded-core-to-linear-push-core}) and the translation
+from Linear Push Core to Graded Modal Core
+(Section~\ref{sec:trans-linear-push-core-to-graded-core}).
+
+\subsection{Linear Core}
+\label{sec:linear-core}
+
+Linear Base augmented with products and sums becomes what we call \textbf{Linear~Core}.
+Linear Core features the following new type constructors for products,
+units, and sums:
+%
+\begin{align*}
+  \SYSTEMnt{A} & ::= ... \mid  \SYSTEMnt{A}  \otimes  \SYSTEMnt{B}  \mid  \mathrm{unit}  \mid  \SYSTEMnt{A}  \oplus  \SYSTEMnt{B} 
+  \tag{types}
+\end{align*}
+
+\paragraph{Typing} Linear Core extends Linear Base typing (given in Figure~\ref{fig:linear-base-types})
+with the judgments for multiplicative products and their unit, along with additive disjunction, in Figure~\ref{fig:linear-core}, which
+are standard from Linear Logic~\cite{girard1987linear}. This is the same typing as in linear-base systems such as Granule~\cite{DBLP:journals/pacmpl/OrchardLE19,DBLP:journals/corr/abs-2112-14966}, the synthesis calculus of \citet{hughes2021linear}, and that of \citet{brunel2014core} (although
+their system has a less general natural numbers data type instead of products and sums, but the same insights apply).
+
+As in Linear Base, any terms comprising multiple sub-terms have their contexts
+combined using context addition $+$ which adds together the grades of
+graded assumptions using semiring addition.
+
+
+
+\subsection{Graded Modal Core}
+\label{sec:graded-core}
+
+Graded Modal Base augmented with products and sums becomes \textbf{Graded Modal Core}.
+Graded Modal Core features the following new type constructors for products, units, and sums:
+%
+\begin{align*}
+  \SYSTEMnt{A} & ::= ... \mid  \SYSTEMnt{A}  \times  \SYSTEMnt{B}  \mid  \mathrm{unit}  \mid  \SYSTEMnt{A}  +  \SYSTEMnt{B} 
+  \tag{types}
+\end{align*}
+
+\paragraph{Typing}
+
+Graded Modal Core extends Graded Modal Base typing (given in Section~\ref{sec:graded-modal-base}) by the judgments
+given in Figure~\ref{fig:graded-base-types-products-sums}. The typing is akin to that shown
+by \citet{DBLP:journals/pacmpl/AbelB20}, in Linear Haskell~\cite{DBLP:journals/pacmpl/BernardyBNJS18}, and by \citet{grad} (although they restrict their
+products initially to $r = 1$).
+
+In the elimination of the products we may use each variable
+according to grade $\SYSTEMnt{r}$ and thus the context $\Delta_{{\mathrm{1}}}$ for the eliminated product
+is multiplied by $\SYSTEMnt{r}$ in the conclusion. Thus, the usage of the components is propagated
+to demands on the dependencies for the product. The elimination of sums
+has a similar idea, propagating demands on the variables $x$ and $y$ through to the
+dependencies of the eliminated sum term $t$. There is an additional side condition here too
+ ($ \SYSTEMsym{1}  \, \textcolor{coeffectColor}{\sqsubseteq} \,  \SYSTEMnt{r} $) accounting for usage incurred by the inspection of the sum
+constructor, and thus some information gained. This side condition is key to applications of
+graded coeffect types for information-flow control~(\ref{exm:security-lattice}) \cite{DBLP:journals/pacmpl/AbelB20,mycroftfest2024}:
+if the grade here is $r = \mathsf{Hi}$, representing
+a high-security value, then the side condition fails as $1 = \mathsf{Lo}$ and
+thus $\mathsf{Lo} \not\succeq \mathsf{Hi}$. This prevents pattern matching on a high-security
+value as a control-flow attack to leak information. Lastly note the elimination of
+the unit type similarly allows (an arbitrary) scaling of the scrutinee's context, in line with
+presentations in the literature (e.g.,~\cite{DBLP:journals/pacmpl/AbelB20}).
+%
+\begin{figure}[t]
+\raggedright\noindent\framebox{$ \Delta  \vdash_{\textsc{g} }  \SYSTEMnt{t}  :  \SYSTEMnt{A} $} \quad Typing rules
+\begin{gather*}
+\begin{align*}
+\begin{array}{c}
+\SYSTEMdruleGradprodi{}
+\quad
+\SYSTEMdruleGradprode{}
+\\[1.25em]
+\SYSTEMdruleGraduniti{}
+\quad
+\SYSTEMdruleGradunite{}
+\quad
+\SYSTEMdruleGradsumiOne{}
+\\[1.25em]
+\SYSTEMdruleGradsumiTwo{}
+\;
+\SYSTEMdruleGradsume{}
+\end{array}
+\end{align*}
+\end{gather*}
+\caption{Graded Modal Core additional typing rules.}
+\label{fig:graded-base-types-products-sums}
+\end{figure}
+
+\subsection{Translation from Linear Core to Graded Modal Core}
+\label{sec:linear-core-to-graded}
+
+We extend the translation from Section \ref{subsec:transl-lb2gmb} via a homomorphism
+on the additional syntax:
+%
+% TEMPORARILY REDEFINE SYSTEM DRULE FOR THE TRANSLATION WHICH IS REALLY
+% JUST A FUNCTIOn
+\renewcommand{\triangleq}{& \oldTriangleq &}
+\renewcommand{\equiv}{& \oldEquiv &}
+\renewcommand{\SYSTEMdrule}[4][]{#3 \qquad #2}
+%
+\begin{gather*}
+{\setlength{\arraycolsep}{0.1em}
+\begin{array}{lcl@{\hspace{0em}}r}
+\SYSTEMdruleTranslLtoGTmprodi{} \\
+\SYSTEMdruleTranslLtoGTmprode{} \\
+\SYSTEMdruleTranslLtoGTmuniti{} \\
+\SYSTEMdruleTranslLtoGTmunite{} \\
+\SYSTEMdruleTranslLtoGTmsumiOne{} \\
+\SYSTEMdruleTranslLtoGTmsumiTwo{} & \text{(Term translation)} \\
+\SYSTEMdruleTranslLtoGTmsume{}  \\[0.5em]
+\SYSTEMdruleTranslLtoGTyprodTy{} \\
+\SYSTEMdruleTranslLtoGTysumTy{} \\
+\SYSTEMdruleTranslLtoGTyunitTy{} & \text{(Type translation)}
+\end{array}}
+\end{gather*}
+%
+\let\SYSTEMdrule\oldSYSTEMdrule
+\let\equiv\oldEquiv
+\let\triangleq\oldTriangleq
+%
+We can then re-establish the two key results about the translation (proofs in
+Appendix~\refappendix{app:proofs-lin-core-to-grad-core}):
+%
+\begin{restatable}{thrm}{linCanToGradTranslationExt}[Soundness of the Linear Core to Graded Modal Core translation]
+ \begin{itemize}[itemsep=0.2em]
+  \item Type preservation: $ \Gamma  \vdash_{\textsc{l} }  \SYSTEMnt{t}  :  \SYSTEMnt{A}  \implies   \textcolor{LGcolor}{\llparenthesis}  \Gamma  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}  $;
+  \item Operational correspondence: $ \SYSTEMnt{t}  \rightsquigarrow_{\textsc{l} }  \SYSTEMnt{t'}  \implies   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \rightsquigarrow_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t'}  \smidge \textcolor{LGcolor}{\rrparenthesis}  $;
+  \item Equation preservation: $ \SYSTEMnt{t}  \,\equiv_{\textsc{l} }\,  \SYSTEMnt{t'}  \implies   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \equiv_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t'}  \smidge \textcolor{LGcolor}{\rrparenthesis}  $.
+\end{itemize}
+\end{restatable}
+%
+A notable point of the type preservation proof is that when translating sum elimination from Linear Core to
+Graded Modal Core, we pick the grade $r = 1$ which satisfies the side condition that $ \SYSTEMsym{1}  \, \textcolor{coeffectColor}{\sqsubseteq} \,  \SYSTEMsym{1} $
+trivially by reflexivity of the pre-order.
+%
+
+\subsection{No Type-Sound Translation from Graded Modal Core to Linear Core}
+\label{sec:no-trans-graded-core-to-linear-core}
+
+We now attempt a similar homomorphic translation ($  \textcolor{GLcolor}{\llbracket}   -   \textcolor{GLcolor}{\rrbracket}  _\circ $) back from Graded Modal Core
+to Linear Core, focusing on just products and sums:
+%
+\renewcommand{\equiv}{ \oldEquiv}
+\renewcommand{\SYSTEMdrule}[4][]{{\displaystyle{#3}}}
+%
+\begin{align}
+ \tag{Term translation} \\[-1.5em]
+\notag & \begin{array}{l}
+  \textcolor{GLcolor}{\llbracket}   \langle  \SYSTEMnt{t_{{\mathrm{1}}}} ,  \SYSTEMnt{t_{{\mathrm{2}}}}  \rangle   \textcolor{GLcolor}{\rrbracket}  _\circ  \triangleq  \langle    \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{1}}}}  \textcolor{GLcolor}{\rrbracket}  _\circ  ,    \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{2}}}}  \textcolor{GLcolor}{\rrbracket}  _\circ   \rangle  \\
+  \textcolor{GLcolor}{\llbracket}   \mathsf{let} \, \langle  \SYSTEMmv{x} ,  \SYSTEMmv{y}  \rangle =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}}   \textcolor{GLcolor}{\rrbracket}  _\circ  \triangleq   \mathsf{let} \, \langle  \SYSTEMmv{x} ,  \SYSTEMmv{y}  \rangle =    \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{1}}}}  \textcolor{GLcolor}{\rrbracket}  _\circ   \, \mathsf{in} \,   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{2}}}}  \textcolor{GLcolor}{\rrbracket}   _\circ \\
+  \textcolor{GLcolor}{\llbracket}   \mathsf{inj}_i \,  \SYSTEMnt{t}   \textcolor{GLcolor}{\rrbracket}  _\circ  \triangleq   \mathsf{inj}_i \,   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   _\circ \\
+  \textcolor{GLcolor}{\llbracket}   \mathsf{inj}_2 \,  \SYSTEMnt{t}   \textcolor{GLcolor}{\rrbracket}  _\circ  \triangleq   \mathsf{inj}_2 \,   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   _\circ \\
+  \textcolor{GLcolor}{\llbracket}   \mathsf{case} \,  \SYSTEMnt{t}  \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{x}  \rightarrow  \SYSTEMnt{t_{{\mathrm{1}}}}  ; \, \mathsf{inj2} \,  \SYSTEMmv{y}  \rightarrow  \SYSTEMnt{t_{{\mathrm{2}}}}  \}   \textcolor{GLcolor}{\rrbracket}  _\circ  \triangleq  \mathsf{case} \,    \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}  _\circ   \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{x}  \rightarrow    \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{1}}}}  \textcolor{GLcolor}{\rrbracket}  _\circ   ; \, \mathsf{inj2} \,  \SYSTEMmv{y}  \rightarrow    \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{2}}}}  \textcolor{GLcolor}{\rrbracket}  _\circ   \} 
+\end{array} \\
+\tag{Type translation}
+& \begin{array}{l}
+  \textcolor{GLcolor}{\llbracket}   \SYSTEMnt{A}  \times  \SYSTEMnt{B}   \textcolor{GLcolor}{\rrbracket}  _\circ  \triangleq     \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}  _\circ   \otimes   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{B}  \textcolor{GLcolor}{\rrbracket}   _\circ  \\
+  \textcolor{GLcolor}{\llbracket}   \SYSTEMnt{A}  +  \SYSTEMnt{B}   \textcolor{GLcolor}{\rrbracket}  _\circ  \triangleq     \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}  _\circ   \oplus   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{B}  \textcolor{GLcolor}{\rrbracket}   _\circ 
+\end{array}
+\end{align}
+%
+\let\SYSTEMdrule\oldSYSTEMdrule
+\let\equiv\oldEquiv
+%
+However, this translation is unsound: consider the following Graded Modal Core terms, $f$ and $g$,
+which manifest a distributivity of grading over products and sums:
+%
+\begin{align*}
+\begin{array}{rl}
+f &:   (   \SYSTEMnt{A}  \times  \SYSTEMnt{B}   )   \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }   (    \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A}   \times   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{B}    )   \\
+f &=  \lambda  \SYSTEMmv{p}  .  \SYSTEMsym{(}   \mathsf{let} \, \langle  \SYSTEMmv{x} ,  \SYSTEMmv{y}  \rangle =  \SYSTEMmv{p}  \, \mathsf{in} \,   \langle   \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]}  ,   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}   \rangle    \SYSTEMsym{)} 
+\end{array}
+\begin{array}{rl}
+g &:   (   \SYSTEMnt{A}  +  \SYSTEMnt{B}   )   \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }   (    \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A}   +   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{B}    )   \quad (\text{where }  \SYSTEMsym{1}  \, \textcolor{coeffectColor}{\sqsubseteq} \,  \SYSTEMnt{r} )\\
+g &=  \lambda  \SYSTEMmv{e}  .   \mathsf{case} \,  \SYSTEMmv{e}  \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{x}  \rightarrow   \mathsf{inj}_1 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]}    ; \, \mathsf{inj2} \,  \SYSTEMmv{y}  \rightarrow   \mathsf{inj}_2 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}    \}  
+\end{array}
+\end{align*}
+%
+Thus $f$ is a function that distributes the resource requirements on a pair onto its components, and similarly, $g$ distributes the resource requirements on a sum onto the components of its injections.
+
+Applying the above translation to $f$ and $g$ yields the following ill-typed terms
+(to avoid clutter, we consider $  \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}  _\circ  $ interchangeable with $ \SYSTEMnt{A} $):
+%
+\begin{align*}
+  \textcolor{GLcolor}{\llbracket}  \SYSTEMmv{f}  \textcolor{GLcolor}{\rrbracket}  _\circ  &:   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   (   \SYSTEMnt{A}  \otimes  \SYSTEMnt{B}   )    \multimap   (    \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A}   \otimes   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{B}    )   \tag{ill-typed} \\
+\notag
+  \textcolor{GLcolor}{\llbracket}  \SYSTEMmv{f}  \textcolor{GLcolor}{\rrbracket}  _\circ  &=  \lambda  \SYSTEMmv{b}  .  \SYSTEMsym{(}   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{p}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{b}  \, \mathsf{in} \,   \mathsf{let} \, \langle  \SYSTEMmv{x} ,  \SYSTEMmv{y}  \rangle =  \SYSTEMmv{p}  \, \mathsf{in} \,   \langle   \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]}  ,   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}   \rangle     \SYSTEMsym{)}  \\[.25em]
+\notag
+  \textcolor{GLcolor}{\llbracket}  \SYSTEMmv{g}  \textcolor{GLcolor}{\rrbracket}  _\circ  &:   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   (   \SYSTEMnt{A}  \oplus  \SYSTEMnt{B}   )    \multimap   (    \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A}   \oplus   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{B}    )   \\
+\notag
+  \textcolor{GLcolor}{\llbracket}  \SYSTEMmv{g}  \textcolor{GLcolor}{\rrbracket}  _\circ  &=  \lambda  \SYSTEMmv{b}  .  \SYSTEMsym{(}   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{e}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{b}  \, \mathsf{in} \,   \mathsf{case} \,  \SYSTEMmv{e}  \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{x}  \rightarrow   \mathsf{inj}_1 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]}    ; \, \mathsf{inj2} \,  \SYSTEMmv{y}  \rightarrow   \mathsf{inj}_2 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}    \}    \SYSTEMsym{)} 
+\end{align*}
+%
+To see why these are ill-typed, the following gives a partial derivation for the body of
+$  \textcolor{GLcolor}{\llbracket}  \SYSTEMmv{f}  \textcolor{GLcolor}{\rrbracket}  _\circ $:
+
+\begin{gather*}
+    \inferrule*[right=\SYSTEMRenameRuleLinlet{}]
+      {
+       % \inferrule*[Right=\SYSTEMRenameRuleLinvar{}, vdots=5.5em, rightskip=12em]
+      %    { }
+       %   {   \SYSTEMmv{b}  :   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   (   \SYSTEMnt{A}  \otimes  \SYSTEMnt{B}   )      \vdash_{\textsc{l} }  \SYSTEMmv{b}  :   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   (   \SYSTEMnt{A}  \otimes  \SYSTEMnt{B}   )   }
+        \inferrule*[Right=\SYSTEMRenameRuleLinprode{}]
+          {
+            \inferrule*[Right=\SYSTEMRenameRuleLinder{}*]
+              {\inferrule*[Right=\SYSTEMRenameRuleLinvar{}]{ }{   \SYSTEMmv{p}  :   \SYSTEMnt{A}  \otimes  \SYSTEMnt{B}     \vdash_{\textsc{l} }  \SYSTEMmv{p}  :   \SYSTEMnt{A}  \otimes  \SYSTEMnt{B}  } \hspace{5em} r = 1 }
+              {   \SYSTEMmv{p}  : \textcolor{coeffectColor}{[}   \SYSTEMnt{A}  \otimes  \SYSTEMnt{B}  {\textcolor{coeffectColor}{]_{ \SYSTEMnt{r} } } }    \vdash_{\textsc{l} }  \SYSTEMmv{p}  :   \SYSTEMnt{A}  \otimes  \SYSTEMnt{B}  }
+            \hspace{4em}
+            \inferrule*[Right=\SYSTEMRenameRuleLinprodi{}]
+              {
+                \inferrule*[Right=?]
+                  { }
+                  {    \SYSTEMmv{x}  :  \SYSTEMnt{A}    \vdash_{\textsc{l} }   \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]}   :   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A}   }
+                \hspace{4em}
+                \inferrule*[Right=?]
+                  { }
+                  {    \SYSTEMmv{y}  :  \SYSTEMnt{B}    \vdash_{\textsc{l} }   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}   :   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{B}   }
+              }
+              {    \SYSTEMmv{x}  :   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A}     \SYSTEMsym{+}    \SYSTEMmv{y}  :   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{B}     \vdash_{\textsc{l} }   \langle   \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]}  ,   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}   \rangle   :    \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A}   \otimes   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{B}   }
+          }
+          {   \SYSTEMmv{p}  : \textcolor{coeffectColor}{[}   \SYSTEMnt{A}  \otimes  \SYSTEMnt{B}  {\textcolor{coeffectColor}{]_{ \SYSTEMnt{r} } } }    \vdash_{\textsc{l} }   \mathsf{let} \, \langle  \SYSTEMmv{x} ,  \SYSTEMmv{y}  \rangle =  \SYSTEMmv{p}  \, \mathsf{in} \,   \langle   \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]}  ,   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}   \rangle    :    \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A}   \otimes   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{B}    }
+      }
+      {
+        %\inferrule*[Right=\SYSTEMRenameRuleLinabs{}]
+          {   \SYSTEMmv{b}  :   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   (   \SYSTEMnt{A}  \otimes  \SYSTEMnt{B}   )      \vdash_{\textsc{l} }   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{p}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{b}  \, \mathsf{in} \,   \mathsf{let} \, \langle  \SYSTEMmv{x} ,  \SYSTEMmv{y}  \rangle =  \SYSTEMmv{p}  \, \mathsf{in} \,   \langle   \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]}  ,   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}   \rangle     :    \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A}   \otimes   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{B}   }
+        %  {  \emptyset   \vdash_{\textsc{l} }   \lambda  \SYSTEMmv{b}  .  \SYSTEMsym{(}   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{p}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{b}  \, \mathsf{in} \,   \mathsf{let} \, \langle  \SYSTEMmv{x} ,  \SYSTEMmv{y}  \rangle =  \SYSTEMmv{p}  \, \mathsf{in} \,   \langle   \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]}  ,   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}   \rangle     \SYSTEMsym{)}   :     \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   (   \SYSTEMnt{A}  \otimes  \SYSTEMnt{B}   )    \multimap   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A}    \otimes   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{B}   }
+      }
+\end{gather*}
+%
+At the points marked with question marks (?), we cannot apply promotion (\SYSTEMRenameRuleLinpr{}) to
+$x$ and $y$, because the \textit{graded} predicate in the
+antecedent does not hold; they are linear variables. Further, to apply \SYSTEMRenameRuleLinder{} at
+the point marked with an asterisk (*), we would have to restrict to $r = 1$.
+A similar attempted derivation for $  \textcolor{GLcolor}{\llbracket}  \SYSTEMmv{g}  \textcolor{GLcolor}{\rrbracket}  _\circ $, commuting the graded modality
+and sum types, encounters the same issues.
+
+One may wonder if any sound translation is possible at all. \citet{hughes2021linear} have explored
+precisely this point and show that linear-base and graded-base systems exhibit a fundamental
+difference in expressivity. Linear Core is akin to Linear Logic, in that it does
+not admit derivation of the distributive law $!(A \otimes B) \multimap \, !A \otimes !B$ as the
+semantics of multiplicative tensor $\otimes$ is that each component must be used equally; such a
+distributive law would allow $A$ and $B$ to be decoupled and used differently. On the other hand,
+Graded Base and the graded-base systems in the literature cited above admit such a distributive law
+as seen with $f$. Thus Graded Base cannot model Linear Logic's $!$-modality exactly through \emph{any}
+choice of semiring for the graded modality.
+
+\citet{hughes2021linear} propose extensions to graded systems to bring back the restrictions of
+Linear Logic. Here we explore a different route, namely we extend Linear Core by further constructs
+which admit the augmented expressivity of Graded Modal Core, giving the system \textbf{Linear~Push~Core}.
+
+%We could `drag back' the expressivity of Graded Base by requiring that
+%$r = 1$ in the product and sum eliminations, however even that is
+%still more general.
+
+\subsection{Linear Push Core}
+\label{sec:linear-push-core}
+%
+We extend Linear Core to \textbf{Linear~Push~Core} with new syntax, heaving it to a level of
+expressivity on par with Graded Modal Core, leaving behind the restrictions of Linear Logic
+discussed in \ref{sec:no-trans-graded-core-to-linear-core}.
+
+Since the essential missing piece is the distributive laws between the graded modality and
+products and sums, we complete the syntax of Linear Push Core with the following two constructs:
+%
+\begin{align*}
+  \SYSTEMnt{t} & ::= ... \mid  \textsf{push}_\otimes  \SYSTEMnt{t}  \mid  \textsf{push}_\oplus  \SYSTEMnt{t}  \mid  \textsf{push}_{\mathrm{unit} }  \SYSTEMnt{t} 
+  \tag{terms}
+\end{align*}
+%
+The syntax is non-standard but isomorphic to other approaches; Granule achieves the same
+expressivity implicitly via pattern matching~\cite{DBLP:journals/pacmpl/OrchardLE19}, but
+we prefer to introduce explicit syntax here. These two constructs provide exactly
+the distributive behaviour captured in product and sum elimination in Graded Modal Core.
+Figure~\ref{fig:linear-core-push} gives the typing and operational model.
+
+\begin{figure}[t]
+\raggedright\noindent\framebox{$ \Gamma  \vdash_{\textsc{l} }  \SYSTEMnt{t}  :  \SYSTEMnt{A} $} \quad Typing rules
+\begin{gather*}
+\begin{align*}
+\begin{array}{c}
+\SYSTEMdruleLinpushprod{}
+\,
+\SYSTEMdruleLinpushsum{}
+\,
+\SYSTEMdruleLinpushunit{}
+\end{array}
+\end{align*}
+\end{gather*}
+\bigskip
+
+\raggedright\noindent\framebox{$ \SYSTEMnt{t}  \rightsquigarrow_{\textsc{l} }  \SYSTEMnt{t'} $} \quad Operational semantics for push constructors
+\begin{gather*}
+\begin{align*}
+\begin{array}{c}
+    \SYSTEMdruleSemLinpushProd{}
+   \;\;
+   \SYSTEMdruleSemLinpushUnit{}
+   \;\;
+   \SYSTEMdruleSemLinpushSumInjGen{}
+  \\[1em]
+  \SYSTEMdruleSemLinpushProdCong{}
+  \;
+  \SYSTEMdruleSemLinpushSumCong{}
+  \;
+  \SYSTEMdruleSemLinpushUnitCong{}
+  \\[1em]
+  \SYSTEMdruleSemLinpushProdBoxCong{}
+  \;
+  \SYSTEMdruleSemLinpushSumBoxCong{}
+  \;
+  \SYSTEMdruleSemLinpushUnitBoxCong{}
+  \end{array}
+\end{align*}
+\end{gather*}
+\caption{Linear Push Core}
+\label{fig:linear-core-push}
+\end{figure}
+
+\subsection{Translation from Graded Modal Core to Linear Push Core}
+\label{sec:trans-graded-core-to-linear-push-core}
+%
+We define the translation
+from Graded Modal Core into Linear Push Core as follows
+(fixing the unsound translation to Linear Core from Section~\ref{sec:no-trans-graded-core-to-linear-core}
+in the product and sum elimination):
+%
+%
+\renewcommand{\triangleq}{& \oldTriangleq &}
+\renewcommand{\equiv}{& \oldEquiv &}
+\renewcommand{\SYSTEMdrule}[4][]{#3 \qquad #2}
+%
+\begin{gather*}
+{\setlength{\arraycolsep}{0.1em}
+\begin{array}{lcl@{\hspace{-4em}}r}
+\SYSTEMdruleTranslGtoLTmprodi{} \\
+ \textcolor{GLcolor}{\llbracket}   \mathsf{let} \, \langle  \SYSTEMmv{x} ,  \SYSTEMmv{y}  \rangle =  \SYSTEMnt{t_{{\mathrm{1}}}}  \, \mathsf{in} \,  \SYSTEMnt{t_{{\mathrm{2}}}}   \textcolor{GLcolor}{\rrbracket}  \triangleq  \mathsf{let} \, \langle  \SYSTEMmv{x'} ,  \SYSTEMmv{y'}  \rangle =   \textsf{push}_\otimes   \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{1}}}}  \textcolor{GLcolor}{\rrbracket}   \textcolor{coeffectColor}{]}    \, \mathsf{in} \,   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{x'}  \, \mathsf{in} \,   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{y'}  \, \mathsf{in} \,   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{2}}}}  \textcolor{GLcolor}{\rrbracket}     \\
+\SYSTEMdruleTranslGtoLTmsumiOne{} \\
+\SYSTEMdruleTranslGtoLTmsumiTwo{} \\
+  \textcolor{GLcolor}{\llbracket}   \mathsf{case} \,  \SYSTEMnt{t}  \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{x}  \rightarrow  \SYSTEMnt{t_{{\mathrm{1}}}}  ; \, \mathsf{inj2} \,  \SYSTEMmv{y}  \rightarrow  \SYSTEMnt{t_{{\mathrm{2}}}}  \}   \textcolor{GLcolor}{\rrbracket}  \\
+\multicolumn{3}{l}{\hspace{0.2em}\;\quad \oldTriangleq \;  \mathsf{case} \,   \textsf{push}_\oplus   \textcolor{coeffectColor}{[}   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   \textcolor{coeffectColor}{]}    \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{x'}  \rightarrow   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{x'}  \, \mathsf{in} \,   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{1}}}}  \textcolor{GLcolor}{\rrbracket}    ; \, \mathsf{inj2} \,  \SYSTEMmv{y'}  \rightarrow   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{y'}  \, \mathsf{in} \,   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t_{{\mathrm{2}}}}  \textcolor{GLcolor}{\rrbracket}    \}  }\\
+\SYSTEMdruleTranslGtoLTmuniti{} \\
+\SYSTEMdruleTranslGtoLTmunite{} & \text{(Term translation)} \\[0.5em]
+\SYSTEMdruleTranslGtoLTyprodTy{} \\
+\SYSTEMdruleTranslGtoLTysumTy{} \\
+\SYSTEMdruleTranslGtoLTyunitTy{} & \text{(Type translation)}
+\end{array}}
+\end{gather*}
+%
+\let\SYSTEMdrule\oldSYSTEMdrule
+\let\equiv\oldEquiv
+\let\triangleq\oldTriangleq
+%
+Translation of a product elimination on $\SYSTEMnt{t_{{\mathrm{1}}}}$ first promotes
+the product to a graded modality which is then `pushed into' each component of the product via $\mathsf{push}_\otimes$. The resulting graded modal components $x'$ and $y'$ are then eliminated in the scope of $\SYSTEMnt{t_{{\mathrm{2}}}}$. A similar idea is applied for sum elimination. Thus this translation
+gets at the heart of what is happening inside Graded Modal Core (and why it differs from
+Linear Core): its eliminators distribute the coeffect analysis inside products and sums,
+which we now capture explicitly here in Linear Push Core.
+
+We now re-establish the core results (proofs for which are
+in Appendix~\refappendix{app:proofs-grad-core-to-lin-core}):
+%
+\begin{restatable}{thrm}{gradToLinTranslationExt}[Soundness of the Graded Modal Core to Linear Push Core translation]
+ \begin{itemize}[itemsep=0.2em]
+  \item Type preservation: $ \Delta  \vdash_{\textsc{g} }  \SYSTEMnt{t}  :  \SYSTEMnt{A}  \implies   \textcolor{GLcolor}{\llbracket}  \Delta  \textcolor{GLcolor}{\rrbracket}   \vdash_{\textsc{l} }   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   :   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{A}  \textcolor{GLcolor}{\rrbracket}  $;
+  \item Operational correspondence: $ \SYSTEMnt{t}  \rightsquigarrow_{\textsc{g} }  \SYSTEMnt{t'}  \implies   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   \rightsquigarrow_{\textsc{l} }^\ast   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t'}  \textcolor{GLcolor}{\rrbracket}  $.
+  \item Equation preservation: $(\SYSTEMnt{t}  \equiv^{-\eta\otimes\oplus\mathsf{unit} }_{\textsc{g} }  \SYSTEMnt{t'}) \implies   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t}  \textcolor{GLcolor}{\rrbracket}   \,\equiv_{\textsc{l} }\,   \textcolor{GLcolor}{\llbracket}  \SYSTEMnt{t'}  \textcolor{GLcolor}{\rrbracket}  $.
+\end{itemize}
+Our translation does not, in general, preserve $\eta$-equalities for
+products, sums, and unit (it can only preserve $\eta$ on these types
+for closed terms); i.e., our translation is not extensional due to
+additional `push'-structure for handling nesting of graded modalities
+and products, sums, and units.
+\end{restatable}
+%
+Given that we have changed Linear Core to Linear Push Core by adding two new constructs,
+we now re-establish that we can translate Linear Push Core back into Graded Modal Core.
+
+\subsection{Translation from Linear Push Core to Graded Modal Core}
+\label{sec:trans-linear-push-core-to-graded-core}
+%
+We extend the Linear Core to Graded Modal Core translation with the following
+additional cases to handle the extra constructs of Linear Push Core:
+%
+\renewcommand{\equiv}{ \oldEquiv}
+\renewcommand{\SYSTEMdrule}[4][]{{\displaystyle{#3}}}
+%
+\begin{align}
+\tag{Term translation} \\[-1.5em]
+\notag & \begin{array}{l}
+\SYSTEMdruleTranslLtoGTmpushProd{} \\
+\SYSTEMdruleTranslLtoGTmpushSum{} \\
+\SYSTEMdruleTranslLtoGTmpushUnit{}
+\end{array}
+\end{align}
+%
+\let\SYSTEMdrule\oldSYSTEMdrule
+\let\equiv\oldEquiv
+%
+Note that (for $ \textsf{push}_\otimes     $ and $ \textsf{push}_\oplus     $) these are essentially the programs $f$ and $g$ shown in Section~\ref{sec:no-trans-graded-core-to-linear-core}
+which are the derivation of $\textsf{push}$ combinators in Graded Modal Core.
+
+We thus (re)establish the key results (proofs in Appendix~\refappendix{app:proofs-lin-core-to-grad-core}):
+
+
+\begin{restatable}{thrm}{linToGradTranslationExt}[Soundness of the Linear Push Core to Graded Modal Core translation]
+ \begin{itemize}[itemsep=0.2em]
+  \item Type preservation: $ \Gamma  \vdash_{\textsc{l} }  \SYSTEMnt{t}  :  \SYSTEMnt{A}  \implies   \textcolor{LGcolor}{\llparenthesis}  \Gamma  \textcolor{LGcolor}{\rrparenthesis}   \vdash_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   :   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{A}  \smidge \textcolor{LGcolor}{\rrparenthesis}  $;
+  \item Operational correspondence: $ \SYSTEMnt{t}  \rightsquigarrow_{\textsc{l} }  \SYSTEMnt{t'}  \implies   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \rightsquigarrow_{\textsc{g} }^\ast   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t'}  \smidge \textcolor{LGcolor}{\rrparenthesis}  $;
+  \item Equation preservation: $ \SYSTEMnt{t}  \,\equiv_{\textsc{l} }\,  \SYSTEMnt{t'}  \implies   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \equiv_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t'}  \smidge \textcolor{LGcolor}{\rrparenthesis}  $.
+\end{itemize}
+\end{restatable}
+%
+Note that whilst the operational correspondence from Linear Base to Graded Modal Base mapped a single
+reduction $ \SYSTEMnt{t}  \rightsquigarrow_{\textsc{l} }  \SYSTEMnt{t'} $ to a single graded-base reduction $  \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t}  \smidge \textcolor{LGcolor}{\rrparenthesis}   \rightsquigarrow_{\textsc{g} }   \textcolor{LGcolor}{\llparenthesis} \smidge  \SYSTEMnt{t'}  \smidge \textcolor{LGcolor}{\rrparenthesis}  $ this
+is now not possible for Linear Push Core. Instead, a single reduction in Linear Push Core for
+the $\mathsf{push}$ combinators corresponds to several reductions in Graded Modal Core.
+
+
+\iffalse
+% SOME LEFTOVERS HERE
+\begin{align*}
+ \textcolor{GLcolor}{\llbracket}  \SYSTEMmv{f}  \textcolor{GLcolor}{\rrbracket}  &:   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   (   \SYSTEMnt{A}  \otimes  \SYSTEMnt{B}   )    \multimap   (    \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A}   \otimes   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{B}    )   \\
+ \textcolor{GLcolor}{\llbracket}  \SYSTEMmv{f}  \textcolor{GLcolor}{\rrbracket}  &=  \lambda  \SYSTEMmv{b}  .  \SYSTEMsym{(}   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{p}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{b}  \, \mathsf{in} \,   \mathsf{let} \, \langle  \SYSTEMmv{x'} ,  \SYSTEMmv{y'}  \rangle =   \textsf{push}_\otimes   \textcolor{coeffectColor}{[}  \SYSTEMmv{p}  \textcolor{coeffectColor}{]}    \, \mathsf{in} \,   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{x'}  \, \mathsf{in} \,   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{y'}  \, \mathsf{in} \,   \langle   \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]}  ,   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}   \rangle       \SYSTEMsym{)} \\
+\\
+ \textcolor{GLcolor}{\llbracket}  \SYSTEMmv{g}  \textcolor{GLcolor}{\rrbracket}  &:   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }   (   \SYSTEMnt{A}  \oplus  \SYSTEMnt{B}   )    \multimap   (    \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{A}   \oplus   \textcolor{coeffectColor}{\square_{ \SYSTEMnt{r} } }  \SYSTEMnt{B}    )   \\
+ \textcolor{GLcolor}{\llbracket}  \SYSTEMmv{g}  \textcolor{GLcolor}{\rrbracket}  &=  \lambda  \SYSTEMmv{b}  .  \SYSTEMsym{(}   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{e}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{b}  \, \mathsf{in} \,   \mathsf{case} \,   \textsf{push}_\oplus   \textcolor{coeffectColor}{[}  \SYSTEMmv{e}  \textcolor{coeffectColor}{]}    \, \mathsf{of} \, \{ \mathsf{inj1} \,  \SYSTEMmv{x'}  \rightarrow   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{x'}  \, \mathsf{in} \,   \mathsf{inj}_1 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{x}  \textcolor{coeffectColor}{]}     ; \, \mathsf{inj2} \,  \SYSTEMmv{y}  \rightarrow   \mathsf{inj}_2 \,   \textcolor{coeffectColor}{[}  \SYSTEMmv{y}  \textcolor{coeffectColor}{]}    \}    \SYSTEMsym{)} 
+\end{align*}
+\fi
+
+\begin{remark}
+Graded Modal Core extends Graded Modal Base rather than Graded Base.
+If Graded Modal Core did not have a graded modality it could not give a precise type to projection on products:
+%
+\begin{align*}
+  \emptyset   \vdash_{\textsc{g} }  \SYSTEMsym{(}   \lambda  \SYSTEMmv{z}  .   \mathsf{let} \, \langle  \SYSTEMmv{x} ,  \SYSTEMmv{y}  \rangle =  \SYSTEMmv{z}  \, \mathsf{in} \,  \SYSTEMmv{x}    \SYSTEMsym{)}  :    (   \SYSTEMnt{A}  \times  \SYSTEMnt{B}   )   \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMnt{r} } }  \SYSTEMnt{A}  
+\end{align*}
+%
+where $ \SYSTEMsym{1}  \, \textcolor{coeffectColor}{\sqsubseteq} \,  \SYSTEMnt{r} $ due to the use of $x$ and $ \SYSTEMsym{0}  \, \textcolor{coeffectColor}{\sqsubseteq} \,  \SYSTEMnt{r} $ due to the
+absence of $y$.  For the exact-usage natural numbers semiring this
+would not be typeable as there is no such $r$ satisfying both
+constraints. For a semiring of intervals denoting lower-bound and
+upper-bound usage~\cite{DBLP:journals/pacmpl/OrchardLE19}, the
+constraints would be satisfied by $r = [0,1]$.
+
+We instead opted to include the graded modality in Graded Modal Core as in the work of \citet{DBLP:journals/pacmpl/AbelB20}, \citet{grtt}, and others~\cite{DBLP:conf/esop/HughesO24,mycroftfest2024}.
+Thus we can specify for this example a more fine-grained type via the graded modality,
+where the $\SYSTEMnt{B}$ component of the product is unused:
+%
+\[
+    \emptyset   \vdash_{\textsc{g} }   \lambda  \SYSTEMmv{z}  .   \mathsf{let} \, \langle  \SYSTEMmv{x} ,  \SYSTEMmv{y}  \rangle =  \SYSTEMmv{z}  \, \mathsf{in} \,   \mathsf{let} \, \textcolor{coeffectColor}{[}  \SYSTEMmv{y'}  \textcolor{coeffectColor}{]} =  \SYSTEMmv{y}  \, \mathsf{in} \,  \SYSTEMmv{x}     :    (   \SYSTEMnt{A}  \times   \textcolor{coeffectColor}{\square_{ \SYSTEMsym{0} } }  \SYSTEMnt{B}    )   \xrightarrow{\textcolor{coeffectColor}{ \SYSTEMsym{1} } }  \SYSTEMnt{A}  
+\]
+%
+Without the inclusion of graded modalities, Graded Modal Core is less expressive than Linear Core.
+
+Note that some dependently-typed graded-base systems such as \textsc{GraD}~\cite{grad}
+and QTT~\cite{quantitative-type-theory} omit the graded modality but include a graded
+dependent $\Sigma$ type which can be used to encode the graded modality.
+\end{remark}

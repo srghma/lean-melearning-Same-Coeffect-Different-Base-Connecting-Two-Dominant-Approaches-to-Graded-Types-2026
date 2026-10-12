@@ -3,7 +3,6 @@ import Mathlib
 open scoped BigOperators
 open scoped Real
 open scoped Nat
-open scoped Classical
 open scoped Pointwise
 
 set_option maxHeartbeats 8000000
