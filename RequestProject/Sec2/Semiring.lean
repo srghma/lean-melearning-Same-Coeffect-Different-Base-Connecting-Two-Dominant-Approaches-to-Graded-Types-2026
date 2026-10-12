@@ -24,6 +24,14 @@ class PreorderedSemiring (R : Type*) extends Semiring R, Preorder R where
   add_mono : ∀ {a b c d : R}, a ≤ b → c ≤ d → a + c ≤ b + d
   mul_mono : ∀ {a b c d : R}, a ≤ b → c ≤ d → a * c ≤ b * d
 
+-- 1. Left addition monotonicity
+instance (R : Type*) [h : PreorderedSemiring R] : AddLeftMono R where
+  elim _ := h.add_mono le_rfl
+
+-- 2. Left multiplication monotonicity
+instance (R : Type*) [h : PreorderedSemiring R] : MulLeftMono R where
+  elim _ := h.mul_mono le_rfl
+
 /-! ## The linearity semiring `{0, 1, ω}` -/
 
 /-- The *none-one-tons* / linearity semiring `{0, 1, ω}`. -/
@@ -67,10 +75,10 @@ instance : Mul Lin := ⟨mul⟩
 scoped notation "ω" => Lin.omega
 
 instance : CommSemiring Lin where
-  add := add
-  mul := mul
-  zero := zero
-  one := one
+  -- add := add
+  -- mul := mul
+  -- zero := zero
+  -- one := one
   add_assoc := by intro a b c; cases a <;> cases b <;> cases c <;> rfl
   zero_add := by intro a; cases a <;> rfl
   add_zero := by intro a; cases a <;> rfl
@@ -84,7 +92,7 @@ instance : CommSemiring Lin where
   right_distrib := by intro a b c; cases a <;> cases b <;> cases c <;> rfl
   mul_comm := by intro a b; cases a <;> cases b <;> rfl
   nsmul := nsmulRec
-  npow := npowRec
+  -- npow := npowRec
 
 instance : PreorderedSemiring Lin where
   le := le

@@ -119,45 +119,45 @@ inductive LTyped : {n : ℕ} → (Fin n → LTy R F) → (Fin n → Use R) → L
       LTyped Γ u t A → u i = Use.grd r → r ≤ s → LTyped Γ (Function.update u i (Use.grd s)) t A
   /-- product introduction -/
   | pair {n : ℕ} {Γ : Fin n → LTy R F} {u₁ u₂ u : Fin n → Use R} {t₁ t₂ : LTm F n} {A B : LTy R F}
-      (h : F.Core = true) :
+      (h : F.Core) :
       LTyped Γ u₁ t₁ A → LTyped Γ u₂ t₂ B → CtxAdd u₁ u₂ u →
       LTyped Γ u (.pair h t₁ t₂) (.tensor h A B)
   /-- product elimination -/
   | letpair {n : ℕ} {Γ : Fin n → LTy R F} {u₁ u₂ u : Fin n → Use R} {t₁ : LTm F n}
-      {t₂ : LTm F (n + 2)} {A B C : LTy R F} (h : F.Core = true) :
+      {t₂ : LTm F (n + 2)} {A B C : LTy R F} (h : F.Core) :
       LTyped Γ u₁ t₁ (.tensor h A B) → LTyped (B .: A .: Γ) (Use.lin .: Use.lin .: u₂) t₂ C →
       CtxAdd u₁ u₂ u → LTyped Γ u (.letpair h t₁ t₂) C
   /-- unit introduction -/
-  | unit {n : ℕ} {Γ : Fin n → LTy R F} (h : F.Core = true) : LTyped Γ emptyU (.unit h) (.unit h)
+  | unit {n : ℕ} {Γ : Fin n → LTy R F} (h : F.Core) : LTyped Γ emptyU (.unit h) (.unit h)
   /-- unit elimination -/
   | letunit {n : ℕ} {Γ : Fin n → LTy R F} {u₁ u₂ u : Fin n → Use R} {t₁ t₂ : LTm F n}
-      {A : LTy R F} (h : F.Core = true) :
+      {A : LTy R F} (h : F.Core) :
       LTyped Γ u₁ t₁ (.unit h) → LTyped Γ u₂ t₂ A → CtxAdd u₁ u₂ u →
       LTyped Γ u (.letunit h t₁ t₂) A
   /-- left injection -/
   | inl {n : ℕ} {Γ : Fin n → LTy R F} {u : Fin n → Use R} {t : LTm F n} {A B : LTy R F}
-      (h : F.Core = true) : LTyped Γ u t A → LTyped Γ u (.inl h t) (.oplus h A B)
+      (h : F.Core) : LTyped Γ u t A → LTyped Γ u (.inl h t) (.oplus h A B)
   /-- right injection -/
   | inr {n : ℕ} {Γ : Fin n → LTy R F} {u : Fin n → Use R} {t : LTm F n} {A B : LTy R F}
-      (h : F.Core = true) : LTyped Γ u t B → LTyped Γ u (.inr h t) (.oplus h A B)
+      (h : F.Core) : LTyped Γ u t B → LTyped Γ u (.inr h t) (.oplus h A B)
   /-- sum elimination -/
   | case {n : ℕ} {Γ : Fin n → LTy R F} {u₁ u₂ u : Fin n → Use R} {t : LTm F n}
-      {t₁ t₂ : LTm F (n + 1)} {A B C : LTy R F} (h : F.Core = true) :
+      {t₁ t₂ : LTm F (n + 1)} {A B C : LTy R F} (h : F.Core) :
       LTyped Γ u₁ t (.oplus h A B) → LTyped (A .: Γ) (Use.lin .: u₂) t₁ C →
       LTyped (B .: Γ) (Use.lin .: u₂) t₂ C → CtxAdd u₁ u₂ u → LTyped Γ u (.case h t t₁ t₂) C
   /-- `push⊗ : □_r (A ⊗ B) ⊸ □_r A ⊗ □_r B` -/
   | pushProd {n : ℕ} {Γ : Fin n → LTy R F} {u : Fin n → Use R} {t : LTm F n} {r : R}
-      {A B : LTy R F} (h : F.Push = true) (hc : F.Core = true) :
+      {A B : LTy R F} (h : F.Push) (hc : F.Core) :
       LTyped Γ u t (.box r (.tensor hc A B)) →
       LTyped Γ u (.pushProd h t) (.tensor hc (.box r A) (.box r B))
   /-- `push⊕ : □_r (A ⊕ B) ⊸ □_r A ⊕ □_r B` (when `1 ⊑ r`) -/
   | pushSum {n : ℕ} {Γ : Fin n → LTy R F} {u : Fin n → Use R} {t : LTm F n} {r : R}
-      {A B : LTy R F} (h : F.Push = true) (hc : F.Core = true) :
+      {A B : LTy R F} (h : F.Push) (hc : F.Core) :
       1 ≤ r → LTyped Γ u t (.box r (.oplus hc A B)) →
       LTyped Γ u (.pushSum h t) (.oplus hc (.box r A) (.box r B))
   /-- `push_unit : □_r unit ⊸ unit` -/
   | pushUnit {n : ℕ} {Γ : Fin n → LTy R F} {u : Fin n → Use R} {t : LTm F n} {r : R}
-      (h : F.Push = true) (hc : F.Core = true) :
+      (h : F.Push) (hc : F.Core) :
       LTyped Γ u t (.box r (.unit hc)) → LTyped Γ u (.pushUnit h t) (.unit hc)
 
 namespace LTyped

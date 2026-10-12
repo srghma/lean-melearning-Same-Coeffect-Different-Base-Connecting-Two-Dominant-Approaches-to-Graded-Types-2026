@@ -36,7 +36,7 @@ theorem GSteps.toL {F : GLevel} {n : ℕ} {t t' : GTm F n} (h : GSteps false t t
   | tail _ h ih => exact ih.trans h.toL
 
 /-- Multi-step version of `LStep.toG` (for Linear Base and Linear Core). -/
-theorem LSteps.toG {F : LLevel} (hF : F.Push = false) {n : ℕ} {t t' : LTm F n}
+theorem LSteps.toG {F : LLevel} (hF : ¬ F.Push) {n : ℕ} {t t' : LTm F n}
     (h : LSteps t t') : GSteps false t.toG t'.toG := by
   induction h with
   | refl => exact .refl

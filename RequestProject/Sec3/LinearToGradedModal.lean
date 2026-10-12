@@ -43,10 +43,10 @@ def LLevel.toG : LLevel → GLevel
 
 lemma LLevel.toG_modal (F : LLevel) : F.toG.Modal = true := by cases F <;> rfl
 
-lemma LLevel.toG_core {F : LLevel} (h : F.Core = true) : F.toG.Core = true := by
+lemma LLevel.toG_core {F : LLevel} (h : F.Core) : F.toG.Core := by
   cases F <;> simp_all [LLevel.Core, LLevel.toG, GLevel.Core]
 
-lemma LLevel.toG_core_of_push {F : LLevel} (h : F.Push = true) : F.toG.Core = true :=
+lemma LLevel.toG_core_of_push {F : LLevel} (h : F.Push) : F.toG.Core :=
   LLevel.toG_core (LLevel.core_of_push h)
 
 /-- A map of grades along which the linear-base type system can be translated. -/
@@ -189,7 +189,7 @@ lemma toGGrades_update (φ : GradeMap R S) {n : ℕ} (u : Fin n → Use R) (i : 
 
 section push
 
-variable {G : GLevel} (hm : G.Modal = true) (hc : G.Core = true)
+variable {G : GLevel} (hm : G.Modal = true) (hc : G.Core)
 
 lemma single_zero_eq {n : ℕ} (ρ : S) :
     ρ • (Pi.single (0 : Fin (n + 1)) (1 : S) : Fin (n + 1) → S) + 0 = (ρ .: (0 : Fin n → S)) := by
@@ -324,7 +324,7 @@ lemma GSteps.lift {G : GLevel} {b : Bool} {n m : ℕ} (f : GTm G n → GTm G m)
 
 /-- **Theorem 3.1 / 5.3 (operational correspondence)**, for Linear Base and Linear Core:
 a single reduction step is simulated by a single step, `t ⇝_L t' ⟹ ⦇t⦈ ⇝_G ⦇t'⦈`. -/
-theorem LStep.toG {n : ℕ} (hF : F.Push = false) {t t' : LTm F n} (h : LStep t t') :
+theorem LStep.toG {n : ℕ} (hF : ¬ F.Push) {t t' : LTm F n} (h : LStep t t') :
     GStep false t.toG t'.toG := by
   induction h with
   | beta t₂ t₁ => rw [LTm.toG_subst1]; exact .beta _ _
@@ -476,7 +476,7 @@ theorem LCong.toG {n : ℕ} {t t' : LTm F n} (h : LCong (LAxF LAxSel.noPushEta) 
   | pushUnit h _ ih => exact .letbox _ ih (.refl _)
 
 /-- Without `push` constructs (Linear Base, Linear Core) the full theory `≡_L` is preserved. -/
-theorem LEq.toG {n : ℕ} (hF : F.Push = false) {t t' : LTm F n} (h : LEq t t') :
+theorem LEq.toG {n : ℕ} (hF : ¬ F.Push) {t t' : LTm F n} (h : LEq t t') :
     GEq t.toG t'.toG := by
   refine LCong.toG (h.mono ?_)
   intro n t t' h

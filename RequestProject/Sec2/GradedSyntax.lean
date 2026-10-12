@@ -43,7 +43,7 @@ def Core : GLevel → Bool
   | core => true
   | _ => false
 
-lemma modal_of_core {F : GLevel} (h : F.Core = true) : F.Modal = true := by
+lemma modal_of_core {F : GLevel} (h : F.Core) : F.Modal = true := by
   cases F <;> simp_all [Modal, Core]
 
 /-- Inclusion order (`Graded Base ⊆ Graded Modal Base ⊆ Graded Modal Core`). -/
@@ -60,7 +60,7 @@ instance : DecidableRel (fun F G : GLevel => F ≤ G) :=
 lemma modal_mono {F G : GLevel} (hFG : F ≤ G) (h : F.Modal = true) : G.Modal = true := by
   cases F <;> cases G <;> first | rfl | exact h | exact absurd hFG (by decide)
 
-lemma core_mono {F G : GLevel} (hFG : F ≤ G) (h : F.Core = true) : G.Core = true := by
+lemma core_mono {F G : GLevel} (hFG : F ≤ G) (h : F.Core) : G.Core := by
   cases F <;> cases G <;> first | rfl | exact h | exact absurd hFG (by decide)
 
 end GLevel
@@ -76,11 +76,11 @@ inductive GTy (R : Type u) (F : GLevel) : Type u
   /-- the graded modality `□_r A` (Graded Modal Base) -/
   | box : F.Modal = true → R → GTy R F → GTy R F
   /-- products `A × B` (Graded Modal Core) -/
-  | prod : F.Core = true → GTy R F → GTy R F → GTy R F
+  | prod : F.Core → GTy R F → GTy R F → GTy R F
   /-- unit (Graded Modal Core) -/
-  | unit : F.Core = true → GTy R F
+  | unit : F.Core → GTy R F
   /-- sums `A + B` (Graded Modal Core) -/
-  | sum : F.Core = true → GTy R F → GTy R F → GTy R F
+  | sum : F.Core → GTy R F → GTy R F → GTy R F
 
 /-- Terms of the graded-base lineage at level `F` with `n` free variables. -/
 inductive GTm (F : GLevel) : ℕ → Type
@@ -91,14 +91,14 @@ inductive GTm (F : GLevel) : ℕ → Type
   | box {n : ℕ} : F.Modal = true → GTm F n → GTm F n
   /-- `let [x] = t₁ in t₂` (Graded Modal Base) -/
   | letbox {n : ℕ} : F.Modal = true → GTm F n → GTm F (n + 1) → GTm F n
-  | pair {n : ℕ} : F.Core = true → GTm F n → GTm F n → GTm F n
+  | pair {n : ℕ} : F.Core → GTm F n → GTm F n → GTm F n
   /-- `let ⟨x, y⟩ = t₁ in t₂` (`y` is index `0`, `x` index `1`) -/
-  | letpair {n : ℕ} : F.Core = true → GTm F n → GTm F (n + 2) → GTm F n
-  | unit {n : ℕ} : F.Core = true → GTm F n
-  | letunit {n : ℕ} : F.Core = true → GTm F n → GTm F n → GTm F n
-  | inl {n : ℕ} : F.Core = true → GTm F n → GTm F n
-  | inr {n : ℕ} : F.Core = true → GTm F n → GTm F n
-  | case {n : ℕ} : F.Core = true → GTm F n → GTm F (n + 1) → GTm F (n + 1) → GTm F n
+  | letpair {n : ℕ} : F.Core → GTm F n → GTm F (n + 2) → GTm F n
+  | unit {n : ℕ} : F.Core → GTm F n
+  | letunit {n : ℕ} : F.Core → GTm F n → GTm F n → GTm F n
+  | inl {n : ℕ} : F.Core → GTm F n → GTm F n
+  | inr {n : ℕ} : F.Core → GTm F n → GTm F n
+  | case {n : ℕ} : F.Core → GTm F n → GTm F (n + 1) → GTm F (n + 1) → GTm F n
 
 namespace GTm
 

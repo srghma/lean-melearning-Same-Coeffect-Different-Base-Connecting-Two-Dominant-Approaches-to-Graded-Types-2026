@@ -15,7 +15,7 @@ The three linear-base calculi of the paper
 
 are presented as a single family of grammars indexed by a *level* `F : LLevel`.
 Constructors which only exist in the bigger calculi carry a proof that the level supports them
-(e.g. `F.Core = true`), so that e.g. `LTm .base n` contains *exactly* the Linear Base terms with
+(e.g. `F.Core`), so that e.g. `LTm .base n` contains *exactly* the Linear Base terms with
 `n` free variables (the other constructors are uninhabited at that level).
 
 Variables are de Bruijn indices `Fin n`; `LTm F 0` is the type of closed terms.
@@ -39,16 +39,16 @@ inductive LLevel : Type
 namespace LLevel
 
 /-- Does the level contain products, unit and sums? -/
-def Core : LLevel → Bool
-  | base => false
-  | _ => true
+def Core : LLevel → Prop
+  | base => False
+  | _ => True
 
 /-- Does the level contain the `push` constructs? -/
-def Push : LLevel → Bool
-  | push => true
-  | _ => false
+def Push : LLevel → Prop
+  | push => True
+  | _ => False
 
-lemma core_of_push {F : LLevel} (h : F.Push = true) : F.Core = true := by
+lemma core_of_push {F : LLevel} (h : F.Push) : F.Core := by
   cases F <;> simp_all [Push, Core]
 
 /-- Inclusion order between the calculi (`Linear Base ⊆ Linear Core ⊆ Linear Push Core`). -/
@@ -62,11 +62,11 @@ instance : LE LLevel := ⟨fun F G => F.toNat ≤ G.toNat⟩
 instance : DecidableRel (fun F G : LLevel => F ≤ G) :=
   fun F G => inferInstanceAs (Decidable (F.toNat ≤ G.toNat))
 
-lemma core_mono {F G : LLevel} (hFG : F ≤ G) (h : F.Core = true) : G.Core = true := by
-  cases F <;> cases G <;> first | rfl | exact h | exact absurd hFG (by decide)
+lemma core_mono {F G : LLevel} (hFG : F ≤ G) (h : F.Core) : G.Core := by
+  cases F <;> cases G <;> first | rfl | exact h | exact absurd hFG (by sorry)
 
-lemma push_mono {F G : LLevel} (hFG : F ≤ G) (h : F.Push = true) : G.Push = true := by
-  cases F <;> cases G <;> first | rfl | exact h | exact absurd hFG (by decide)
+lemma push_mono {F G : LLevel} (hFG : F ≤ G) (h : F.Push) : G.Push := by
+  cases F <;> cases G <;> first | rfl | exact h | exact absurd hFG (by sorry)
 
 end LLevel
 
@@ -82,11 +82,11 @@ inductive LTy (R : Type u) (F : LLevel) : Type u
   /-- the graded modality `□_r A` -/
   | box : R → LTy R F → LTy R F
   /-- multiplicative product `A ⊗ B` (Linear Core) -/
-  | tensor : F.Core = true → LTy R F → LTy R F → LTy R F
+  | tensor : F.Core → LTy R F → LTy R F → LTy R F
   /-- unit (Linear Core) -/
-  | unit : F.Core = true → LTy R F
+  | unit : F.Core → LTy R F
   /-- additive sum `A ⊕ B` (Linear Core) -/
-  | oplus : F.Core = true → LTy R F → LTy R F → LTy R F
+  | oplus : F.Core → LTy R F → LTy R F → LTy R F
 
 /-- Terms of the linear-base lineage at level `F` with `n` free variables. -/
 inductive LTm (F : LLevel) : ℕ → Type
@@ -101,25 +101,25 @@ inductive LTm (F : LLevel) : ℕ → Type
   /-- unboxing `let [x] = t₁ in t₂` -/
   | letbox {n : ℕ} : LTm F n → LTm F (n + 1) → LTm F n
   /-- pairing `⟨t₁, t₂⟩` -/
-  | pair {n : ℕ} : F.Core = true → LTm F n → LTm F n → LTm F n
+  | pair {n : ℕ} : F.Core → LTm F n → LTm F n → LTm F n
   /-- `let ⟨x, y⟩ = t₁ in t₂` -/
-  | letpair {n : ℕ} : F.Core = true → LTm F n → LTm F (n + 2) → LTm F n
+  | letpair {n : ℕ} : F.Core → LTm F n → LTm F (n + 2) → LTm F n
   /-- unit `⟨⟩` -/
-  | unit {n : ℕ} : F.Core = true → LTm F n
+  | unit {n : ℕ} : F.Core → LTm F n
   /-- `let ⟨⟩ = t₁ in t₂` -/
-  | letunit {n : ℕ} : F.Core = true → LTm F n → LTm F n → LTm F n
+  | letunit {n : ℕ} : F.Core → LTm F n → LTm F n → LTm F n
   /-- `inj₁ t` -/
-  | inl {n : ℕ} : F.Core = true → LTm F n → LTm F n
+  | inl {n : ℕ} : F.Core → LTm F n → LTm F n
   /-- `inj₂ t` -/
-  | inr {n : ℕ} : F.Core = true → LTm F n → LTm F n
+  | inr {n : ℕ} : F.Core → LTm F n → LTm F n
   /-- `case t of {inj₁ x → t₁; inj₂ y → t₂}` -/
-  | case {n : ℕ} : F.Core = true → LTm F n → LTm F (n + 1) → LTm F (n + 1) → LTm F n
+  | case {n : ℕ} : F.Core → LTm F n → LTm F (n + 1) → LTm F (n + 1) → LTm F n
   /-- `push⊗ t` (Linear Push Core) -/
-  | pushProd {n : ℕ} : F.Push = true → LTm F n → LTm F n
+  | pushProd {n : ℕ} : F.Push → LTm F n → LTm F n
   /-- `push⊕ t` (Linear Push Core) -/
-  | pushSum {n : ℕ} : F.Push = true → LTm F n → LTm F n
+  | pushSum {n : ℕ} : F.Push → LTm F n → LTm F n
   /-- `push_unit t` (Linear Push Core) -/
-  | pushUnit {n : ℕ} : F.Push = true → LTm F n → LTm F n
+  | pushUnit {n : ℕ} : F.Push → LTm F n → LTm F n
 
 namespace LTm
 

@@ -65,7 +65,7 @@ theorem arrow_GB_GPB :
 
 /-- `GB → LB` (Theorem 2.5) and `GMB → LB` (Theorem 3.2): `⟦-⟧` preserves typing, reduction and
 the equational theory. -/
-theorem arrow_GB_GMB_to_LB {F : GLevel} (hF : F.Core = false) :
+theorem arrow_GB_GMB_to_LB {F : GLevel} (hF : ¬ F.Core) :
     (∀ {n : ℕ} {Γ : Fin n → GTy R F} {δ : Fin n → R} {t : GTm F n} {A : GTy R F},
       GTyped Γ δ t A → LTyped (toLCtx Γ) (grdU δ) t.toL A.toL) ∧
     (∀ {n : ℕ} {t t' : GTm F n}, GStep false t t' → LSteps t.toL t'.toL) ∧
@@ -97,7 +97,7 @@ theorem arrow_LB_GPB :
 /-- `LB → GMB` (Theorem 3.1) and `LC → GMC` (Theorem 5.3): `⦇-⦈` preserves typing (for any grade
 map, in particular the identity and the linearity-preserving map of Theorem 3.3), each reduction
 step is simulated by one step, and the full equational theory is preserved. -/
-theorem arrow_LB_LC_to_GMB_GMC {F : LLevel} (hF : F.Push = false) {S : Type u}
+theorem arrow_LB_LC_to_GMB_GMC {F : LLevel} (hF : ¬ F.Push) {S : Type u}
     [PreorderedSemiring S] (φ : GradeMap R S) :
     (∀ {n : ℕ} {Γ : Fin n → LTy R F} {u : Fin n → Use R} {t : LTm F n} {A : LTy R F},
       LTyped Γ u t A → GTyped (toGCtx φ Γ) (toGGrades φ u) t.toG (A.toG φ)) ∧

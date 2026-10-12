@@ -31,19 +31,19 @@ inductive GStep (underLam : Bool) : {n : ℕ} → GTm F n → GTm F n → Prop
       GStep underLam (letbox h (box h t₁) t₂) (t₂.subst1 t₁)
   | congLetL {n : ℕ} (h : F.Modal = true) {t₁ t₁' : GTm F n} (t₂ : GTm F (n + 1)) :
       GStep underLam t₁ t₁' → GStep underLam (letbox h t₁ t₂) (letbox h t₁' t₂)
-  | prodCong {n : ℕ} (h : F.Core = true) {t₁ t₁' : GTm F n} (t₂ : GTm F (n + 2)) :
+  | prodCong {n : ℕ} (h : F.Core) {t₁ t₁' : GTm F n} (t₂ : GTm F (n + 2)) :
       GStep underLam t₁ t₁' → GStep underLam (letpair h t₁ t₂) (letpair h t₁' t₂)
-  | prodBeta {n : ℕ} (h : F.Core = true) (t₁ t₂ : GTm F n) (t₃ : GTm F (n + 2)) :
+  | prodBeta {n : ℕ} (h : F.Core) (t₁ t₂ : GTm F n) (t₃ : GTm F (n + 2)) :
       GStep underLam (letpair h (pair h t₁ t₂) t₃) (t₃.subst2 t₁ t₂)
-  | unitCong {n : ℕ} (h : F.Core = true) {t₁ t₁' : GTm F n} (t₂ : GTm F n) :
+  | unitCong {n : ℕ} (h : F.Core) {t₁ t₁' : GTm F n} (t₂ : GTm F n) :
       GStep underLam t₁ t₁' → GStep underLam (letunit h t₁ t₂) (letunit h t₁' t₂)
-  | unitBeta {n : ℕ} (h : F.Core = true) (t₂ : GTm F n) :
+  | unitBeta {n : ℕ} (h : F.Core) (t₂ : GTm F n) :
       GStep underLam (letunit h (unit h) t₂) t₂
-  | congCase {n : ℕ} (h : F.Core = true) {t t' : GTm F n} (t₁ t₂ : GTm F (n + 1)) :
+  | congCase {n : ℕ} (h : F.Core) {t t' : GTm F n} (t₁ t₂ : GTm F (n + 1)) :
       GStep underLam t t' → GStep underLam (case h t t₁ t₂) (case h t' t₁ t₂)
-  | caseInl {n : ℕ} (h : F.Core = true) (t : GTm F n) (t₁ t₂ : GTm F (n + 1)) :
+  | caseInl {n : ℕ} (h : F.Core) (t : GTm F n) (t₁ t₂ : GTm F (n + 1)) :
       GStep underLam (case h (inl h t) t₁ t₂) (t₁.subst1 t)
-  | caseInr {n : ℕ} (h : F.Core = true) (t : GTm F n) (t₁ t₂ : GTm F (n + 1)) :
+  | caseInr {n : ℕ} (h : F.Core) (t : GTm F n) (t₁ t₂ : GTm F (n + 1)) :
       GStep underLam (case h (inr h t) t₁ t₂) (t₂.subst1 t)
 
 /-- Reflexive-transitive closure of `GStep b`. -/
@@ -65,17 +65,17 @@ inductive GAxF (etaPS : Bool) : {n : ℕ} → GTm F n → GTm F n → Prop
       GAxF etaPS (app (letbox h t₁ t₂) t₀) (letbox h t₁ (app t₂ (shift t₀)))
   | letCommBox {n : ℕ} (h : F.Modal = true) (t₁ : GTm F n) (t₂ : GTm F (n + 1)) :
       GAxF etaPS (letbox h (box h t₁) (box h t₂)) (box h (letbox h (box h t₁) t₂))
-  | betaUnit {n : ℕ} (h : F.Core = true) (t : GTm F n) : GAxF etaPS (letunit h (unit h) t) t
-  | etaUnit {n : ℕ} (h : F.Core = true) (t : GTm F n) : GAxF etaPS (letunit h t (unit h)) (unit h)
-  | betaProd {n : ℕ} (h : F.Core = true) (t₁ t₂ : GTm F n) (t : GTm F (n + 2)) :
+  | betaUnit {n : ℕ} (h : F.Core) (t : GTm F n) : GAxF etaPS (letunit h (unit h) t) t
+  | etaUnit {n : ℕ} (h : F.Core) (t : GTm F n) : GAxF etaPS (letunit h t (unit h)) (unit h)
+  | betaProd {n : ℕ} (h : F.Core) (t₁ t₂ : GTm F n) (t : GTm F (n + 2)) :
       GAxF etaPS (letpair h (pair h t₁ t₂) t) (t.subst2 t₁ t₂)
-  | etaProd {n : ℕ} (he : etaPS = true) (h : F.Core = true) (t : GTm F n) :
+  | etaProd {n : ℕ} (he : etaPS = true) (h : F.Core) (t : GTm F n) :
       GAxF etaPS (letpair h t (pair h (var 1) (var 0))) t
-  | betaSumOne {n : ℕ} (h : F.Core = true) (t : GTm F n) (t₁ t₂ : GTm F (n + 1)) :
+  | betaSumOne {n : ℕ} (h : F.Core) (t : GTm F n) (t₁ t₂ : GTm F (n + 1)) :
       GAxF etaPS (case h (inl h t) t₁ t₂) (t₁.subst1 t)
-  | betaSumTwo {n : ℕ} (h : F.Core = true) (t : GTm F n) (t₁ t₂ : GTm F (n + 1)) :
+  | betaSumTwo {n : ℕ} (h : F.Core) (t : GTm F n) (t₁ t₂ : GTm F (n + 1)) :
       GAxF etaPS (case h (inr h t) t₁ t₂) (t₂.subst1 t)
-  | etaSum {n : ℕ} (he : etaPS = true) (h : F.Core = true) (t : GTm F n) :
+  | etaSum {n : ℕ} (he : etaPS = true) (h : F.Core) (t : GTm F n) :
       GAxF etaPS (case h t (inl h (var 0)) (inr h (var 0))) t
 
 /-- The full set of axioms of `≡_G`. -/
@@ -94,17 +94,17 @@ inductive GCong (Ax : ∀ {n : ℕ}, GTm F n → GTm F n → Prop) : {n : ℕ} �
       GCong Ax t t' → GCong Ax (box h t) (box h t')
   | letbox {n : ℕ} (h : F.Modal = true) {t₁ t₁' : GTm F n} {t₂ t₂' : GTm F (n + 1)} :
       GCong Ax t₁ t₁' → GCong Ax t₂ t₂' → GCong Ax (letbox h t₁ t₂) (letbox h t₁' t₂')
-  | pair {n : ℕ} (h : F.Core = true) {t₁ t₁' t₂ t₂' : GTm F n} :
+  | pair {n : ℕ} (h : F.Core) {t₁ t₁' t₂ t₂' : GTm F n} :
       GCong Ax t₁ t₁' → GCong Ax t₂ t₂' → GCong Ax (pair h t₁ t₂) (pair h t₁' t₂')
-  | letpair {n : ℕ} (h : F.Core = true) {t₁ t₁' : GTm F n} {t₂ t₂' : GTm F (n + 2)} :
+  | letpair {n : ℕ} (h : F.Core) {t₁ t₁' : GTm F n} {t₂ t₂' : GTm F (n + 2)} :
       GCong Ax t₁ t₁' → GCong Ax t₂ t₂' → GCong Ax (letpair h t₁ t₂) (letpair h t₁' t₂')
-  | letunit {n : ℕ} (h : F.Core = true) {t₁ t₁' t₂ t₂' : GTm F n} :
+  | letunit {n : ℕ} (h : F.Core) {t₁ t₁' t₂ t₂' : GTm F n} :
       GCong Ax t₁ t₁' → GCong Ax t₂ t₂' → GCong Ax (letunit h t₁ t₂) (letunit h t₁' t₂')
-  | inl {n : ℕ} (h : F.Core = true) {t t' : GTm F n} :
+  | inl {n : ℕ} (h : F.Core) {t t' : GTm F n} :
       GCong Ax t t' → GCong Ax (inl h t) (inl h t')
-  | inr {n : ℕ} (h : F.Core = true) {t t' : GTm F n} :
+  | inr {n : ℕ} (h : F.Core) {t t' : GTm F n} :
       GCong Ax t t' → GCong Ax (inr h t) (inr h t')
-  | case {n : ℕ} (h : F.Core = true) {t t' : GTm F n} {t₁ t₁' t₂ t₂' : GTm F (n + 1)} :
+  | case {n : ℕ} (h : F.Core) {t t' : GTm F n} {t₁ t₁' t₂ t₂' : GTm F (n + 1)} :
       GCong Ax t t' → GCong Ax t₁ t₁' → GCong Ax t₂ t₂' →
       GCong Ax (case h t t₁ t₂) (case h t' t₁' t₂')
 

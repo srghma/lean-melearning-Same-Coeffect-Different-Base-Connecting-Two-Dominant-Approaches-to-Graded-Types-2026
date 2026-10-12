@@ -50,28 +50,28 @@ inductive GTyped : {n : ℕ} → (Fin n → GTy R F) → (Fin n → R) → GTm F
       GTyped Γ (δ₁ + δ₂) (.letbox h t₁ t₂) B
   /-- product introduction -/
   | pair {n : ℕ} {Γ : Fin n → GTy R F} {δ₁ δ₂ : Fin n → R} {t₁ t₂ : GTm F n} {A B : GTy R F}
-      (h : F.Core = true) :
+      (h : F.Core) :
       GTyped Γ δ₁ t₁ A → GTyped Γ δ₂ t₂ B → GTyped Γ (δ₁ + δ₂) (.pair h t₁ t₂) (.prod h A B)
   /-- product elimination: the context of the scrutinee is scaled by `r` -/
   | letpair {n : ℕ} {Γ : Fin n → GTy R F} {δ₁ δ₂ : Fin n → R} {t₁ : GTm F n}
-      {t₂ : GTm F (n + 2)} {r : R} {A B C : GTy R F} (h : F.Core = true) :
+      {t₂ : GTm F (n + 2)} {r : R} {A B C : GTy R F} (h : F.Core) :
       GTyped Γ δ₁ t₁ (.prod h A B) → GTyped (B .: A .: Γ) (r .: r .: δ₂) t₂ C →
       GTyped Γ (r • δ₁ + δ₂) (.letpair h t₁ t₂) C
   /-- unit introduction -/
-  | unit {n : ℕ} {Γ : Fin n → GTy R F} (h : F.Core = true) : GTyped Γ 0 (.unit h) (.unit h)
+  | unit {n : ℕ} {Γ : Fin n → GTy R F} (h : F.Core) : GTyped Γ 0 (.unit h) (.unit h)
   /-- unit elimination -/
   | letunit {n : ℕ} {Γ : Fin n → GTy R F} {δ₁ δ₂ : Fin n → R} {t₁ t₂ : GTm F n} {A : GTy R F}
-      (h : F.Core = true) (r : R) :
+      (h : F.Core) (r : R) :
       GTyped Γ δ₁ t₁ (.unit h) → GTyped Γ δ₂ t₂ A → GTyped Γ (r • δ₁ + δ₂) (.letunit h t₁ t₂) A
   /-- left injection -/
   | inl {n : ℕ} {Γ : Fin n → GTy R F} {δ : Fin n → R} {t : GTm F n} {A B : GTy R F}
-      (h : F.Core = true) : GTyped Γ δ t A → GTyped Γ δ (.inl h t) (.sum h A B)
+      (h : F.Core) : GTyped Γ δ t A → GTyped Γ δ (.inl h t) (.sum h A B)
   /-- right injection -/
   | inr {n : ℕ} {Γ : Fin n → GTy R F} {δ : Fin n → R} {t : GTm F n} {A B : GTy R F}
-      (h : F.Core = true) : GTyped Γ δ t B → GTyped Γ δ (.inr h t) (.sum h A B)
+      (h : F.Core) : GTyped Γ δ t B → GTyped Γ δ (.inr h t) (.sum h A B)
   /-- sum elimination, with side condition `1 ⊑ r` -/
   | case {n : ℕ} {Γ : Fin n → GTy R F} {δ₁ δ₂ : Fin n → R} {t : GTm F n} {t₁ t₂ : GTm F (n + 1)}
-      {r : R} {A B C : GTy R F} (h : F.Core = true) :
+      {r : R} {A B C : GTy R F} (h : F.Core) :
       GTyped Γ δ₁ t (.sum h A B) → GTyped (A .: Γ) (r .: δ₂) t₁ C →
       GTyped (B .: Γ) (r .: δ₂) t₂ C → 1 ≤ r → GTyped Γ (r • δ₁ + δ₂) (.case h t t₁ t₂) C
 

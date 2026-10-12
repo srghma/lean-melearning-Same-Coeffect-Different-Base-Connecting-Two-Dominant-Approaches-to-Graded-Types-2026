@@ -29,38 +29,38 @@ inductive LStep : {n : ℕ} → LTm F n → LTm F n → Prop
       LStep (letbox (box t₁) t₂) (t₂.subst1 t₁)
   | congLetL {n : ℕ} {t₁ t₁' : LTm F n} (t₂ : LTm F (n + 1)) :
       LStep t₁ t₁' → LStep (letbox t₁ t₂) (letbox t₁' t₂)
-  | prodCong {n : ℕ} (h : F.Core = true) {t₁ t₁' : LTm F n} (t₂ : LTm F (n + 2)) :
+  | prodCong {n : ℕ} (h : F.Core) {t₁ t₁' : LTm F n} (t₂ : LTm F (n + 2)) :
       LStep t₁ t₁' → LStep (letpair h t₁ t₂) (letpair h t₁' t₂)
-  | prodBeta {n : ℕ} (h : F.Core = true) (t₁ t₂ : LTm F n) (t₃ : LTm F (n + 2)) :
+  | prodBeta {n : ℕ} (h : F.Core) (t₁ t₂ : LTm F n) (t₃ : LTm F (n + 2)) :
       LStep (letpair h (pair h t₁ t₂) t₃) (t₃.subst2 t₁ t₂)
-  | unitCong {n : ℕ} (h : F.Core = true) {t₁ t₁' : LTm F n} (t₂ : LTm F n) :
+  | unitCong {n : ℕ} (h : F.Core) {t₁ t₁' : LTm F n} (t₂ : LTm F n) :
       LStep t₁ t₁' → LStep (letunit h t₁ t₂) (letunit h t₁' t₂)
-  | unitBeta {n : ℕ} (h : F.Core = true) (t₂ : LTm F n) : LStep (letunit h (unit h) t₂) t₂
-  | congCase {n : ℕ} (h : F.Core = true) {t t' : LTm F n} (t₁ t₂ : LTm F (n + 1)) :
+  | unitBeta {n : ℕ} (h : F.Core) (t₂ : LTm F n) : LStep (letunit h (unit h) t₂) t₂
+  | congCase {n : ℕ} (h : F.Core) {t t' : LTm F n} (t₁ t₂ : LTm F (n + 1)) :
       LStep t t' → LStep (case h t t₁ t₂) (case h t' t₁ t₂)
-  | caseInl {n : ℕ} (h : F.Core = true) (t : LTm F n) (t₁ t₂ : LTm F (n + 1)) :
+  | caseInl {n : ℕ} (h : F.Core) (t : LTm F n) (t₁ t₂ : LTm F (n + 1)) :
       LStep (case h (inl h t) t₁ t₂) (t₁.subst1 t)
-  | caseInr {n : ℕ} (h : F.Core = true) (t : LTm F n) (t₁ t₂ : LTm F (n + 1)) :
+  | caseInr {n : ℕ} (h : F.Core) (t : LTm F n) (t₁ t₂ : LTm F (n + 1)) :
       LStep (case h (inr h t) t₁ t₂) (t₂.subst1 t)
-  | pushProdCong {n : ℕ} (h : F.Push = true) {t t' : LTm F n} :
+  | pushProdCong {n : ℕ} (h : F.Push) {t t' : LTm F n} :
       LStep t t' → LStep (pushProd h t) (pushProd h t')
-  | pushProdBoxCong {n : ℕ} (h : F.Push = true) {t t' : LTm F n} :
+  | pushProdBoxCong {n : ℕ} (h : F.Push) {t t' : LTm F n} :
       LStep t t' → LStep (pushProd h (box t)) (pushProd h (box t'))
-  | pushProd {n : ℕ} (h : F.Push = true) (hc : F.Core = true) (t₁ t₂ : LTm F n) :
+  | pushProd {n : ℕ} (h : F.Push) (hc : F.Core) (t₁ t₂ : LTm F n) :
       LStep (pushProd h (box (pair hc t₁ t₂))) (pair hc (box t₁) (box t₂))
-  | pushSumCong {n : ℕ} (h : F.Push = true) {t t' : LTm F n} :
+  | pushSumCong {n : ℕ} (h : F.Push) {t t' : LTm F n} :
       LStep t t' → LStep (pushSum h t) (pushSum h t')
-  | pushSumBoxCong {n : ℕ} (h : F.Push = true) {t t' : LTm F n} :
+  | pushSumBoxCong {n : ℕ} (h : F.Push) {t t' : LTm F n} :
       LStep t t' → LStep (pushSum h (box t)) (pushSum h (box t'))
-  | pushSumInl {n : ℕ} (h : F.Push = true) (hc : F.Core = true) (t : LTm F n) :
+  | pushSumInl {n : ℕ} (h : F.Push) (hc : F.Core) (t : LTm F n) :
       LStep (pushSum h (box (inl hc t))) (inl hc (box t))
-  | pushSumInr {n : ℕ} (h : F.Push = true) (hc : F.Core = true) (t : LTm F n) :
+  | pushSumInr {n : ℕ} (h : F.Push) (hc : F.Core) (t : LTm F n) :
       LStep (pushSum h (box (inr hc t))) (inr hc (box t))
-  | pushUnitCong {n : ℕ} (h : F.Push = true) {t t' : LTm F n} :
+  | pushUnitCong {n : ℕ} (h : F.Push) {t t' : LTm F n} :
       LStep t t' → LStep (pushUnit h t) (pushUnit h t')
-  | pushUnitBoxCong {n : ℕ} (h : F.Push = true) {t t' : LTm F n} :
+  | pushUnitBoxCong {n : ℕ} (h : F.Push) {t t' : LTm F n} :
       LStep t t' → LStep (pushUnit h (box t)) (pushUnit h (box t'))
-  | pushUnit {n : ℕ} (h : F.Push = true) (hc : F.Core = true) :
+  | pushUnit {n : ℕ} (h : F.Push) (hc : F.Core) :
       LStep (pushUnit h (box (unit hc)) : LTm F n) (unit hc)
 
 /-- Reflexive-transitive closure `⇝_L*`. -/
@@ -99,33 +99,33 @@ inductive LAxF (S : LAxSel) : {n : ℕ} → LTm F n → LTm F n → Prop
       LAxF S (app (letbox t₁ t₂) t₀) (letbox t₁ (app t₂ (shift t₀)))
   | letCommBox {n : ℕ} (he : S.letComm = true) (t₁ : LTm F n) (t₂ : LTm F (n + 1)) :
       LAxF S (letbox (box t₁) (box t₂)) (box (letbox (box t₁) t₂))
-  | betaUnit {n : ℕ} (h : F.Core = true) (t : LTm F n) : LAxF S (letunit h (unit h) t) t
-  | etaUnit {n : ℕ} (h : F.Core = true) (t : LTm F n) : LAxF S (letunit h t (unit h)) (unit h)
-  | betaProd {n : ℕ} (h : F.Core = true) (t₁ t₂ : LTm F n) (t : LTm F (n + 2)) :
+  | betaUnit {n : ℕ} (h : F.Core) (t : LTm F n) : LAxF S (letunit h (unit h) t) t
+  | etaUnit {n : ℕ} (h : F.Core) (t : LTm F n) : LAxF S (letunit h t (unit h)) (unit h)
+  | betaProd {n : ℕ} (h : F.Core) (t₁ t₂ : LTm F n) (t : LTm F (n + 2)) :
       LAxF S (letpair h (pair h t₁ t₂) t) (t.subst2 t₁ t₂)
-  | etaProd {n : ℕ} (h : F.Core = true) (t : LTm F n) :
+  | etaProd {n : ℕ} (h : F.Core) (t : LTm F n) :
       LAxF S (letpair h t (pair h (var 1) (var 0))) t
-  | betaSumOne {n : ℕ} (h : F.Core = true) (t : LTm F n) (t₁ t₂ : LTm F (n + 1)) :
+  | betaSumOne {n : ℕ} (h : F.Core) (t : LTm F n) (t₁ t₂ : LTm F (n + 1)) :
       LAxF S (case h (inl h t) t₁ t₂) (t₁.subst1 t)
-  | betaSumTwo {n : ℕ} (h : F.Core = true) (t : LTm F n) (t₁ t₂ : LTm F (n + 1)) :
+  | betaSumTwo {n : ℕ} (h : F.Core) (t : LTm F n) (t₁ t₂ : LTm F (n + 1)) :
       LAxF S (case h (inr h t) t₁ t₂) (t₂.subst1 t)
-  | etaSum {n : ℕ} (h : F.Core = true) (t : LTm F n) :
+  | etaSum {n : ℕ} (h : F.Core) (t : LTm F n) :
       LAxF S (case h t (inl h (var 0)) (inr h (var 0))) t
-  | pushProdBeta {n : ℕ} (h : F.Push = true) (hc : F.Core = true) (t₁ t₂ : LTm F n) :
+  | pushProdBeta {n : ℕ} (h : F.Push) (hc : F.Core) (t₁ t₂ : LTm F n) :
       LAxF S (pushProd h (box (pair hc t₁ t₂))) (pair hc (box t₁) (box t₂))
   /-- `let ⟨x', y'⟩ = push⊗ t in let [x] = x' in let [y] = y' in [⟨x, y⟩] ≡ t` -/
-  | pushProdEta {n : ℕ} (he : S.pushEta = true) (h : F.Push = true) (hc : F.Core = true) (t : LTm F n) :
+  | pushProdEta {n : ℕ} (he : S.pushEta = true) (h : F.Push) (hc : F.Core) (t : LTm F n) :
       LAxF S (letpair hc (pushProd h t) (letbox (var 1) (letbox (var 1) (box (pair hc (var 1) (var 0))))))
         t
-  | pushSumBetaOne {n : ℕ} (h : F.Push = true) (hc : F.Core = true) (t : LTm F n) :
+  | pushSumBetaOne {n : ℕ} (h : F.Push) (hc : F.Core) (t : LTm F n) :
       LAxF S (pushSum h (box (inl hc t))) (inl hc (box t))
-  | pushSumBetaTwo {n : ℕ} (h : F.Push = true) (hc : F.Core = true) (t : LTm F n) :
+  | pushSumBetaTwo {n : ℕ} (h : F.Push) (hc : F.Core) (t : LTm F n) :
       LAxF S (pushSum h (box (inr hc t))) (inr hc (box t))
   /-- `case push⊕ t of {inj₁ x → let [x'] = x in [inj₁ x']; inj₂ y → let [y'] = y in [inj₂ y']} ≡ t` -/
-  | pushSumEta {n : ℕ} (he : S.pushEta = true) (h : F.Push = true) (hc : F.Core = true) (t : LTm F n) :
+  | pushSumEta {n : ℕ} (he : S.pushEta = true) (h : F.Push) (hc : F.Core) (t : LTm F n) :
       LAxF S (case hc (pushSum h t) (letbox (var 0) (box (inl hc (var 0))))
         (letbox (var 0) (box (inr hc (var 0))))) t
-  | pushUnitBeta {n : ℕ} (h : F.Push = true) (hc : F.Core = true) :
+  | pushUnitBeta {n : ℕ} (h : F.Push) (hc : F.Core) :
       LAxF S (pushUnit h (box (unit hc)) : LTm F n) (unit hc)
 
 /-- All axioms of `≡_L`. -/
@@ -143,24 +143,24 @@ inductive LCong (Ax : ∀ {n : ℕ}, LTm F n → LTm F n → Prop) : {n : ℕ} �
   | box {n : ℕ} {t t' : LTm F n} : LCong Ax t t' → LCong Ax (box t) (box t')
   | letbox {n : ℕ} {t₁ t₁' : LTm F n} {t₂ t₂' : LTm F (n + 1)} :
       LCong Ax t₁ t₁' → LCong Ax t₂ t₂' → LCong Ax (letbox t₁ t₂) (letbox t₁' t₂')
-  | pair {n : ℕ} (h : F.Core = true) {t₁ t₁' t₂ t₂' : LTm F n} :
+  | pair {n : ℕ} (h : F.Core) {t₁ t₁' t₂ t₂' : LTm F n} :
       LCong Ax t₁ t₁' → LCong Ax t₂ t₂' → LCong Ax (pair h t₁ t₂) (pair h t₁' t₂')
-  | letpair {n : ℕ} (h : F.Core = true) {t₁ t₁' : LTm F n} {t₂ t₂' : LTm F (n + 2)} :
+  | letpair {n : ℕ} (h : F.Core) {t₁ t₁' : LTm F n} {t₂ t₂' : LTm F (n + 2)} :
       LCong Ax t₁ t₁' → LCong Ax t₂ t₂' → LCong Ax (letpair h t₁ t₂) (letpair h t₁' t₂')
-  | letunit {n : ℕ} (h : F.Core = true) {t₁ t₁' t₂ t₂' : LTm F n} :
+  | letunit {n : ℕ} (h : F.Core) {t₁ t₁' t₂ t₂' : LTm F n} :
       LCong Ax t₁ t₁' → LCong Ax t₂ t₂' → LCong Ax (letunit h t₁ t₂) (letunit h t₁' t₂')
-  | inl {n : ℕ} (h : F.Core = true) {t t' : LTm F n} :
+  | inl {n : ℕ} (h : F.Core) {t t' : LTm F n} :
       LCong Ax t t' → LCong Ax (inl h t) (inl h t')
-  | inr {n : ℕ} (h : F.Core = true) {t t' : LTm F n} :
+  | inr {n : ℕ} (h : F.Core) {t t' : LTm F n} :
       LCong Ax t t' → LCong Ax (inr h t) (inr h t')
-  | case {n : ℕ} (h : F.Core = true) {t t' : LTm F n} {t₁ t₁' t₂ t₂' : LTm F (n + 1)} :
+  | case {n : ℕ} (h : F.Core) {t t' : LTm F n} {t₁ t₁' t₂ t₂' : LTm F (n + 1)} :
       LCong Ax t t' → LCong Ax t₁ t₁' → LCong Ax t₂ t₂' →
       LCong Ax (case h t t₁ t₂) (case h t' t₁' t₂')
-  | pushProd {n : ℕ} (h : F.Push = true) {t t' : LTm F n} :
+  | pushProd {n : ℕ} (h : F.Push) {t t' : LTm F n} :
       LCong Ax t t' → LCong Ax (pushProd h t) (pushProd h t')
-  | pushSum {n : ℕ} (h : F.Push = true) {t t' : LTm F n} :
+  | pushSum {n : ℕ} (h : F.Push) {t t' : LTm F n} :
       LCong Ax t t' → LCong Ax (pushSum h t) (pushSum h t')
-  | pushUnit {n : ℕ} (h : F.Push = true) {t t' : LTm F n} :
+  | pushUnit {n : ℕ} (h : F.Push) {t t' : LTm F n} :
       LCong Ax t t' → LCong Ax (pushUnit h t) (pushUnit h t')
 
 /-- The equational theory `t ≡_L t'`. -/

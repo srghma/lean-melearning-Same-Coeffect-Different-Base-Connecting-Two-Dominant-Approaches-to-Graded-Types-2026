@@ -38,10 +38,10 @@ def GLevel.toL : GLevel → LLevel
   | .modal => .base
   | .core => .push
 
-lemma GLevel.toL_core {F : GLevel} (h : F.Core = true) : F.toL.Core = true := by
+lemma GLevel.toL_core {F : GLevel} (h : F.Core) : F.toL.Core := by
   cases F <;> simp_all [GLevel.Core, GLevel.toL, LLevel.Core]
 
-lemma GLevel.toL_push {F : GLevel} (h : F.Core = true) : F.toL.Push = true := by
+lemma GLevel.toL_push {F : GLevel} (h : F.Core) : F.toL.Push := by
   cases F <;> simp_all [GLevel.Core, GLevel.toL, LLevel.Push]
 
 variable {R : Type u} {F : GLevel}
@@ -409,7 +409,7 @@ theorem GCong.toL {n : ℕ} {t t' : GTm F n} (h : GCong (GAxF false) t t') : LEq
       (.letbox (.refl _) (ih₂.rename _))
 
 /-- Without products and sums the η-rules for them cannot occur, so `≡_G` and `≡_G^{-η⊗⊕}` agree. -/
-theorem GAxF.noEta_of_not_core {n : ℕ} (hF : F.Core = false) {t t' : GTm F n}
+theorem GAxF.noEta_of_not_core {n : ℕ} (hF : ¬ F.Core) {t t' : GTm F n}
     (h : GAxF true t t') : GAxF false t t' := by
   cases h with
   | etaProd _ h' _ => exact absurd h' (by simp [hF])
@@ -428,7 +428,7 @@ theorem GAxF.noEta_of_not_core {n : ℕ} (hF : F.Core = false) {t t' : GTm F n}
   | betaSumTwo => exact .betaSumTwo _ _ _ _
 
 /-- For Graded Base and Graded Modal Base (no products/sums) the full theory `≡_G` is preserved. -/
-theorem GEq.toL {n : ℕ} (hF : F.Core = false) {t t' : GTm F n} (h : GEq t t') :
+theorem GEq.toL {n : ℕ} (hF : ¬ F.Core) {t t' : GTm F n} (h : GEq t t') :
     LEq t.toL t'.toL :=
   GCong.toL (h.mono (fun h => GAxF.noEta_of_not_core hF h))
 
