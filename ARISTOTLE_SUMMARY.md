@@ -1,3 +1,34 @@
+# Summary of changes for run f3d30fa2-f5a7-421e-b8b5-68aa8318ed6a
+I fixed the wrong grade for `f` in the paper's "apply twice" example, in the two places where it appeared.
+
+- **`calculi-ottput.tex`** (the §2.2 example after Fig. 3): the conclusion of the derivation tree now gives `f` the grade \((1 + r)\) instead of \((1+1)\). This is the grade the paper's own application rule \(\Delta_1 + r\cdot\Delta_2\) produces. The grade \(x :_{(r\cdot r)}\) was already correct and is unchanged.
+- **`introduction-ottput.tex`**: the generalised type now reads \((A \xrightarrow{r} A) \xrightarrow{1+r} (A \xrightarrow{r*r} A)\) instead of having \(\xrightarrow{2}\) on the outer arrow. I left the sentence just before it alone. That sentence gives the type \((A \xrightarrow{1} A) \xrightarrow{2} (A \xrightarrow{1} A)\) for the case \(r = 1\), where \(1 + 1 = 2\) is correct.
+
+The corrected text matches what the project already proves in `RequestProject/Sec2/Graded/Examples.lean`: `twice_body` proves the derivation with \(f :_{1+r}\), and `twice_typed` proves the corrected type. I updated that file's header comment and `READING_GUIDE.md` to say the paper sources are now corrected. The two theorems about the old \((1+1)\) version are kept and now describe it as the "originally printed" judgment: one shows it holds when \(r \sqsubseteq 1\), the other that it fails over \(\mathbb{N}\) with \(r = 2\). I updated their Properties-table entries to match, and they stay proved.
+
+No Lean statements or proofs changed. The whole project still builds with no `sorry`, and the changes are committed. I didn't recompile the paper PDF from the `.tex` files.
+
+# Summary of changes for run d711f6f1-a168-4ab1-9e98-88253de03325
+**No, it wasn't formalized before.** Nothing in the project covered this example, so I added it in a new file, `RequestProject/Sec2/Graded/Examples.lean`. Formalizing it showed that **the grade printed for `f` in the paper's conclusion is wrong**.
+
+**The grade problem.** The paper's application rule gives the conclusion the grades \(\Delta_1 + r\cdot\Delta_2\). In the outer application:
+- \(\Delta_1\) is \(f :_1\), from the variable rule for the outer `f`.
+- \(\Delta_2\) is \(f :_1, x :_r\), from the inner derivation of `f x`.
+
+So the conclusion gives `f` grade \(1 + r\cdot 1 = 1 + r\), not \((1+1)\). The grade \(x :_{r\cdot r}\) is correct. (The paper's introduction also gives the type \((A \xrightarrow{r} A) \xrightarrow{2} (A \xrightarrow{r*r} A)\), with grade 2 on `f`, which has the same problem.)
+
+**What I proved.** In the formalization the term is the body `app (var 1) (app (var 1) (var 0))`, where `x` is index 0 and `f` is index 1, with `Fin` de Bruijn indices as in the rest of the project. Each theorem is about the existing Graded Base typing judgment `GTyped`:
+- `twice_body`: `f :_(1 + r) (A →^r A), x :_(r·r) A ⊢ f (f x) : A`, for any pre-ordered semiring. This is the paper's derivation tree with the grades its rules actually produce.
+- `twice_typed`: `⊢ λf.λx. f (f x) : (A →^r A) →^(1 + r) (A →^(r·r) A)`.
+- `twice_body_paper_of_le_one`: the paper's judgment as printed, with `f :_(1+1)`, holds whenever \(r \sqsubseteq 1\), using the approximation rule. For example, it holds for every \(r\) in the linearity semiring \(\{0,1,\omega\}\), because \(1+1=\omega\) there.
+- `twice_body_paper_not_always`: the printed judgment can fail. Over \(\mathbb{N}\) with the usual order and \(r = 2\), it has no derivation, because every derivation of `f (f x)` gives `f` a grade of at least \(1 + r = 3\). The proof uses two inversion lemmas, for variables and for applications, that account for the approximation rule. To use \(\mathbb{N}\) here I also added an instance making \(\mathbb{N}\) with its usual order a pre-ordered semiring.
+
+**Checks.** The whole project builds with no `sorry`, no warnings and no errors. The four theorems use only the axioms `propext` and `Quot.sound`. I added an optional entry for the new file to `READING_GUIDE.md`, registered the four results in the Properties table as proved, and committed the work.
+
+## Suggested follow-up
+
+The paper's example gives `f` the grade (1+1) in its conclusion, but its own application rule gives 1 + r. The introduction's type `(A →^r A) →^2 (A →^(r*r) A)` has the same problem. If you like, I can draft corrected text for both places in the `.tex` files.
+
 # Summary of changes for run 935c8c07-89f0-4c93-8930-cc2456390bf5
 I reorganized the files in two levels: first by paper section, then by meaning. The full project builds with no `sorry`, no warnings and no errors. I spot-checked the axioms of two of the main theorems (`arrow_LB_GPB` and `arrow_GMC_LC_unsound`), and both use only `propext` and `Quot.sound`.
 

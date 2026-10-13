@@ -69,6 +69,11 @@ LC → GMC and LPC → GMC.
 10. **`Sec2/Graded/Semantics.lean`.** `GStep b`: `GStep False` is call-by-name reduction, and
     `GStep True` also reduces under λ (this is the target of the CPS translation). `GAxF`,
     `GCong` and `GEq` are the equational theory.
+    *Optional:* **`Sec2/Graded/Examples.lean`** works through the §2.2 example
+    `h = λf. λx. f (f x)` (`twice_body`, `twice_typed`). The application rule gives `f` grade
+    `1 + r`, not the `1 + 1` originally printed in the paper (the `.tex` sources are now corrected
+    to `1 + r`). The originally printed judgment holds when `r ⊑ 1`
+    (`twice_body_paper_of_le_one`) but not in general (`twice_body_paper_not_always`).
 
 ## 4. The dotted arrows (inclusions)
 
