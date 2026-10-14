@@ -18,6 +18,11 @@ on Plotkin's call-by-name CPS translation (answer type `K`, the base type):
 
 (This file reuses the context translation `toGGrades (GradeMap.id R)` of Section 3.)
 
+An alternative, direct-style translation (`⦇A ⊸ B⦈ = ⦇A⦈ →¹ ⦇B⦈`, `⦇K⦈ = K`,
+`⦇□_r A⦈ = ∀β. (⦇A⦈ →^r β) →¹ β`, `⦇[t]⦈ = Λβ. λf. f ⦇t⦈`,
+`⦇let [x] = t₁ in t₂⦈ = (⦇t₁⦈ @ ⦇B⦈) (λx. ⦇t₂⦈)`) needs type polymorphism, so it targets Graded
+Poly Base; see `Sec4/Translations/LinearToPoly/Direct.lean`.
+
 Main results (Theorem 2.7):
 * `LTyped.cps`: type preservation;
 * `LStep.cps`: operational correspondence. The paper states `⦇t⦈ ⇝*_βG ⦇t'⦈`; as in the paper's

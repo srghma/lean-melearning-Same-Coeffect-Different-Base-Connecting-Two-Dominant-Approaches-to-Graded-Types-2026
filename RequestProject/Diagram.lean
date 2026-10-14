@@ -8,6 +8,7 @@ public import RequestProject.Sec3.Translations.LinearToGradedModal
 public import RequestProject.Sec3.Translations.ObservationalIso
 public import RequestProject.Sec4.Translations.LinearToPoly.Basic
 public import RequestProject.Sec4.Translations.LinearToPoly.Equations
+public import RequestProject.Sec4.Translations.LinearToPoly.Direct
 public import RequestProject.Sec4.Counterexamples.LinearToPolyLiteral
 public import RequestProject.Sec5.Counterexamples.GradedModalCoreToLinearCore
 public import RequestProject.Sec5.Counterexamples.PushCoreSimulation
@@ -85,7 +86,8 @@ theorem arrow_LB_GB :
     (∀ {n : ℕ} {t t' : LTm LinearBase n}, LCong (LAxF LAxSel.cps) t t' → GEq t.cps t'.cps) :=
   ⟨fun h => h.cps, fun h => h.cps, fun h => h.cps⟩
 
-/-- `LB → GPB` (Theorem 4.1). The translation is defined on typing derivations (`LToP`):
+/-- `LB → GPB` (Theorem 4.1), which is also the direct-style alternative to the CPS translation
+`LB → GB` (see `Sec4/Translations/LinearToPoly/Direct.lean`). The translation is defined on typing derivations (`LToP`):
 * type preservation: every Linear Base derivation has a translation, and translations are well
   typed;
 * operational correspondence: for every derivation `Π` of `Γ ⊢ t : A` and step `t ⇝ t'` there is

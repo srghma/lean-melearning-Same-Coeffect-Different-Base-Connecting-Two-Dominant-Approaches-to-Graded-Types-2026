@@ -41,7 +41,8 @@ RequestProject/
 │   ├── Inclusions/   GradedToPoly.lean  GB ⊆ GPB
 │   ├── Translations/ LinearToPoly/      LB → GPB: Basic (derivation-based translation),
 │   │                                    Structural, Subst, Soundness (operational
-│   │                                    correspondence), Equations (equation preservation)
+│   │                                    correspondence), Equations (equation preservation),
+│   │                                    Direct (as the direct-style alternative to CPS)
 │   └── Counterexamples/ LinearToPolyLiteral.lean  literal reading of Thm 4.1 fails
 └── Sec5/                             §5  core calculi
     └── Counterexamples/ GradedModalCoreToLinearCore.lean  GMC ⇢ LC is unsound

@@ -106,6 +106,11 @@ LC → GMC and LPC → GMC.
     theory `≡_{G∀}`. Skim these files; they are infrastructure.
 19. **`Sec4/Translations/LinearToPoly/Basic.lean`** (§4.2). The translation is defined on *typing
     derivations*, as a relation `LToP Γ u t A p`. Read `LTyped.toP_exists` and `LToP.typed`.
+    *Optional:* **`Sec4/Translations/LinearToPoly/Direct.lean`** presents this translation as the
+    direct-style alternative to the CPS translation of step 15: it restates the type and context
+    clauses, proves that erasing type annotations gives a map on terms (`LToP.erase_eq`), and shows
+    that fixing `β := K` to stay inside Graded Base breaks type preservation
+    (`directK_not_typeSound`).
 20. **`Sec4/Linear/UsageAlgebra.lean`.** Arithmetic on usage contexts, needed for simultaneous
     substitution (`SubstUse`). Read it when the next files need it.
 21. **`Sec4/Translations/LinearToPoly/Structural.lean`, `…/Subst.lean`, `…/Soundness.lean`,

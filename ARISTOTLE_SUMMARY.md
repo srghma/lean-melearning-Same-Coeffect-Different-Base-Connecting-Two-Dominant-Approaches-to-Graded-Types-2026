@@ -1,3 +1,17 @@
+# Summary of changes for run c0d223bb-19d9-47b7-be35-024cd918f533
+I added the direct translation as an alternative to the CPS one. It was already formalized, but it can't target Graded Base: \(\forall\beta\), \(\Lambda\beta\) and `@` are not part of Graded Base, so it translates into **Graded Poly Base**. In fact it is exactly the paper's §4.2 translation LB → GPB, which the project already formalizes: types as `LTy.toP`, terms as `LToP` and context grades as `toGGrades (GradeMap.id R)`. Type preservation, operational correspondence and equation preservation are already proved and collected in `arrow_LB_GPB` in `Diagram.lean`.
+
+**New file `RequestProject/Sec4/Translations/LinearToPoly/Direct.lean`** presents it as the direct-style alternative to CPS:
+- **The three type equations and the context translation in your notation**, each proved by `rfl`: \(\Gamma, x : A \mapsto x :_1\), \(\Gamma, x : [A]_r \mapsto x :_r\), and a variable not in \(\Gamma\) gets grade 0. The five term equations are the cases of `LToP` itself.
+- **`LToP.erase_eq` (proved):** the `let` case uses \(⦇B⦈\), so the translation is defined on typing derivations, not terms. This theorem says that the dependence only touches type annotations. If you erase \(\Lambda\) and `@` from the translation of any derivation of `t`, you get `LTm.direct t`. That is the plain term map \(x\mapsto x\), \(\lambda x.t\mapsto\lambda x.⦇t⦈\), \(t_1t_2\mapsto⦇t_1⦈⦇t_2⦈\), \([t]\mapsto\lambda f.f⦇t⦈\), \(\mathsf{let}\,[x]=t_1\,\mathsf{in}\,t_2\mapsto⦇t_1⦈(\lambda x.⦇t_2⦈)\).
+- **`directK_not_typeSound` (proved):** this is why staying in Graded Base would need polymorphism. If you fix \(\beta := K\), giving \(⦇\Box_r A⦈ = (⦇A⦈\to^r K)\to^1 K\), type preservation fails:
+  - In Linear Base, \(z : \Box_1(K\multimap K) \vdash \mathsf{let}\,[x]=z\,\mathsf{in}\,x : K\multimap K\).
+  - Its translation \(z\,(\lambda x.x)\) has no Graded Base typing at \(K\to^1 K\) in the translated context, whatever the grades.
+
+**Documentation:** the CPS file header and the `arrow_LB_GPB` docstring now point to the new file. `READING_GUIDE.md` (optional note under step 19) and `FORMALIZATION.md` list it too.
+
+The whole project builds with no `sorry`. The two new theorems use only `propext` and `Quot.sound` (`LToP.erase_eq` uses only `propext`). Both are registered as proved in the Properties table, and the work is committed and pushed. I didn't change the paper's `.tex` sources. Section 4.2 there already gives this direct translation.
+
 # Summary of changes for run f3d30fa2-f5a7-421e-b8b5-68aa8318ed6a
 I fixed the wrong grade for `f` in the paper's "apply twice" example, in the two places where it appeared.
 
