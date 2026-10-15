@@ -1,0 +1,69 @@
+flowchart LR
+    %% ==========================================
+    %% LEFT COLUMN: Linear-Base Lineage
+    %% ==========================================
+    subgraph Linear ["Linear-Base Lineage"]
+        direction TB
+        LB["Linear Base (LB)<br><i>§2.1 · ⊢_l</i>"]
+        LC["Linear Core (LC)<br><i>§5.1 · ⊗, ⊕</i>"]
+        LPC["Linear Push Core (LPC)<br><i>§5.5 · push</i>"]
+
+        LB -.->|⊆| LC
+        LC -.->|⊆| LPC
+    end
+
+    %% ==========================================
+    %% RIGHT COLUMN: Graded-Base Lineage
+    %% ==========================================
+    subgraph Graded ["Graded-Base Lineage"]
+        direction TB
+        GPB["Graded Poly Base (GPB)<br><i>§4.1 · ∀α</i>"]
+        GB["Graded Base (GB)<br><i>§2.2 · ⊢_g</i>"]
+        GMB["Graded Modal Base (GMB)<br><i>§3.1 · □_r</i>"]
+        GMC["Graded Modal Core (GMC)<br><i>§5.2 · ×, +</i>"]
+
+        GB -.->|⊆| GPB
+        GB -.->|⊆| GMB
+        GMB -.->|⊆| GMC
+    end
+
+    %% ==========================================
+    %% 1. BASE LEVEL TRANSLATIONS
+    %% ==========================================
+    LB -->|🟣 Linear to Graded: CPS ⦇·⦈| GB
+    GB -->|🟢 Graded to Linear: Direct ⟦·⟧| LB
+    LB -->|🟣 Linear to Graded: Church ⦇·⦈| GPB
+    LB <-->|🔵 Mutual: Homomorphic| GMB
+
+    %% ==========================================
+    %% 2. CORE & PUSH LEVEL TRANSLATIONS
+    %% ==========================================
+    LC -->|🟣 Linear to Graded: ⦇·⦈| GMC
+    LPC <-->|🔵 Mutual: push ⦇·⦈ / ⟦·⟧| GMC
+
+    %% ==========================================
+    %% 3. THE UNSOUND / IMPOSSIBLE ARROWS (RED)
+    %% ==========================================
+    GMC -.->|❌ Unsound: ⟦·⟧∘| LC
+    GPB -.->|❌ Impossible: Target lacks ∀| LC
+    GPB -.->|❌ Impossible: Target lacks ∀| LPC
+    LC -.->|❌ Unsound: Church pairs force push| GPB
+
+    %% ==========================================
+    %% STYLING
+    %% ==========================================
+    classDef linearStyle fill:#ede7f6,stroke:#5e35b1,stroke-width:2px;
+    classDef gradedStyle fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
+    class LB,LC,LPC linearStyle;
+    class GB,GPB,GMB,GMC gradedStyle;
+
+    %% 0..4 : Inclusions (Gray)
+    linkStyle 0,1,2,3,4 stroke:#9e9e9e,stroke-width:1.5px;
+    %% 5, 7, 9 : Linear -> Graded (Purple)
+    linkStyle 5,7,9 stroke:#7c4dff,stroke-width:2px;
+    %% 6 : Graded -> Linear (Green)
+    linkStyle 6 stroke:#2e7d32,stroke-width:2px;
+    %% 8, 10 : Mutual Translations (Blue)
+    linkStyle 8,10 stroke:#0288d1,stroke-width:2px;
+    %% 11..14 : Unsound / Impossible (Red)
+    linkStyle 11,12,13,14 stroke:#d32f2f,stroke-width:2px;
