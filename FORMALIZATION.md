@@ -33,8 +33,10 @@ RequestProject/
 │   └── Translations/ GradedToLinear.lean     `⟦-⟧`: GB/GMB → LB, GMC → LPC
 │                     LinearToGradedCPS.lean  CPS, LB → GB
 ├── Sec3/                             §3  graded modal base
-│   └── Translations/ LinearToGradedModal.lean  `⦇-⦈`: LB → GMB, LC → GMC, LPC → GMC
-│                     ObservationalIso.lean     round trips LB ⇄ GMB
+│   ├── Translations/ LinearToGradedModal.lean  `⦇-⦈`: LB → GMB, LC → GMC, LPC → GMC
+│   │                 ObservationalIso.lean     round trips LB ⇄ GMB
+│   └── Examples/     BoxCurry.lean  □_x C →^y D vs C →^(x·y) D: when the candidate maps type
+│                     GranuleFlattening.lean  Granule-style graded `let [x]` (flattening); subject reduction
 ├── Sec4/                             §4  graded poly base
 │   ├── Poly/         Syntax, Typing (with reduction), Subst, Equations (`≡_{G∀}`)
 │   ├── Linear/       UsageAlgebra.lean  arithmetic on usage contexts (for substitution)
@@ -43,6 +45,8 @@ RequestProject/
 │   │                                    Structural, Subst, Soundness (operational
 │   │                                    correspondence), Equations (equation preservation),
 │   │                                    Direct (as the direct-style alternative to CPS)
+│   │                 GradedModalVsPoly.lean  GMB vs GPB: GMB → GPB by composition,
+│   │                                    no type-erasing GPB → GMB
 │   └── Counterexamples/ LinearToPolyLiteral.lean  literal reading of Thm 4.1 fails
 └── Sec5/                             §5  core calculi
     └── Counterexamples/ GradedModalCoreToLinearCore.lean  GMC ⇢ LC is unsound

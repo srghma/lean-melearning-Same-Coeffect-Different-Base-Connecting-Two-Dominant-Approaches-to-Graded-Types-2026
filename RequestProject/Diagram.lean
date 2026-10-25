@@ -12,6 +12,7 @@ public import RequestProject.Sec4.Translations.LinearToPoly.Direct
 public import RequestProject.Sec4.Counterexamples.LinearToPolyLiteral
 public import RequestProject.Sec5.Counterexamples.GradedModalCoreToLinearCore
 public import RequestProject.Sec5.Counterexamples.PushCoreSimulation
+public import RequestProject.Sec4.Translations.GradedModalVsPoly
 
 /-!
 # The diagram of calculi and translations
@@ -164,5 +165,31 @@ theorem arrow_LPC_GMC {S : Type u} [PreorderedSemiring S] (φ : GradeMap R S) :
     (∀ {n : ℕ} {t t' : LTm LinearPushCore n}, LCong (LAxF LAxSel.noPushEta) t t' →
       GEq t.toG t'.toG) :=
   ⟨fun h => h.toG φ, fun h => h.toG_join, LStep.toG_counterexample, fun h => h.toG⟩
+
+/-! ## Comparing GMB and GPB (not an arrow of the diagram) -/
+
+/-- **GMB and GPB are not equivalent in the sense of `LB ⇄ GMB`.**
+* `GMB → GPB` exists, as the composite `GMB → LB → GPB`: it preserves typing and has the
+  operational correspondence of Theorem 4.1;
+* in the other direction there is no translation in the paper, and no type-erasing translation can
+  exist: the closed, well-typed GPB term `λx. (x @ (∀α. α →¹ α)) x` erases to `λx. x x`, which has
+  no typing derivation in GMB (in any context, at any type).
+
+See `Sec4/Translations/GradedModalVsPoly.lean`. -/
+theorem relation_GMB_GPB :
+    (∀ {n : ℕ} {Γ : Fin n → GTy R GradedModalBase} {δ : Fin n → R} {t : GTm GradedModalBase n}
+      {A : GTy R GradedModalBase}, GTyped Γ δ t A →
+      ∃ p : PTm R 0 n, LToP (toLCtx Γ) (grdU δ) t.toL A.toL p ∧
+        PTyped (fun i => (toLCtx Γ i).toP) δ p A.toL.toP) ∧
+    (∀ {k n : ℕ} {Γ : Fin n → GTy R GradedModalBase} {δ : Fin n → R}
+      {t t' : GTm GradedModalBase n} {A : GTy R GradedModalBase} {p : PTm R k n},
+      LToP (toLCtx Γ) (grdU δ) t.toL A.toL p → GStep False t t' →
+      ∃ p', LToP (toLCtx Γ) (grdU δ) t'.toL A.toL p' ∧ PSteps p p') ∧
+    (PTyped (Fin.elim0 : Fin 0 → PTy R 0) Fin.elim0 selfApp (.fn (1 + 1) polyIdTy polyIdTy) ∧
+      (selfApp (R := R)).erase = .lam (.app (.var 0) (.var 0)) ∧
+      ∀ {n : ℕ} (Γ : Fin n → GTy R GradedModalBase) (δ : Fin n → R) (T : GTy R GradedModalBase),
+        ¬ GTyped Γ δ (.lam (.app (.var 0) (.var 0))) T) :=
+  ⟨fun h => h.toGPB, fun h hs => GStep.toGPB h hs,
+    selfApp_typed, selfApp_erase, fun Γ δ T => GExample.lam_selfApp_untypable Γ δ T⟩
 
 end Coeffect

@@ -117,6 +117,18 @@ LC → GMC and LPC → GMC.
     `…/Equations.lean`.** These follow the usual route: structural lemmas, then the
     substitution lemma, then operational correspondence (`LToP.step`), then equation
     preservation (`LToP.eq_preserve`).
+    *Optional:* **`Sec4/Translations/GradedModalVsPoly.lean`** compares GMB and GPB: GMB → GPB
+    exists as the composite GMB → LB → GPB (`GTyped.toGPB`, `GStep.toGPB`), but no type-erasing
+    translation GPB → GMB exists (`selfApp_erase_untypable`); summarised as `relation_GMB_GPB` in
+    `Diagram.lean`.
+    *Optional:* **`Sec3/Examples/BoxCurry.lean`** checks when `λg.λc. g [c]` and
+    `λf.λb. let [z] = b in f z` type between `□_x C →^y D` and `C →^(x·y) D`; over `ℕ` the second
+    types iff `x·y ≤ x` and `1 ≤ y` (`gradedToModal_typed_nat_iff`).
+    *Optional:* **`Sec3/Examples/GranuleFlattening.lean`** models Granule's coeffect flattening
+    as a graded box elimination `letbox_q` (the bound variable gets grade `q·r`). With it the same
+    term types for all `x, y` (`gradedToModal_typedQ`), nested boxes flatten
+    (`flatten_typedQ`, untypable with the paper's rule: `flatten_untypable_two_three`), and the
+    system still has subject reduction (`GTypedQ.preservation`, via `GTypedQ.subst`).
 
 ## 7. Negative results
 
